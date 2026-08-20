@@ -1,0 +1,351 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  }
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: rgb(233, 232, 232);
+  overflow-x: hidden;
+}
+
+/* Flecha Subuir -----------------*/
+.ir-arriba {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(2,2,2,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index:100;
+}
+
+/* Logo -----------------*/
+.Logo {
+  position: relative;
+  float: left;
+  height: 55px;
+  width: 230px;
+  margin-left: 20px;
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+.logo_hov:hover {
+  transform : scale(1.2);
+  -moz-transform : scale(1.2); /* Firefox */
+  -webkit-transform : scale(1.2); /* Chrome - Safari */
+  -o-transform : scale(1.2); /* Opera */
+  -ms-transform : scale(1.2); /* IE9 */
+  z-index: 3;
+  cursor: pointer;
+  color: #1a1a1a;
+}
+
+/* Selector -----------------*/
+.selector { 
+  height: 90px;
+  min-width: 100%;
+  max-width: 100%;
+  font-size: 15px;
+  font-family: 'Raleway', sans-serif;
+  position: fixed;
+  color: white;
+  z-index:3;
+  -webkit-transition: background-color .7s;
+}  
+
+/* Nuevo Nav -----------------*/
+.topnav {
+  padding-right: 60px;
+  overflow: hidden;
+  background-color: transparent;
+  -webkit-transition: background-color .7s;
+  z-index: 3;
+  text-align: center;
+}
+
+.topnav .login-color {
+  color: rgb(192, 3, 3);
+}
+
+.topnav a {
+  text-transform: uppercase;
+  color: white;
+  float: right;
+  display: block;
+  text-align: center;
+  padding: 45px 16px;
+  text-decoration: none;
+  font-size: 12px;
+  transition: 0.5s ease;
+  -moz-transition: 0.5s ease; /* Firefox */
+  -webkit-transition: 0.5s ease; /* Chrome - Safari */
+  -o-transition: 0.5s ease; /* Opera */
+  z-index: 3;
+}
+
+.topnav a:hover {
+  transform : scale(1.5);
+    -moz-transform : scale(1.5); /* Firefox */
+    -webkit-transform : scale(1.5); /* Chrome - Safari */
+    -o-transform : scale(1.5); /* Opera */
+    -ms-transform : scale(1.5); /* IE9 */
+    z-index: 3;
+    cursor: pointer;
+    color: #1a1a1a;
+}
+
+.topnav .icon {
+  display: none;
+  z-index: 3;
+}
+
+.insta{
+  position: relative;
+  height: 16px;
+  width: 16px;
+  top: -2px;
+}
+
+@media screen and (max-width: 800px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+    z-index: 3;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .topnav {padding-right: 0px;}
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 3;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+    z-index: 3;
+    transition: 0.5s ease;
+    transform : scale(1);
+    background-color: #1a1a1a;
+    opacity: 0.9;
+    cursor: pointer;
+    padding: 10px 16px;
+    color: white;
+  }
+  .topnav.responsive a:hover{
+    background-color: #990000;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 800px) {
+.ir-arriba {
+  visibility: hidden;
+  }
+}
+
+/* Slider -----------------*/
+.slideshow-container {
+  background-image: url(../images/proyectos/PilarDelEste/SanRamiro/LOTE-428/view/frente.jpeg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*BOTONES*/
+.boton_descarga {
+  color: #318aac !important;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 0.5em 1.2em;
+  top: 10px;
+  background: rgba(0,0,0,0);
+  border: 1px solid #318aac;
+  transition: all 1s ease;
+  position: relative;
+  letter-spacing: 0.4em;
+}
+.boton_descarga:hover {
+  background: #318aac;
+  color: #fff !important;
+}
+
+
+.descripcion {
+  font-size: 10px;
+  font-family: 'Raleway', sans-serif;
+  color: #1a1a1a;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 20%;
+  width: 250px;
+  display:inline-block
+
+}
+
+.descripcion2 {
+  font-size: 10px;
+  font-family: 'Raleway', sans-serif;
+  color: #1a1a1a;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding-left: 20%;
+  width: 250px;
+  display:inline-block;
+}
+
+.descripcion2 h2 {
+  font-size: 12px;
+  font-family: 'Raleway', sans-serif;
+  color: #1a1a1a;
+}
+
+
+.titulos {
+  padding-top: 24px;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+
+.descripcion h2 {
+  font-size: 12px;
+  font-family: 'Raleway', sans-serif;
+  color: #1a1a1a;
+  text-transform: uppercase;
+}
+
+.brochure {
+  margin-top: -255px;
+  margin-bottom: 250px;
+  margin-left: 70%;
+  position: relative;
+  width: 145px;
+}
+
+.brochure p {
+  font-size: 12px;
+  font-family: 'Raleway', sans-serif;
+  color: #1a1a1a;
+}
+
+.brochure p:hover {
+    cursor: pointer;
+    color: #990000;
+}
+
+/*GALERIA DE IMAGENES*/
+.viewer-imagen {
+  margin: auto;
+  margin-bottom: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*BOTON MAPA*/
+.boton_mapa {
+  color: #318aac !important;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 0.5em 1.2em;
+  top: 10px;
+  background: rgba(0,0,0,0);
+  border: 1px solid #318aac;
+  transition: all 1s ease;
+  position: relative;
+}
+.boton_mapa:hover {
+  background: #318aac;
+  color: #fff !important;
+}
+.mapa {
+  top: 10px;
+  font-size: 12px;
+  position: relative;
+  letter-spacing: 0.4em;
+}
+
+  .mapa a {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 200;
+    text-decoration: none;
+    color: #000;
+  }
+  .mapa a:hover {
+    color: rgb(61, 18, 18);
+  }
+/* titulo galeria*/
+.titulo_galeria {
+  height: 100px;
+  width: 100%;
+  background-color: #f1ecec;
+}
+.titulo_galeria h2 {
+  color: #111;
+  font-family: Roboto,sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 4.5px;
+  font-weight: 300;
+  padding-top: 42px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* titulo video */
+.titulo_video {
+  height: 100px;
+  width: 100%;
+  background-color: #f1ecec;
+}
+.titulo_video h2 {
+  color: #111;
+  font-family: Roboto,sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 4.5px;
+  font-weight: 300;
+  padding-top: 42px;
+  text-align: center;
+  text-transform: uppercase;
+}
+/* vista video */
+.video-responsive {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 56.25%;/* 16/9 ratio */
+  /*padding-top: 30px;*/ /* IE6 workaround*/
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 60px;
+}
+
+.video-responsive video,
+.video-responsive object,
+.video-responsive embed {
+  position: absolute;
+  width: 95%;
+  height: 100%;
+} 

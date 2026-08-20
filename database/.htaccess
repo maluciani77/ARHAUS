@@ -1,0 +1,2 @@
+# Los .sql y la base SQLite local nunca se deben poder descargar por HTTP.
+Require all denied

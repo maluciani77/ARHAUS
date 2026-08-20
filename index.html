@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <!-- utiliza la anchura del dispositivo donde se visualiza la web como nuevo viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> ARHAUS | Developers </title>
+    <link rel="icon" href="images/Logo2.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="images/Logo2.png-180x180.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Outline&Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/fontello.css"> <!-- Link con CSS de icono Up -->
+    <link rel="stylesheet" href="css/master.css">
+    <link rel="stylesheet" href="css/nav-vertical.css">
+    <link rel="stylesheet" href="css/carousel.css">
+    <link rel="stylesheet" href="css/footer.css"> 
+    <!-- Link con CSS principal -->
+    <script src="js/jquery-3.3.1.min.js"></script> <!-- Link con JQuery -->
+    <script src='js/script.js'></script> <!-- Link con JavaScript principal 2 -->
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+    <div id="preloader"></div>
+    <!-- <div class="oculto">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/CNFZS-DQwBo?si=yPsXCFcftE_gktEv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div> -->
+
+    <header>
+		<span class="ir-arriba"><img src="images/scroll-up.png" alt=""></span>
+	</header>
+
+    <!-- LOGO -->
+    <a href="index.html" class="logo-top-right"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav__container">
+            <label for="menu" class="nav__label"></label>
+            <input type="checkbox" id="menu" class="nav__input">
+            <div class="nav__menu">
+                <a href="index.html" class="nav__item">Home</a>
+                <a href="proyecto.html" class="nav__item">Proyectos</a>
+                <a href="estudio.html" class="nav__item">Estudio</a>
+                <a href="contacto.html" class="nav__item">Contacto</a>
+                <a href="login.html" target="_blank" class="nav__item">Login</a>
+            </div>
+        </div>
+    </nav>
+
+
+   <!-- <video class="video-responsive" autoplay loop muted>
+    <source src="images/proyectos/video/nordelta_el_golf.mp4">
+   </video> -->
+
+   <!-- CARRUSEL HERO -->
+   <section class="hero-carousel">
+       <div class="carousel-container">
+           <div class="carousel-slide active">
+               <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Proyecto Alvear">
+               <div class="carousel-overlay">
+                   <h1 class="carousel-title">Alvear Chico</h1>
+                   <p class="carousel-subtitle">Tortuguitas, Buenos Aires</p>
+               </div>
+           </div>
+           <div class="carousel-slide">
+               <img src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="Proyecto San Ramiro">
+               <div class="carousel-overlay">
+                   <h1 class="carousel-title">San Ramiro</h1>
+                   <p class="carousel-subtitle">Pilar del Este, Buenos Aires</p>
+               </div>
+           </div>
+           <div class="carousel-slide">
+               <img src="images/proyectos/Tortuguitas/BarrioAlvear1/exteriores/fachada_1.jpg" alt="Proyecto Moderno">
+               <div class="carousel-overlay">
+                   <h1 class="carousel-title">Diseño Contemporáneo</h1>
+                   <p class="carousel-subtitle">Arquitectura de Vanguardia</p>
+               </div>
+           </div>
+           <div class="carousel-slide">
+               <img src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="Proyecto Residencial">
+               <div class="carousel-overlay">
+                   <h1 class="carousel-title">Vivienda Unifamiliar</h1>
+                   <p class="carousel-subtitle">Elegancia y Confort</p>
+               </div>
+           </div>
+       </div>
+
+       <!-- Indicadores -->
+       <div class="carousel-indicators">
+           <button class="indicator active" data-slide="0"></button>
+           <button class="indicator" data-slide="1"></button>
+           <button class="indicator" data-slide="2"></button>
+           <button class="indicator" data-slide="3"></button>
+       </div>
+
+       <!-- Controles -->
+       <button class="carousel-control prev" aria-label="Anterior">
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+               <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+           </svg>
+       </button>
+       <button class="carousel-control next" aria-label="Siguiente">
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+               <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+           </svg>
+       </button>
+   </section>
+
+
+   <!-- SECCION SOBRE NOSOTROS -->
+   <section class="contenedor">
+    <!-- <div class="ejecutor"> -->
+    <h2 class="tit-nosotros animado" id="tit-nosotros">
+        sobre nosotros
+        <button class="boton" onclick="showHide();">
+            <img src="assets/icon/ver-mas02.png" id="text-btn">
+            <!-- <span id="text-btn">...ver mas</span> -->
+        </button>
+    </h2>
+    <!-- <button id="boton" class="boton" onclick="mostrar();">
+        <img src="assets/icon/ver-mas.png">
+    </button> -->
+    <!-- </div> -->
+    <section class="contenido">
+        <article class="article_one fade-in delay-1">
+            <article class="parraf">
+                <img src="assets/icon/ico1.png" alt="">
+                <h2 class="titulos">¿que hacemos?</h2>
+                <p>
+                    Atentos a las necesidades del mercado y a las oportunidades de inversión que surgen día a día.
+                    Nuestra filosofía de trabajo conjuga rentabilidad, calidad e innovación con un objetivo central: la satisfacción de nuestros clientes.
+                </p>
+            </article>
+        </article>
+        <article class="article_two fade-in delay-2">
+            <article class="parraf">
+                <img src="assets/icon/ico2.png" alt="">
+                <h2 class="titulos">tipos de clientes</h2>
+                <p>
+                    Nuestra principal herramienta son los fideicomisos al costo. 
+                    Se tratan de proyectos de realización dinámica y a plazos cortos que disminuyen notablemente cualquier riesgo a futuro.
+                </p>
+            </article>
+        </article>
+        <article class="article_three fade-in delay-3">
+            <article class="parraf">
+                <img src="assets/icon/ico3.png" alt="">
+                <h2 class="titulos">trayectoria</h2>
+                <p>
+                    En Arhaus contamos con la experiencia de nuestros profesionales para seguir proyectando e innovando día a día. 
+                    Creemos en el trabajo de equipo para superar las dificultades y acercar soluciones a nuestros clientes.
+                </p>
+            </article>
+        </article>
+    </section>
+</section>
+    <!-- <div class="swiper">
+        <div class="swiper-wrapper">
+           
+            <div class="swiper-slide slide-1 slide-item">
+                <img src="../images/proyectos/PilarDelEste/SanRamiro/LOTE-425/view/frente.jpg" alt="">
+            </div>
+            
+            <div class="swiper-slide slide-2 slide-item">
+                <img src="../images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="">
+            </div>
+            
+            <div class="swiper-slide slide-3 slide-item">
+                <img src="../images/proyectos/PilarDelEste/SanRamiro/LOTE-424/view/frente.jpg" alt="">
+            </div>
+        </div> -->
+        <!-- <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
+        <!--<div class="swiper-pagination"></div>-->
+    <!-- </div> -->
+
+    <div class="social-media animado">
+        <a href="https://www.instagram.com/arhausdevelopers/" target="_blank">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" color="pink" height="1.1em" viewBox="0 0 448 512">! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc.<style>svg{fill:#ffffff}</style><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg> -->
+            <img class="imagen" src="assets/icon/instagram.png" alt="">
+        </a>
+        <a href="#" target="_blank">
+            <img class="imagen" src="assets/icon/pinterest.png" alt="">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" height="1.1em" viewBox="0 0 448 512"> -->
+        </a>
+        <a href="#" target="_blank">
+            <img class="imagen" src="assets/icon/youtube.png" alt="">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" height="1.1em" viewBox="0 0 448 512"> -->
+        </a>
+    </div>
+
+
+    
+<div class="container_frase" id="nosotros-section">
+  <!-- Fondo estático -->
+  <div class="bg-static"></div>
+
+  <!-- Fondo que se mueve con el texto encima -->
+  <div class="bg-moving" style="background-image:url('images/casco.png');">
+    <div class="contenido_mas">
+      <h2 class="frase_title animado"> 
+        nuevos proyectos
+      </h2>
+      <p class="frase_cuerpo animado">
+        Cada proyecto se desarrolla a partir de los requisitos del cliente y la innovación emerge en el proceso de diseño haciendo que cada uno sea único.
+        <br><br>
+        El contexto, los materiales y los detalles son nuestros pilares a la hora de diseñar. 
+      </p>
+    </div>
+  </div>
+</div>
+
+
+
+    <script>
+        const section = document.getElementById("nosotros-section");
+        const moving = section.querySelector(".bg-moving");
+        const contenido = section.querySelector(".contenido_mas");
+
+        window.addEventListener("scroll", () => {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Progreso relativo al scroll de la sección
+        let progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+        progress = Math.min(Math.max(progress, 0), 1);
+
+        // Parallax: el fondo se mueve más lento
+        const moveY_bg = 30 * progress;
+        moving.style.transform = `translateY(${moveY_bg}px)`;
+
+        // Contenido: se mueve y hace zoom
+        const translateY = 100 * progress;
+        const scale = 0.8 + 0.2 * progress;
+        contenido.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        moving.style.transform = `translateY(${translateY}px) scale(${scale})`;
+
+        // Opacidad gradual: llega a 1 cuando la mitad del contenido entra en viewport
+        const contenidoHeight = contenido.offsetHeight;
+        const scrollToHalf = windowHeight - rect.top - contenidoHeight / 2;
+        let opacity = scrollToHalf / (contenidoHeight / 2);
+        opacity = Math.min(Math.max(opacity, 0), 1);
+        contenido.style.opacity = opacity;
+        });
+
+
+</script>
+
+
+
+    <!-- CARRUSELL -->
+    <div class="container">
+        <div class="info-gallery animado">
+            <div class="datos">
+                <div class="proyec">
+                    <p class="titulo">PROYECTO</p>
+                    <h2 class="subti">Tortuguitas</h2>
+                </div>
+                <div class="tipologia">
+                    <div class="tipo">
+                        <p class="titulo">tipologia</p>
+                        <p>Vivienda Unifamiliar</p>
+                    </div>
+                    <div class="ubi">
+                        <p class="titulo">UBICACIÓN</p>
+                        <p>Tortuguitas, Buenos Aires</p>
+                    </div>
+                    <div class="anio">
+                        <p class="titulo">AÑO</p>
+                        <p>2023</p>
+                    </div>
+                </div>
+                <div class="btn">
+                    <a href="pr_1.html">
+                        <span class="titulo">ver proyecto</span>
+                        <span><img src="images/arrow-right-solid.svg" alt=""></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="swiper2">
+            <!-- Contenedor de swiper -->
+            <div class="swiper-wrapper">
+                <!-- slide 1 -->
+                <div class="swiper-slide slide-1 slide-item">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/vistas/PERSPECTIVA TORTUGUITAS NUEVA 1.jpg" alt="">
+                </div>
+                <!-- slide 2 -->
+                <div class="swiper-slide slide-2 slide-item">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/interiores/INTERIOR 1_2.jpg" alt="">
+                </div>
+                <!-- slide 3 -->
+                <div class="swiper-slide slide-3 slide-item">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/exteriores/FACHADA 1.jpg" alt="">
+                </div>
+                <!-- slide 4 -->
+                <div class="swiper-slide slide-4 slide-item">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/exteriores/frente  2 nuevo.jpg" alt="">
+                </div>
+                <!-- slide 5 -->
+                <div class="swiper-slide slide-5 slide-item">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/interiores/INTERIOR 2_2.jpg" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="image-container">
+            <div class="popup-image">
+                <img id="lightbox-img" src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/vistas/PERSPECTIVA TORTUGUITAS NUEVA 1.jpg" alt="">
+                <button class="popup-close" aria-label="Cerrar">
+                    <img src="assets/icon/exit.png" alt="" style="width:18px;height:18px;display:block;">
+                </button>
+            </div>
+        </div>
+        
+    </div>
+<div class="container">
+    <div class="info-gallery animado">
+        <div class="datos">
+            <div class="proyec">
+                <p class="titulo">PROYECTO</p>
+                <h2 class="subti">Martinez</h2>
+            </div>
+            <div class="tipologia">
+                <div class="tipo">
+                    <p class="titulo">tipologia</p>
+                    <p>Vivienda Unifamiliar</p>
+                </div>
+                <div class="ubi">
+                    <p class="titulo">UBICACIÓN</p>
+                    <p>Martinez, buenos aires</p>
+                </div>
+                <div class="anio">
+                    <p class="titulo">AÑO</p>
+                    <p>2023</p>
+                </div>
+            </div>
+            <div class="btn">
+                <a href="pr_2.html">
+                    <span class="titulo">ver proyecto</span>
+                    <span><img src="images/arrow-right-solid.svg" alt=""></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="swiper2">
+        <!-- Contenedor de swiper -->
+        <div class="swiper-wrapper">
+            <!-- slide 1 -->
+            <div class="swiper-slide slide-1 slide-item">
+                <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/01 Render 11NOV2021.png" alt="">
+            </div>
+            <!-- slide 2 -->
+            <div class="swiper-slide slide-2 slide-item">
+                <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/01Render 08NOV2021.png" alt="">
+            </div>
+            <!-- slide 3 -->
+            <div class="swiper-slide slide-3 slide-item">
+                <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Interiores/Render 2.png" alt="">
+            </div>
+            <!-- slide 4 -->
+            <div class="swiper-slide slide-4 slide-item">
+                <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Interiores/07Render.png" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="image-container">
+        <div class="popup-image">
+            <img src="" alt="">
+            <span><img src="assets/icon/exit.png" alt=""></span>
+        </div>
+    </div>
+</div>
+<!-- Fin carrusell -->
+
+<!-- Swiper CSS -->
+<script type="module" src="js/swp.js" defer></script>
+
+<!-- START FOOTER -->
+<footer class="prague-footer default">
+    <div class="footer-content-outer">
+        <div class="footer-top-content">
+            <div class="prague-footer-main-block">
+                <div class="footer-main-content">
+                    <p>El principio de el Estudio de Arquitectura y Construcción es la concepción colectiva. Desde el principio, la práctica ha creído en las virtudes del intercambio, el cruce de ideas, el esfuerzo común, el conocimiento compartido y el entusiasmo.</p>
+                </div>
+            </div>
+            <div class="prague-footer-info-block">
+                <h6 class="footer-info-block-title">CONTACTO</h6>
+                <div class="footer-info-block-content">
+                    <p><a href="mailto:info@misto.com.ar">info@arhaus.com.ar</a></p>
+                    <p>Buenos Aires - Argentina</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom-content">
+            <!-- Footer copyright -->
+            <div class="footer-copyright">
+                <p>2020 - Todos los derechos reservados</p>
+            </div>
+            <!-- End footer copyright -->
+            <div class="prague-social-nav">
+                <ul class="social-content">
+                    <li>
+                        <a target="_blank" href="https://www.instagram.com/arhausdevelopers/">
+                            <i aria-hidden="true" class="fa fa-instagram"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="#">
+                            <i aria-hidden="true" class="fa fa-pinterest-p"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="https://youtu.be/mgiUE3NlW64" target="_blank">
+                            <i aria-hidden="true" class="fa fa-youtube-square"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+</footer>
+<script src="js/animar.js"></script>
+<script src="js/carousel.js"></script>
+<script src="js/main.js"> </script> Link con JavaScript Subir
+</body>
+</html>

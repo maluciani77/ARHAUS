@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Proyectos - Arhaus Developers </title>
+    <meta charset="UTF-8"/>
+    <!-- utiliza la anchura del dispositivo donde se visualiza la web como nuevo viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Autor" content="Monterno Augusto | Arq">   </meta>
+	<link rel="stylesheet" href="css/master_proyecto.css">
+	<link rel="stylesheet" href="css/nav-vertical.css">
+	<!-- Link con CSS principal --> 
+	<link href="https://fonts.googleapis.com/css2?family=Bungee+Outline&Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/footer.css"> 
+	<link rel="stylesheet" type="text/css" href="css/fontello.css"> <!-- Link con CSS de icono Up -->
+	<script src="js/jquery-3.3.1.min.js"></script> <!-- Link con JQuery -->
+	<script src="js/main.js" defer></script> <!-- Link con JavaScript principal -->
+	<script src='js/script.js'></script> <!-- Link con JavaScript principal 2 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+	<header>
+		<span class="ir-arriba"><img src="images/scroll-up.png" alt=""></span>
+	</header>  
+
+	<!-- NAV -->
+    <nav>
+        <div class="nav__container">
+            <a href="index.html"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
+            <label for="menu" class="nav__label"></label>
+            <input type="checkbox" id="menu" class="nav__input">
+            <div class="nav__menu">
+                <a href="index.html" class="nav__item">← Volver al inicio</a>
+            </div>
+        </div>
+    </nav>
+
+	<!-- Script Selector -->
+	<script>
+		function myFunction() {
+		  var x = document.getElementById("myTopnav");
+		  if (x.className === "topnav") {
+		    x.className += " responsive";
+		  } else {
+		    x.className = "topnav";
+		  }
+		}
+    </script>   
+    
+    <!-- IMAGEN PRINCIPAL -->
+    <!--<div class="slideshow-container">
+        <h1 class="title-estudio">PROYECTO</h1>-->
+        <!--<h1 class="title-estudio_2">PROYECTO</h1>-->
+    <!--</div>-->
+
+<!-- NUEVA GALERIA Y SUBMENU -->
+
+    <!--
+    <section class="gallery">
+        <div class="buttons">
+            <button type="button">
+                All
+            </button>
+            <button type="button" data-btn="1">
+                En curso
+            </button>
+            <button type="button" data-btn="2">
+                Finalizadas
+            </button>
+            <button type="button" data-btn="3">
+                Caracteristicas
+            </button>
+            <button type="button" data-btn="4">
+                En venta
+            </button>
+        </div>-->
+        <!--<div class="images">
+            <!- En curso -->
+            <!--<img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-424/view/frente.jpg" alt="img" data-img="1"/>
+            <div class="portfolio_description">
+                <h5 class="portfolio_title">
+                    <a href="#">Marayui</a>
+                </h5>
+                <span class="project_category">Casas / Proyectos</span>
+            </div>
+            <img src="images/proyectos/e.jpg" alt="img" data-img="1"/>--><!-- Pablo nogues -->
+            <!-- Obras finalizadas -->
+            <!--<img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-425/view/frente.jpg" alt="img" data-img="2"/>
+            <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-428/view/frente.jpeg" alt="img" data-img="2"/>
+            <img src="images/proyectos/f.jpg" alt="img" data-img="2"/>
+            <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-428/view/frente.jpeg" alt="img" data-img="3"/>
+            <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="img" data-img="4"/>
+            <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-424/view/frente.jpg" alt="img" data-img="4"/>
+
+        </div>
+    </section>--> 
+    <!-- GALERIA CON FILTRADO POR CATAGORIA -->
+    <div class="wrap">
+		<div class="store-wrapper">
+			<div class="category_list">
+				<a href="#" class="category_item" category="all">todos</a>
+				<a href="#" class="category_item" category="terminados">Obras Finalizadas</a>
+				<a href="#" class="category_item" category="proyectos">proyectos</a>
+			</div>
+			<section class="products-list">
+				<div class="product-item" category="terminados">
+                    <div class="card">
+                        <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="" >
+					    <div class="info">
+                            <a href="pr_1.html" class="portfolio_link_class">
+                                <span class="thin_plus_only_icon">+</span>
+                            </a>
+                        </div>
+                        <div class="portfolio_description">
+                            <h5>Tortuguitas</h5>
+                            <span class="project_category">Casas / Proyectos</span>
+                        </div>
+                    </div>
+				</div>
+				<div class="product-item" category="proyectos">
+                    <div class="card">
+                        <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/02-Render-11NOV2021.png" alt="" >
+					    <div class="info">
+                            <a href="pr_2.html" class="portfolio_link_class">
+                                <span class="thin_plus_only_icon">+</span>
+                            </a>
+                        </div>
+                        <div class="portfolio_description">
+                            <h5>Martinez</h5>
+                            <span class="project_category">Casas / Proyectos</span>
+                        </div>
+                    </div>
+				</div>
+                <div class="product-item" category="proyectos">
+                    <div class="card">
+                        <img src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="" >
+					    <div class="info">
+                            <a href="pr_3.html" class="portfolio_link_class">
+                                <span class="thin_plus_only_icon">+</span>
+                            </a>
+                        </div>
+                        <div class="portfolio_description">
+                            <h5>House~424</h5>
+                            <span class="project_category">Casas / Proyectos</span>
+                        </div>
+                    </div>
+				</div>
+                <div class="product-item" category="proyectos">
+                    <div class="card">
+                        <img src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="" >
+					    <div class="info">
+                            <a href="pr_4.html" class="portfolio_link_class">
+                                <span class="thin_plus_only_icon">+</span>
+                            </a>
+                        </div>
+                        <div class="portfolio_description">
+                            <h5>House~425</h5>
+                            <span class="project_category">Casas / Proyectos</span>
+                        </div>
+                    </div>
+				</div>
+			</section>
+		</div>
+	</div>
+    <script src="js/filter.js"></script>
+<!--
+<div class="container">
+    <div class="menu">
+        <ul>
+            <li class="todos active2"><a href="#" class="btn-menu" data-filter="todos">TODOS</a></li>
+            <li class="laptop"><a href="#" class="btn-menu" data-filter="laptop">OBRAS EN CURSO</a></li>
+            <li class="camara"><a href="#" class="btn-menu" data-filter="camara">OBRAS FINALIZADAS</a></li>
+            <li class="iphone"><a href="#" class="btn-menu" data-filter="iphone">DETALLES</a></li>
+            <li class="laptop"><a href="#" class="btn-menu" data-filter="laptop">PROPIEDADES EN VENTA</a></li>
+        </ul>
+    </div>
+    <div class="galeria">-->
+    <!-- GALERIA -->
+    <!--<div class="galeria">
+        <a href="pr_1.html">
+            <div class="box-img laptop">
+                <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-424/view/frente.jpg" alt="">
+                <h2 class="nombre_proyecto">san ramiro | lote 424</h2>
+            </div>
+        </a>
+        <a href="pr_3.html">
+            <div class="box-img camara">
+                <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-425/view/frente.jpg" alt="">
+                <h2 class="nombre_proyecto">san ramiro | lote 425</h2>
+            </div>
+        </a>
+        <a href="pr_4.html">
+            <div class="box-img iphone">
+                <img src="images/proyectos/PilarDelEste/SanRamiro/LOTE-428/view/frente.jpeg" alt="">
+                <h2 class="nombre_proyecto">san ramiro | lote 428</h2>
+            </div>
+        </a>
+        <a href="pr_2.html">
+            <div class="box-img audifono">
+                <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="">
+                <h2 class="nombre_proyecto">tortuguitas</h2>
+            </div>
+        </a>
+        <div class="box-img laptop">
+            <img src="images/proyectos/e.jpg" alt="">
+            <h2 class="nombre_proyecto">PABLO NOGUES</h2>
+        </div>
+        <div class="box-img camara">
+            <img src="images/proyectos/f.jpg" alt="">
+            <h2 class="nombre_proyecto">MUÑIZ</h2>
+        </div>
+    </div>
+</div>-->
+
+
+<script src="js/filtro.js"></script>
+
+
+<!-- START FOOTER -->
+<footer class="prague-footer default">
+    <div class="footer-content-outer">
+        <div class="footer-top-content">
+            <div class="prague-footer-main-block">
+                <div class="footer-main-content">
+                    <p>El principio de el Estudio de Arquitectura y Construcción es la concepción colectiva. Desde el principio, la práctica ha creído en las virtudes del intercambio, el cruce de ideas, el esfuerzo común, el conocimiento compartido y el entusiasmo.</p>
+                </div>
+            </div>
+            <div class="prague-footer-info-block">
+                <h6 class="footer-info-block-title">CONTACTO</h6>
+                <div class="footer-info-block-content">
+                    <p><a href="mailto:info@misto.com.ar">info@arhaus.com.ar</a></p>
+                    <p>Buenos Aires - Argentina</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom-content">
+            <!-- Footer copyright -->
+            <div class="footer-copyright">
+                <p>2020 - Todos los derechos reservados</p>
+            </div>
+            <!-- End footer copyright -->
+            <div class="prague-social-nav">
+                <ul class="social-content">
+                    <li>
+                        <a target="_blank" href="https://www.instagram.com/arhausdevelopers/">
+                            <i aria-hidden="true" class="fa fa-instagram"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="#">
+                            <i aria-hidden="true" class="fa fa-pinterest-p"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="https://youtu.be/mgiUE3NlW64" target="_blank">
+                            <i aria-hidden="true" class="fa fa-youtube-square"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+</footer>
+
+<!-- END FOOTER -->
+<script src="js/animar.js"></script>  
+</body>
+</html>

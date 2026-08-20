@@ -1,0 +1,4 @@
+# Estos archivos solo se usan vía require/include desde otros scripts
+# PHP (del lado del servidor) — nunca deben poder pedirse directamente
+# por HTTP.
+Require all denied

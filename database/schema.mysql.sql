@@ -1,0 +1,48 @@
+-- Esquema para MySQL (Hostinger). Importalo desde hPanel > Bases de datos
+-- > phpMyAdmin, en la base que hayas creado, ANTES de cambiar config.php
+-- a driver 'mysql'.
+
+CREATE TABLE IF NOT EXISTS usuarios (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(150) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  rol ENUM('admin','arquitecto','cliente') NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS obras (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(190) NOT NULL,
+  ubicacion VARCHAR(190),
+  cliente_id INT UNSIGNED NULL,
+  arquitecto_id INT UNSIGNED NULL,
+  estado VARCHAR(30) NOT NULL DEFAULT 'en_curso',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+  FOREIGN KEY (arquitecto_id) REFERENCES usuarios(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS etapas (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  obra_id INT UNSIGNED NOT NULL,
+  nombre VARCHAR(150) NOT NULL,
+  orden INT NOT NULL DEFAULT 0,
+  fecha DATE NULL,
+  descripcion TEXT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS fotos (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  obra_id INT UNSIGNED NOT NULL,
+  etapa_id INT UNSIGNED NULL,
+  archivo VARCHAR(255) NOT NULL,
+  descripcion VARCHAR(255) NULL,
+  subido_por INT UNSIGNED NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE CASCADE,
+  FOREIGN KEY (etapa_id) REFERENCES etapas(id) ON DELETE SET NULL,
+  FOREIGN KEY (subido_por) REFERENCES usuarios(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

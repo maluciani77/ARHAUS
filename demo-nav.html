@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARHAUS - Navegación Vertical Demo</title>
+    <link rel="icon" href="images/Logo2.png" sizes="192x192" />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Outline&Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/nav-vertical.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #fff;
+            font-family: "Raleway", sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .demo-content {
+            padding: 80px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #e21313;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            max-width: 600px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(226, 19, 19, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(226, 19, 19, 0.1);
+            border-color: rgba(226, 19, 19, 0.5);
+            box-shadow: 0 10px 30px rgba(226, 19, 19, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #e21313;
+        }
+
+        .feature-card p {
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .instructions {
+            background: rgba(226, 19, 19, 0.08);
+            border-left: 4px solid #e21313;
+            padding: 30px;
+            border-radius: 5px;
+            margin: 40px 0;
+        }
+
+        .instructions h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .instructions li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #e21313;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .demo-content {
+                padding: 100px 20px 80px;
+            }
+
+            .hero {
+                height: auto;
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <div class="nav__container">
+            <a href="index.html"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
+            <label for="menu" class="nav__label"></label>
+            <input type="checkbox" id="menu" class="nav__input">
+            <div class="nav__menu">
+                <a href="index.html" class="nav__item">Home</a>
+                <a href="proyecto.html" class="nav__item">Proyectos</a>
+                <a href="estudio.html" class="nav__item">Estudio</a>
+                <a href="contacto.html" class="nav__item">Contacto</a>
+                <a href="login.html" target="_blank" class="nav__item">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="demo-content">
+        <section class="hero">
+            <h1>Diseño Minimalista</h1>
+            <p>Navegación elegante con fondo negro y detalles rojos. Pasa el cursor sobre los elementos del menú para ver los efectos.</p>
+        </section>
+
+        <section class="instructions">
+            <h2>✨ Nuevo Diseño Implementado</h2>
+            <ul>
+                <li><strong>Fondo negro total</strong> con bordes rojos sutiles</li>
+                <li><strong>Navegación compacta</strong> de 180px de ancho</li>
+                <li><strong>Logo en la parte superior</strong> de la barra lateral</li>
+                <li><strong>Menú vertical limpio</strong> de arriba hacia abajo</li>
+                <li><strong>Efecto hover elegante</strong> con barra lateral animada y resplandor rojo</li>
+                <li><strong>Tipografía en gris</strong> que se vuelve roja al pasar el cursor</li>
+                <li><strong>Diseño 100% responsivo</strong> con menú hamburguesa en móvil</li>
+            </ul>
+        </section>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎨 Colores de Marca</h3>
+                <p>Negro (#000000) como base con rojo (#e21313) como acento principal</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>📏 Diseño Compacto</h3>
+                <p>Barra lateral de 180px que no ocupa mucho espacio en pantalla</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>✨ Efectos Sutiles</h3>
+                <p>Animaciones elegantes con barra lateral y resplandor al hacer hover</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>📱 100% Responsivo</h3>
+                <p>Menú hamburguesa en móvil que se convierte en X al abrir</p>
+            </div>
+                <h3>⚡ Animaciones Premium</h3>
+                <p>Efectos de rueda giratoria, pulsos luminosos y transiciones suaves que hacen que cada interacción sea memorable.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>🎯 UX Optimizada</h3>
+                <p>Navegación intuitiva con feedback visual inmediato y accesible desde cualquier dispositivo.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,371 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    object-fit: cover;
+    background-image:url(images/overlay.png), url(../images/background-contacto.jpg);
+    background-repeat: no-repeat;
+    background-size: 100px 100px, cover;
+    background-position: top left,center center,bottom center;
+    background-attachment: fixed;
+    overflow-x: hidden;
+} 
+
+/* Logo -----------------*/
+.Logo {
+  height: 40px;
+  padding: 0 40px;
+}
+  .logo_hov:hover {
+    transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    /*Firefox*/-webkit-transform: scale(1.2);
+    /*Chrome-Safari*/-o-transform: scale(1.2);
+    /*Opera*/-ms-transform: scale(1.2);
+    /*IE9*/color: #1a1a1a;
+    z-index: 1000;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+
+
+/* Nuevo Nav -----------------*/
+.nav {
+  background:#000;
+  color: #fff;
+  top: -80px;
+}
+
+.nav__container {
+  display: flex;
+  height: 66px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2000;
+  position: fixed;
+  background: #000;
+  opacity: .9;
+}
+
+.nav__menu {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 3em;
+  padding: 0 40px;
+}
+
+.nav__item {
+  font-family: "Raleway", Sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  --clippy: polygon(0 0, 0 0, 0 100%, 0% 100%);
+}
+
+.nav__item::after {
+  content: "";
+  display: block;
+  background: #e21313;
+  width: 90%;
+  margin-top: 3px;
+  height: 1px;
+  clip-path: var(--clippy);
+  transition: clip-path .5s;
+  -webkit-transition: clip-path .5s;
+  -moz-transition: clip-path .5s;
+  -ms-transition: clip-path .5s;
+  -o-transition: clip-path .5s;
+}
+
+.nav__item:hover {
+  --clippy:polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+
+.nav__label, .nav__input {
+  display: none;
+}
+
+.nav__img {
+  width: 80%;
+}
+
+/* CONTACTO -----------------*/
+
+.datos-contacto {
+  /* border: 1px solid blue; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 400px;
+  height: auto;
+  position: relative;
+  top: 450px;
+  margin: 0 50px;
+}
+
+.datos-contacto img {
+  width: 35%;
+  height: auto;
+  /* border: 1px solid violet; */
+}
+
+.mapa {
+  /* border: 1px solid red; */
+  font-size: 12px;
+  width: 35%;
+  text-align: center;
+  position: relative;
+  letter-spacing: 0.4em;
+}
+
+  .mapa a {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 200;
+    text-decoration: none;
+    color: #000;
+  }
+  .mapa a:hover {
+    color: rgb(117, 95, 95);
+  }
+
+  .contenedor .mapa a:visited {
+    color: #000;
+  }
+
+.contenedor  p {
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  color: white;
+  font-weight: 200;
+  line-height: 2.5em;
+  letter-spacing: 0.1em;
+} 
+.contenedor {
+  /* border: 1px solid red; */
+  margin: 0 50px;
+  width: 400px;
+  height: auto;
+  position: absolute;
+  padding: 20px;
+  top: 120px;
+  color: #000;
+  cursor: pointer;
+}
+/* .contenedor:before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  border-bottom: 2px solid #ffffff;
+  border-top: 2px solid #ffffff;
+  transform: scaleX(0);
+  transition: .5s;
+}
+.contenedor:hover:before {
+  transform: scaleX(1);
+}
+.contenedor:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  transform: scaleY(0);
+  transition: .5s;
+}
+
+.contenedor:hover:after {
+  transform: scaleY(1);
+  transition-delay: .5s;
+} */
+
+.contenedor h2 {
+  font-family: 'Raleway', sans-serif;
+  padding-bottom: 20px;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 400;
+  line-height: 1em;
+  letter-spacing: 0.1em;
+  margin: 0px 0px 30px 0px;
+}
+
+
+.clock {
+  position: relative;
+  right: 50px;
+  float: right;
+  /*right: 630px;*/
+  top: 500px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../images/clock_01.png);
+  background-size: cover;
+}
+.clock::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fbfbfb;
+  border: 0.1px solid #fff;
+  z-index: 100000;
+  border-radius: 50%;
+}
+  .hour, .min , .sec {
+    position: absolute;
+  }
+  .hour, .hr {
+    width: 160px;
+    height: 50px;
+  }
+  .min, .mn {
+    width: 190px;
+    height: 50px;
+  }
+  .sec, .sc {
+    width: 10px;
+    height: 10px;
+  }
+  .hr, .mn, .sc {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;
+  }
+  .hr::before {
+    content: '';
+    position: absolute;
+    width: 1.5px;
+    height: 65px;
+    background: #848484;
+    z-index: 10;
+    border-radius: 0.1px 0.1px 0 0;
+    -webkit-border-radius: 0.1px 0.1px 0 0;
+    -moz-border-radius: 0.1px 0.1px 0 0;
+    -ms-border-radius: 0.1px 0.1px 0 0;
+    -o-border-radius: 0.1px 0.1px 0 0;
+}
+  .mn::before {
+    content: '';
+    position: absolute;
+    width: 1.5px;
+    height: 85px;
+    background: #d6d6d6;
+    z-index: 11;
+    border-radius: 0.1px 0.1px 0 0;
+  }
+  .sc::before {
+    content: '';
+    position: absolute;
+    width: 1.5px;
+    height: 78px;
+    background: #ff6767;
+    z-index: 12;
+    border-radius: 0.1px 0.1px 0 0;
+  }
+
+  /* Media queries */
+@media (max-width: 700px){
+
+  .nav__label{
+    display: block;
+    cursor: pointer;
+  }
+
+  .nav__menu{
+    z-index: 999;
+    position: fixed;
+    top: 66px;
+    bottom: 0;
+    background: #000;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    clip-path: circle(0 at center);
+    transition: clip-path 1s ease-in-out ;
+    -webkit-transition: clip-path 1s ease-in-out ;
+    -moz-transition: clip-path 1s ease-in-out ;
+    -ms-transition: clip-path 1s ease-in-out ;
+    -o-transition: clip-path 1s ease-in-out ;
+}
+  .nav__input:checked + .nav__menu {
+    clip-path: circle(100% at center);
+  }  
+
+  .contenedor {
+    /* border: 1px solid red; */
+    /* margin: 0 50px; */
+    width: fit-content;
+    height: auto;
+    position: absolute;
+    /*padding: 20px;*/
+    top: 500px;
+    right: 60px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    
+}
+
+  .contenedor  p {
+    color: #fff;
+  } 
+
+  .datos-contacto {
+    /* border: 1px solid blue; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    width: 400px;
+    height: auto;
+    position: relative;
+    top: 150px;
+    margin: 0 50px;
+  }
+
+  .clock {
+    position: relative;
+    /*right: 630px;
+    */top: 300px;
+    transform: translate(-10%, -50%);
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(../images/clock_01.png);
+    background-size: cover;
+    -webkit-transform: translate(-10%, -50%);
+    -moz-transform: translate(-10%, -50%);
+    -ms-transform: translate(-10%, -50%);
+    -o-transform: translate(-10%, -50%);
+}
+
+}

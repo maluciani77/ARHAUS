@@ -1,0 +1,83 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    background:
+    /* top, transparent black, faked with gradient */ 
+    linear-gradient(
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.7)
+        ),
+    /* bottom, image */
+    url(../images/background_login.jpg) no-repeat center center fixed;
+    background-size: cover;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.registro-container {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    opacity: 80%;
+}
+h2 {
+    margin-bottom: 20px;
+    color: #ffff;
+    font-size: 1.5em;
+}
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #b80f22;
+}
+button {
+    background: #b80f22;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 95%;
+    font-size: 16px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+/* button:hover {
+    background-color: #0056b3;
+} */
+.mensaje {
+    text-align: center;
+    margin-top: 15px;
+}
+
+p > a {
+    color: #b80f22;
+}
+
+.registro-container .avatar {
+    width: 135px;
+    height: 135px;
+    position: absolute;
+    top: 40px;
+    left: calc(50% - 65px) ;
+}

@@ -1,0 +1,9 @@
+# Blindaje extra: aunque PHP debería procesar este archivo siempre,
+# esto evita que se sirva como texto plano (con la contraseña de la
+# base de datos adentro) si algo llegara a fallar.
+<Files "config.php">
+    Require all denied
+</Files>
+
+# Lo mismo para setup.php una vez que ya creaste el usuario admin:
+# borralo del servidor, no hace falta dejarlo online.

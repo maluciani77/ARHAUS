@@ -1,0 +1,20 @@
+# Config/caché del editor, no es parte del proyecto.
+/.vscode/
+
+# Fotos, renders, videos y PDFs de las obras (~1GB, incluye archivos de
+# más de 100MB que GitHub rechaza directamente). No van al repo: se suben
+# a Hostinger por FTP junto con el resto del sitio, aparte de git.
+/images/proyectos/
+
+# Base de datos local de pruebas (SQLite) — no se sube.
+/database/arhaus.sqlite
+
+# Fotos subidas por arquitectos/admin durante las pruebas locales.
+/uploads/obras/*
+!/uploads/obras/.gitkeep
+
+# Config con credenciales reales de Hostinger — subila a mano al servidor,
+# no la subas al repo con la contraseña de MySQL adentro.
+# (Descomentá la línea de abajo si vas a versionar el repo en un lugar
+# público; si el repo queda privado podés dejarla comentada.)
+# /config.php
