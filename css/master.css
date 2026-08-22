@@ -14,7 +14,9 @@
   }
 
 body {
-  background: #000;
+  background: #F5F4F0;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
@@ -30,15 +32,82 @@ body {
                                  supported by Chrome, Edge, Opera and Firefox */
 }
 
+/* ===================================
+   PANTALLA DE CARGA
+   Antes era un GIF violeta de 181 KB. Ahora es la marca ARHAUS
+   dibujandose sobre el fondo crema del sitio: pesa 0 KB extra
+   (reusa el logo que la pagina ya carga) y combina con el diseno.
+   =================================== */
+
 #preloader {
-  background: #15191F url(../assets/icon/spinner.gif) no-repeat center center;
-  background-size: 15%;
-  height: 100vh;
-  width: 100%;
   position: fixed;
+  inset: 0;
   z-index: 10000;
-  filter: hue-rotate(90deg);
-  -webkit-filter: hue-rotate(90deg);
+  background: #F5F4F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+/* Se desvanece en vez de desaparecer de golpe */
+#preloader.is-oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader__logo {
+  width: 150px;
+  height: auto;
+  display: block;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: preloaderLogo 1.1s ease forwards;
+}
+
+/* Linea fina debajo del logo que barre de lado a lado */
+.preloader__linea {
+  position: relative;
+  width: 150px;
+  height: 1px;
+  background: rgba(51, 51, 51, 0.15);
+  overflow: hidden;
+  opacity: 0;
+  animation: preloaderLineaEntra 0.6s ease 0.35s forwards;
+}
+
+.preloader__linea::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: #880723;
+  animation: preloaderBarrido 1.25s ease-in-out 0.5s infinite;
+}
+
+@keyframes preloaderLogo {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes preloaderLineaEntra {
+  to { opacity: 1; }
+}
+
+@keyframes preloaderBarrido {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__logo,
+  .preloader__linea { animation-duration: 0.01s; }
+  .preloader__linea::after { animation: none; left: 0; width: 100%; }
 }
 
 
@@ -175,22 +244,27 @@ body {
 
 .container_frase {
   position: relative;
+  /* z-index crea un contexto de apilado propio: sin esto, .bg-static
+     (z-index -1) se escapaba y se pintaba detrás de TODA la página,
+     asomando como una franja gris en cualquier hueco. */
+  z-index: 0;
   padding: 80px 40px;
   overflow: hidden;
   color: #ffffff;
+  background: #1f1f1f; /* banda oscura de contraste, el texto va en blanco */
   min-height: 60vh;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: "Work Sans", sans-serif;
 }
 
-/* Fondo estático */
+/* Fondo estático (contenido dentro de la sección, no de la ventana) */
 .bg-static {
   background-image: url("../images/fondo01.jpg");
   background-size: cover;
   background-position: center;
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: -1;
-  opacity: 0.4; /* 50% de transparencia */
+  opacity: 0.4;
 }
 
 /* Imagen en movimiento */
@@ -256,20 +330,9 @@ body {
   opacity: 0.6;          /* semi-transparente */
 }
 
-.frase_title::after {
-  content: "";
-  position: absolute;
-  top: 55%;
-  left: -5%;
-  width: 130%;
-  height: 100%;
-  background: url('images/pincelada2.png') no-repeat center;
-  background-size: cover;
-  transform: translateY(-50%) rotate(3deg);
-  z-index: -1;
-  mix-blend-mode: lighten;
-  opacity: 0.8;
-}
+/* Había acá una segunda pincelada (::after) que apuntaba a
+   images/pincelada2.png: ese archivo no existe en el proyecto y la ruta
+   además estaba mal escrita, así que solo generaba un 404 en cada carga. */
 
 
 
@@ -308,9 +371,9 @@ section.contenedor {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #000;
+  background: #F5F4F0;
   padding-bottom: 20px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.12);
 }
 
 section.contenido {
@@ -320,7 +383,7 @@ section.contenido {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: #000;
+  background: #F5F4F0;
 }
 
 section.contenido {
@@ -332,16 +395,16 @@ section.contenido {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: #F5F4F0;
   width: fit-content;
-  height: fit-content; 
+  height: fit-content;
   /* text-align: center; */
-  color: #fff;
-  text-transform: uppercase;
+  color: #333333;
+  text-transform: none;
   padding-top: 20px;
   margin-right: 10px;
-  font-family: Roboto,sans-serif;
-  font-weight: 500;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 300;
   font-size: 25px;
   /* border: 1px solid red; */
 }
@@ -370,19 +433,20 @@ article img {
 }
 
 article .titulos {
-  text-transform: uppercase;
-  color: #fff;
+  text-transform: none;
+  color: #333333;
   margin-bottom: 45px;
   font-size: 15px;
+  font-weight: 500;
 }
 
 article.parraf {
-  background: #000;
+  background: #F5F4F0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #333333;
 }
 
 article.parraf img {
@@ -392,8 +456,9 @@ article.parraf img {
 article.parraf p {
   text-align: justify;
   font-size: 15px;
-  font-weight: 400;
-  font-family: "Raleway", Sans-serif;
+  font-weight: 300;
+  font-family: "Work Sans", sans-serif;
+  color: #555555;
 }
 
 
@@ -512,7 +577,7 @@ article.parraf p {
   border-color: #A2A2A2;
   transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
   margin-top: 0px;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.12);
   padding: 0% 1% 0% 0%;
   /* border: 1px solid red; */
   box-sizing: border-box;
@@ -525,7 +590,7 @@ article.parraf p {
   flex-wrap: wrap;
   flex-direction: column;
   align-content: stretch;
-  background: #000000;
+  background: #EBE8E1;
   z-index:999;
   width: 30%;
   height: 700px;
@@ -555,8 +620,8 @@ article.parraf p {
 }
 
 .proyec p.titulo {
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
@@ -564,8 +629,8 @@ article.parraf p {
 }
 
 .proyec h2.subti {
-  color: #FFF;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 25px;
   font-weight: 500;
   text-transform: none;
@@ -588,8 +653,8 @@ article.parraf p {
 
 .tipologia .tipo p.titulo  {
   font-size: 10px;
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.3em;
@@ -597,8 +662,8 @@ article.parraf p {
 }
 
 .tipologia .tipo p {
-  color: #fff;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.7em;
@@ -608,16 +673,16 @@ article.parraf p {
 
 .tipologia .ubi p.titulo  {
   font-size: 10px;
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.3em;
 }
 
 .tipologia .ubi p {
-  color: #fff;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.7em;
@@ -626,16 +691,16 @@ article.parraf p {
 
 .tipologia .anio p.titulo {
   font-size: 10px;
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.3em;
 }
 
 .tipologia .anio p {
-  color: #fff;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.7em;
@@ -643,35 +708,36 @@ article.parraf p {
 
 .btn {
   width: 150px;
-  font-family: "Raleway", Sans-serif;
-  font-size: 10px;
-  font-weight: 400;
+  font-family: "Work Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
   text-decoration: none;
   text-align: center;
-  fill: #FFFFFF;
-  color: #FFFFFF;
-  background-color: #0D251000;
+  fill: #333333;
+  color: #333333;
+  background-color: transparent;
   border-style: solid;
   border-width: 1px 1px 1px 1px;
+  border-color: #333333;
   border-radius: 20px 20px 20px 20px;
   padding: 10px 20px 10px 20px;
   line-height: 1;
-  text-transform: uppercase;
-  transition: all 1s ease;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -ms-transition: all 1s ease;
-  -o-transition: all 1s ease;
+  text-transform: none;
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
 }
 
 .btn:hover {
-  color: #000;
-  background-color: #ffffff;
+  color: #F5F4F0;
+  background-color: #333333;
 }
 
 .btn img {
   width: 10px;
-  color: #fff;
+  color: #333333;
 }
 
 /* Swiper DOS */
@@ -978,7 +1044,7 @@ article.parraf p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #000;
+    background: #F5F4F0;
   }
 
   article.parraf {

@@ -5,19 +5,15 @@
 }
 
 body {
-    object-fit: cover;
-    background-image:url(images/overlay.png), url(../images/background-contacto.jpg);
-    background-repeat: no-repeat;
-    background-size: 100px 100px, cover;
-    background-position: top left,center center,bottom center;
-    background-attachment: fixed;
+    background: #F5F4F0;
+    color: #333333;
+    font-family: "Work Sans", sans-serif;
     overflow-x: hidden;
-} 
+}
 
 /* Logo -----------------*/
 .Logo {
-  height: 40px;
-  padding: 0 40px;
+  height: auto;
 }
   .logo_hov:hover {
     transform: scale(1.1);
@@ -33,70 +29,7 @@ body {
 }
 
 
-/* Nuevo Nav -----------------*/
-.nav {
-  background:#000;
-  color: #fff;
-  top: -80px;
-}
-
-.nav__container {
-  display: flex;
-  height: 66px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 2000;
-  position: fixed;
-  background: #000;
-  opacity: .9;
-}
-
-.nav__menu {
-  display: grid;
-  grid-auto-flow: column;
-  gap: 3em;
-  padding: 0 40px;
-}
-
-.nav__item {
-  font-family: "Raleway", Sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #fff;
-  text-decoration: none;
-  --clippy: polygon(0 0, 0 0, 0 100%, 0% 100%);
-}
-
-.nav__item::after {
-  content: "";
-  display: block;
-  background: #e21313;
-  width: 90%;
-  margin-top: 3px;
-  height: 1px;
-  clip-path: var(--clippy);
-  transition: clip-path .5s;
-  -webkit-transition: clip-path .5s;
-  -moz-transition: clip-path .5s;
-  -ms-transition: clip-path .5s;
-  -o-transition: clip-path .5s;
-}
-
-.nav__item:hover {
-  --clippy:polygon(0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-
-.nav__label, .nav__input {
-  display: none;
-}
-
-.nav__img {
-  width: 80%;
-}
+/* Nav: los estilos de .nav__* viven en nav-vertical.css (compartido). */
 
 /* CONTACTO -----------------*/
 
@@ -129,7 +62,7 @@ body {
 }
 
   .mapa a {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-weight: 200;
     text-decoration: none;
     color: #000;
@@ -143,10 +76,10 @@ body {
   }
 
 .contenedor  p {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-size: 12px;
-  color: white;
-  font-weight: 200;
+  color: #333333;
+  font-weight: 300;
   line-height: 2.5em;
   letter-spacing: 0.1em;
 } 
@@ -197,10 +130,10 @@ body {
 } */
 
 .contenedor h2 {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   padding-bottom: 20px;
   font-size: 15px;
-  color: #fff;
+  color: #333333;
   font-weight: 400;
   line-height: 1em;
   letter-spacing: 0.1em;
@@ -325,7 +258,7 @@ body {
     /*padding: 20px;*/
     top: 500px;
     right: 60px;
-    color: #fff;
+    color: #333333;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -334,8 +267,8 @@ body {
 }
 
   .contenedor  p {
-    color: #fff;
-  } 
+    color: #333333;
+  }
 
   .datos-contacto {
     /* border: 1px solid blue; */

@@ -12,22 +12,8 @@ function mostrarScroll() {
 }
 
 window.addEventListener('scroll', mostrarScroll);
+mostrarScroll(); // por si la página carga ya scrolleada
 
-$(".project-detail").slick({
-	slidesToShow: 1,
-	arrows: false,
-	asNavFor: ".project-strip",
-	autoplay: true,
-	autoplaySpeed: 3000
-});
-
-$(".project-strip").slick({
-	slidesToShow: 5,
-	slidesToScroll: 1,
-	arrows: false,
-	asNavFor: ".project-detail",
-	dots: false,
-	infinite: true,
-	centerMode: true,
-	focusOnSelect: true
-});
+// Nota: acá había una inicialización del plugin "slick" sobre
+// .project-detail / .project-strip. Ni esos elementos ni el plugin
+// existen en el sitio, así que solo tiraba un error en cada carga.

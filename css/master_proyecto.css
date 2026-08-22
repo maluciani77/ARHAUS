@@ -10,7 +10,9 @@ html {
 }
 
 body {
-  background: #000;
+  background: #F5F4F0;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   overflow-x: hidden;
 }
 
@@ -38,8 +40,7 @@ body {
 
 /* Logo -----------------*/
 .Logo {
-  height: 40px;
-  padding: 0 40px;
+  height: auto;
 }
   .logo_hov:hover {
     transform: scale(1.1);
@@ -54,119 +55,9 @@ body {
     -o-transform: scale(1.1);
 }
 
-/* Selector -----------------*/
-.selector { 
-  height: 90px;
-  min-width: 100%;
-  max-width: 100%;
-  font-size: 15px;
-  font-family: 'Raleway', sans-serif;
-  position: fixed;
-  color: white;
-  /*background: rgba(2,2,2,0.8);*/
-  /*background: transparent;*/
-  z-index:3;
-  -webkit-transition: background-color .7s;
-}  
-
-
-/* Nuevo Nav -----------------*/
-.nav {
-  background:#000;
-  color: #fff;
-}
-
-.nav__container {
-  display: flex;
-  height: 66px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 800;
-  position: fixed;
-  background: #000;
-  opacity: .9;
-}
-
-.nav__menu {
-  display: grid;
-  grid-auto-flow: column;
-  gap: 3em;
-  padding: 0 40px;
-}
-
-.nav__item {
-  font-family: "Raleway", Sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #fff;
-  text-decoration: none;
-  --clippy: polygon(0 0, 0 0, 0 100%, 0% 100%);
-}
-
-.nav__item::after {
-  content: "";
-  display: block;
-  background: #e21313;
-  width: 90%;
-  margin-top: 3px;
-  height: 1px;
-  clip-path: var(--clippy);
-  transition: clip-path .5s;
-  -webkit-transition: clip-path .5s;
-  -moz-transition: clip-path .5s;
-  -ms-transition: clip-path .5s;
-  -o-transition: clip-path .5s;
-}
-
-.nav__item:hover {
-  --clippy:polygon(0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-
-.nav__label, .nav__input {
-  display: none;
-}
-
-.nav__img {
-  width: 80%;
-}
-
-/* Media queries */
-@media (max-width: 700px){
-
-  .nav__label{
-    display: block;
-    cursor: pointer;
-  }
-
-  .nav__menu{
-    z-index: 999;
-    position: fixed;
-    top: 66px;
-    bottom: 0;
-    background: #000;
-    width: 100%;
-    left: 0;
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-    clip-path: circle(0 at center);
-    transition: clip-path 1s ease-in-out ;
-    -webkit-transition: clip-path 1s ease-in-out ;
-    -moz-transition: clip-path 1s ease-in-out ;
-    -ms-transition: clip-path 1s ease-in-out ;
-    -o-transition: clip-path 1s ease-in-out ;
-}
-
-  .nav__input:checked + .nav__menu {
-    clip-path: circle(100% at center);
-  }
-
-}
+/* Nav: los estilos de .nav__* ahora viven todos en nav-vertical.css,
+   compartido por todo el sitio (antes había un bloque duplicado acá que
+   pisaba el diseño nuevo con fondo negro). */
 
 @media (max-width: 1000px){
   /* Frase_1 responsive */
@@ -196,7 +87,7 @@ body {
 .container {
   min-width: 100%;
   font-size: 15px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   /*background-color: #000000;*/
   background-color: #000;
   padding-bottom: 40px;
@@ -266,7 +157,7 @@ body {
   margin: .1em;
   padding: 0.7em 1.5em;
   font-size: 14px;
-  font-family: Raleway;
+  font-family: 'Work Sans', sans-serif;
   font-weight: 500;
   border: none;
   background: #000000;
@@ -418,7 +309,7 @@ body {
 
 .galeria .box-img h2{
   color: white;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-size: 12px; 
   font-weight: 100; 
   text-align: center;
@@ -454,7 +345,7 @@ body {
 	width: 100%;
 	margin:auto;
   padding-bottom: 40px;
-  border-bottom: 1px solid #fafafa;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.12);
 }
 
 .store-wrapper{
@@ -468,9 +359,9 @@ body {
 	display: flex;
 	flex-direction: row;
 	width: 50%;
-  text-transform: uppercase;
+  text-transform: none;
   font-size: 12px;
-  font-family: Raleway, sans-serif;
+  font-family: "Work Sans", sans-serif;
 }
 
 .category_list .category_item{
@@ -478,14 +369,18 @@ body {
 	width: 90%;
 	padding: 15px 0;
 	margin-bottom: 20px;
-	background: #000;
+	background: transparent;
+	border: 1px solid #333333;
 	text-align: center;
 	text-decoration: none;
-	color: #fff;
+	color: #333333;
+	transition: all 0.25s ease;
 }
 
+.category_list .category_item:hover,
 .category_list .ct_item-active{
-	background: #1a1919;
+	background: #333333;
+	color: #F5F4F0;
 }
 
 /* PRODUCTOS ============*/
@@ -641,7 +536,7 @@ body {
 
 .card:hover .thin_plus_only_icon {
   font-weight: 100;
-  font-family: Raleway;
+  font-family: 'Work Sans', sans-serif;
   font-size: 40px;
   display: block;
   color: #fff;
@@ -670,7 +565,7 @@ body {
 
 .card .portfolio_description h5 {
   color: #fff;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   text-transform: capitalize;
   line-height: 2em;
   font-weight: 500;
@@ -686,7 +581,7 @@ body {
 
 .card .portfolio_description span.project_category {
   color: #fff;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-size: 13px;
   line-height: 22px;
   vertical-align: baseline;

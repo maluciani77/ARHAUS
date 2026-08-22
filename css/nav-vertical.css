@@ -1,131 +1,147 @@
 /* ===================================
-   ARHAUS - NAVEGACIÓN MINIMALISTA
-   Simple, sobre el contenido
+   ARHAUS - NAVEGACIÓN
+   Barra fija arriba, minimalista, sobre fondo claro.
+   Inspirada en estudios de arquitectura tipo editorial.
    =================================== */
 
 :root {
-    --primary-red: #e21313;
-    --text-white: #ffffff;
-    --text-gray: #cccccc;
+    --primary-red: #880723;
+    --nav-bg: #F5F4F0;
+    --text-charcoal: #333333;
+    --text-muted: #767676;
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-/* ===================================
-   NAVEGACIÓN FLOTANTE
-   =================================== */
-
 nav {
-    position: absolute;
-    top: 30px;
-    left: 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
+    background: var(--nav-bg);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.08);
 }
 
 .nav__container {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 0;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 18px 40px;
 }
 
-/* Logo en la esquina superior derecha */
-.logo-top-right {
-    position: absolute;
-    top: 30px;
-    right: 40px;
-    z-index: 1001;
-    display: block;
-    animation: logoEntry 0.6s ease-out;
+/* Logo, primer hijo del nav (en index.html y en el resto de las páginas) */
+.nav__logo {
+    display: flex;
+    align-items: center;
 }
 
 .Logo {
-    width: 120px;
+    width: 90px;
     height: auto;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    /* block evita el espacio extra que una imagen inline agrega debajo
+       (descender), que hacía la barra unos px más alta que el padding. */
+    display: block;
+    transition: opacity 0.3s ease;
 }
 
-/* Animación hover del logo */
 .Logo:hover {
-    transform: scale(1.08) rotate(5deg);
-    filter: drop-shadow(0 4px 16px rgba(226, 19, 19, 0.4));
+    opacity: 0.7;
 }
 
-/* Animación de entrada del logo */
-@keyframes logoEntry {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.9);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Ocultar checkbox y label */
+/* Ocultar checkbox y label en desktop */
 .nav__label,
 .nav__input {
     display: none;
 }
 
 /* ===================================
-   MENÚ VERTICAL SIMPLE
+   MENÚ HORIZONTAL
    =================================== */
 
 .nav__menu {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 34px;
 }
 
 .nav__item {
-    color: var(--text-gray);
-    font-family: "Raleway", sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
+    color: var(--text-charcoal);
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    transition: all 0.3s ease;
+    transition: color 0.25s ease;
     position: relative;
     padding-left: 0;
 }
 
-/* HOME siempre rojo */
-.nav__item:first-child {
-    color: var(--primary-red);
-    font-weight: 600;
-}
-
-/* Hover effects */
-.nav__item:hover {
-    color: var(--primary-red);
-    transform: translateX(10px);
-    letter-spacing: 2px;
-}
-
-/* Línea animada que aparece al hover */
+/* Línea fina que aparece debajo al hover */
 .nav__item::before {
     content: '';
     position: absolute;
-    left: -15px;
-    top: 50%;
-    transform: translateY(-50%) scaleX(0);
-    width: 8px;
-    height: 2px;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1px;
     background: var(--primary-red);
-    transition: transform 0.3s ease;
+    transform: scaleX(0);
     transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.nav__item:hover {
+    color: var(--primary-red);
 }
 
 .nav__item:hover::before {
-    transform: translateY(-50%) scaleX(1);
+    transform: scaleX(1);
     transform-origin: left;
+}
+
+/* ===================================
+   NAV SOBRE EL HERO (solo portada)
+   Arriba de todo: invisible, el hero se ve completo con ARHAUS
+   en el medio. Al pasar la mitad del hero: la barra aparece con
+   el logo y el menú.
+   =================================== */
+
+@media (min-width: 769px) {
+    nav.nav--sobre-hero {
+        background: transparent;
+        border-bottom-color: transparent;
+        transition: background 0.5s ease, border-bottom-color 0.5s ease;
+    }
+
+    nav.nav--sobre-hero .nav__logo,
+    nav.nav--sobre-hero .nav__menu {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    /* Pasada la mitad del hero: barra sólida + logo y menú entrando */
+    nav.nav--sobre-hero.nav--scrolled {
+        background: var(--nav-bg);
+        border-bottom-color: rgba(51, 51, 51, 0.08);
+    }
+
+    nav.nav--sobre-hero.nav--scrolled .nav__logo,
+    nav.nav--sobre-hero.nav--scrolled .nav__menu {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    nav.nav--sobre-hero.nav--scrolled .nav__menu .nav__item {
+        transition: opacity 0.5s ease, transform 0.5s ease, color 0.25s ease;
+    }
 }
 
 /* ===================================
@@ -133,16 +149,8 @@ nav {
    =================================== */
 
 @media (max-width: 768px) {
-    nav {
-        top: 20px;
-        left: 20px;
-        right: 20px;
-    }
-
-    /* Logo en mobile */
-    .nav__container > a {
-        top: 20px;
-        right: 20px;
+    .nav__container {
+        padding: 16px 20px;
     }
 
     .Logo {
@@ -152,8 +160,8 @@ nav {
     /* Mostrar hamburger button */
     .nav__label {
         display: block;
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 24px;
         cursor: pointer;
         position: relative;
         z-index: 1001;
@@ -163,45 +171,44 @@ nav {
     .nav__label::after {
         content: '';
         position: absolute;
-        width: 25px;
+        width: 26px;
         height: 2px;
-        background: var(--text-white);
+        background: var(--text-charcoal);
         transition: all 0.3s ease;
         left: 0;
-    }
-
-    .nav__label::before {
         top: 10px;
     }
 
-    .nav__label::after {
-        top: 20px;
+    .nav__label::before {
+        transform: translateY(-6px);
     }
 
-    /* Animación X cuando está abierto */
+    .nav__label::after {
+        transform: translateY(6px);
+    }
+
     .nav__input:checked ~ .nav__label::before {
         transform: rotate(45deg);
-        top: 15px;
         background: var(--primary-red);
     }
 
     .nav__input:checked ~ .nav__label::after {
         transform: rotate(-45deg);
-        top: 15px;
         background: var(--primary-red);
     }
 
-    /* Menú mobile */
+    /* Menú mobile: overlay claro a pantalla completa */
     .nav__menu {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(245, 244, 240, 0.98);
         padding: 80px 30px;
-        gap: 25px;
+        gap: 26px;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -213,33 +220,234 @@ nav {
     }
 
     .nav__item {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0;
-        transform: translateX(-20px);
+        transform: translateY(-10px);
         transition: all 0.3s ease;
     }
 
     .nav__input:checked ~ .nav__menu .nav__item {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
     }
 
-    /* Animación escalonada */
-    .nav__input:checked ~ .nav__menu .nav__item:nth-child(1) { transition-delay: 0.1s; }
-    .nav__input:checked ~ .nav__menu .nav__item:nth-child(2) { transition-delay: 0.2s; }
-    .nav__input:checked ~ .nav__menu .nav__item:nth-child(3) { transition-delay: 0.3s; }
-    .nav__input:checked ~ .nav__menu .nav__item:nth-child(4) { transition-delay: 0.4s; }
-    .nav__input:checked ~ .nav__menu .nav__item:nth-child(5) { transition-delay: 0.5s; }
-
-    .nav__item:hover::before {
-        display: none;
-    }
+    .nav__input:checked ~ .nav__menu .nav__item:nth-child(1) { transition-delay: 0.05s; }
+    .nav__input:checked ~ .nav__menu .nav__item:nth-child(2) { transition-delay: 0.1s; }
+    .nav__input:checked ~ .nav__menu .nav__item:nth-child(3) { transition-delay: 0.15s; }
+    .nav__input:checked ~ .nav__menu .nav__item:nth-child(4) { transition-delay: 0.2s; }
+    .nav__input:checked ~ .nav__menu .nav__item:nth-child(5) { transition-delay: 0.25s; }
 }
 
 /* ===================================
-   NO AJUSTAR EL BODY
+   Deja lugar para la barra fija arriba.
+   El nav es position:fixed, así que no ocupa lugar en el layout:
+   sin este padding el contenido arrancaría tapado por la barra.
    =================================== */
 
 body {
-    padding-left: 0;
+    padding-top: 66px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 58px;
+    }
+}
+
+/* En la portada NO va padding: el hero tiene que ir a sangre,
+   de borde a borde, con el nav flotando encima. (Este padding era
+   el que dejaba la franja gris asomando arriba del hero.) */
+body.con-hero {
+    padding-top: 0;
+}
+
+
+/* ===================================
+   HALO QUE SIGUE AL CURSOR
+   Neutro (sin tinte de color) y adaptativo: sobre las fotos oscuras
+   del hero aclara, sobre el fondo crema oscurece. Asi se nota en
+   las dos zonas sin parecer un foco.
+   =================================== */
+
+.cursor-halo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 420px;
+    height: 420px;
+    margin: -210px 0 0 -210px; /* queda centrado en el cursor */
+    border-radius: 50%;
+    pointer-events: none;      /* nunca bloquea clics */
+    z-index: 4;                /* sobre el contenido, debajo de la barra */
+    opacity: 0;
+    transition: opacity 0.5s ease, background 0.4s ease;
+    /* Por defecto (fondo claro): sombra suave gris, sin tinte de color */
+    background: radial-gradient(circle closest-side,
+        rgba(45, 45, 45, 0.16) 0%,
+        rgba(45, 45, 45, 0.07) 45%,
+        rgba(45, 45, 45, 0) 100%);
+    will-change: transform;
+}
+
+/* Sobre las fotos oscuras del hero: en vez de oscurecer, aclara */
+.cursor-halo.sobre-oscuro {
+    background: radial-gradient(circle closest-side,
+        rgba(255, 253, 247, 0.22) 0%,
+        rgba(255, 253, 247, 0.09) 45%,
+        rgba(255, 253, 247, 0) 100%);
+}
+
+.cursor-halo.is-visible {
+    opacity: 1;
+}
+
+/* En pantallas tactiles no hay cursor: no tiene sentido */
+@media (hover: none), (pointer: coarse) {
+    .cursor-halo { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cursor-halo { display: none; }
+}
+
+
+/* ===================================
+   NAV: UN PUNTO BLANCO + MENU A PANTALLA COMPLETA
+   =================================== */
+
+nav.nav--boton {
+    position: fixed;
+    top: 0;
+    left: auto;
+    right: 0;
+    background: transparent;
+    border: none;
+    z-index: 1000;
+    padding: clamp(18px, 2.4vw, 30px);
+}
+
+.nav__toggle {
+    position: relative;
+    z-index: 2;              /* por encima del menu, para poder cerrarlo */
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.nav__toggle:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+}
+
+.nav__punto {
+    display: block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav__toggle:hover .nav__punto {
+    transform: scale(1.3);
+}
+
+.nav__toggle.esta-abierto .nav__punto {
+    transform: scale(0.72);
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.18),
+                0 0 10px rgba(0, 0, 0, 0.45);
+}
+
+/* El menu ocupa toda la pantalla, con los enlaces en el medio */
+.nav__panel {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 3vh, 34px);
+    padding: 40px 24px;
+    background: rgba(12, 12, 12, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+/* IMPORTANTISIMO: el atributo hidden funciona poniendo display:none,
+   pero el "display: flex" de arriba lo pisa. Sin esta regla el panel
+   quedaba invisible (opacidad 0) pero PRESENTE a pantalla completa,
+   tapando la galeria y comiendose la rueda del mouse y los clics. */
+.nav__panel[hidden] {
+    display: none;
+}
+
+/* Refuerzo: cerrado no recibe puntero; abierto si. */
+.nav__panel {
+    pointer-events: none;
+}
+
+.nav__panel.esta-abierto {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nav__panel .nav__item {
+    color: rgba(255, 255, 255, 0.9);
+    font-family: "Work Sans", sans-serif;
+    font-size: clamp(1.7rem, 5.5vw, 3.4rem);
+    font-weight: 200;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 0.25s ease, transform 0.5s ease, opacity 0.5s ease;
+    /* Entran escalonados, de arriba hacia abajo */
+    opacity: 0;
+    transform: translateY(14px);
+}
+
+.nav__panel.esta-abierto .nav__item {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--i) * 60ms);
+}
+
+/* Linea roja que crece debajo del enlace al pasar el cursor */
+.nav__panel .nav__item::before {
+    display: block;
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.12em;
+    width: 100%;
+    height: 2px;
+    background: #c2183c;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.nav__panel .nav__item:hover::before,
+.nav__panel .nav__item:focus-visible::before {
+    transform: scaleX(1);
+}
+
+.nav__panel .nav__item:hover {
+    color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav__panel .nav__item {
+        transition-duration: 0.01s;
+    }
 }

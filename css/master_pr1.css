@@ -9,7 +9,9 @@ html {
 }
 
 body {
-  background-color: rgb(0, 0, 0);
+  background-color: #F5F4F0;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   overflow-x: hidden;
 }
 
@@ -36,8 +38,7 @@ body {
 
 /* Logo -----------------*/
 .Logo {
-  height: 40px;
-  padding: 0 40px;
+  height: auto;
 }
 .logo_hov:hover {
   transform : scale(1.2);
@@ -50,71 +51,7 @@ body {
   color: #1a1a1a;
 }
 
-/* Nuevo Nav -----------------*/
-.nav {
-  background:#000;
-  color: #fff;
-}
-
-.nav__container {
-  display: flex;
-  height: 66px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 2000;
-  position: fixed;
-  background: #000;
-  opacity: .9;
-}
-
-.nav__menu {
-  display: grid;
-  grid-auto-flow: column;
-  gap: 3em;
-  padding: 0 40px;
-}
-
-.nav__item {
-  font-family: "Raleway", Sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #fff;
-  text-decoration: none;
-  --clippy: polygon(0 0, 0 0, 0 100%, 0% 100%);
-}
-
-.nav__item::after {
-  content: "";
-  display: block;
-  background: #e21313;
-  width: 90%;
-  margin-top: 3px;
-  height: 1px;
-  clip-path: var(--clippy);
-  transition: clip-path .5s;
-  -webkit-transition: clip-path .5s;
-  -moz-transition: clip-path .5s;
-  -ms-transition: clip-path .5s;
-  -o-transition: clip-path .5s;
-}
-
-.nav__item:hover {
-  --clippy:polygon(0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-
-.nav__label, .nav__input {
-  display: none;
-}
-
-.nav__img {
-  width: 80%;
-}
-
-/* FINALIZA NAV */
+/* Nav: los estilos de .nav__* viven en nav-vertical.css (compartido). */
 
 
 .insta{
@@ -136,7 +73,7 @@ body {
 .info-gallery {
   /* border: 1px solid red; */
   box-sizing: border-box;
-  background: #000000;
+  background: #EBE8E1;
   z-index:999;
   width: 100%;
   height: 380px;
@@ -175,16 +112,16 @@ body {
 }
 
 .proyec p.titulo {
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
 }
 
 .proyec h2.subti {
-  color: #FFF;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 65px;
   font-weight: 500;
   text-transform: none;
@@ -207,8 +144,8 @@ body {
 
 .tipologia .tipo p.titulo  {
   font-size: 10px;
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.3em;
@@ -216,8 +153,8 @@ body {
 }
 
 .tipologia .tipo p {
-  color: #fff;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.7em;
@@ -225,16 +162,16 @@ body {
 
 .tipologia .ubi p.titulo  {
   font-size: 10px;
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-weight: 400;
   text-transform: uppercase;
   line-height: 1.3em;
 }
 
 .tipologia .ubi p {
-  color: #fff;
-  font-family: "Raleway", Sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.7em;
@@ -254,8 +191,8 @@ body {
   margin-bottom: 7px;
   font-weight: 600;
   font-size: 10px;
-  font-family: 'Raleway', sans-serif;
-  color: #fff;
+  font-family: 'Work Sans', sans-serif;
+  color: #333333;
   text-transform: uppercase;
   /* border: 1px solid blue; */
 }
@@ -293,13 +230,13 @@ body {
   text-transform: uppercase;
   font-family: "Montserrat", Sans-serif;
   font-size: 15px;
-  color: #D5D5D5;
+  color: #767676;
   line-height: 1.3em;
 }
 
 .sub-tit {
-  color: #D5D5D5;
-  font-family: "Raleway", Sans-serif;
+  color: #767676;
+  font-family: "Work Sans", sans-serif;
   font-size: 10px;
   font-weight: 400;
   text-transform: uppercase;
@@ -308,7 +245,7 @@ body {
 
 .tit {
   column-gap: 0px;
-  color: #D5D5D5;
+  color: #767676;
   font-family: "Montserrat", Sans-serif;
   font-size: 20px;
   font-weight: 500;
@@ -317,28 +254,28 @@ body {
 }
 
 .superficie .supermetros {
-  color: #D5D5D5;
+  color: #767676;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
 
 .superficie .superft {
-  color: #D5D5D5;
+  color: #767676;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
 
 .superficie .anioproyect {
-  color: #D5D5D5;
+  color: #767676;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .superficie .anioconstruc {
-  color: #D5D5D5;
+  color: #767676;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -610,11 +547,11 @@ body {
 .titulo_video {
   height: 100px;
   width: 100%;
-  background-color: #000;
+  background-color: #F5F4F0;
 }
 .titulo_video h2 {
-  color: #fff;
-  font-family: Roboto,sans-serif;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   font-size: 14px;
   line-height: 18px;
   letter-spacing: 4.5px;
@@ -899,8 +836,8 @@ It's important to use percentages or there may be gaps on the right side of the 
     /* border: 1px solid yellow; */
    }
    .datos .proyec  .titulo {
-      color: #D5D5D5;
-      font-family: "Raleway", sans-serif;
+      color: #767676;
+      font-family: "Work Sans", sans-serif;
       font-size: 10px;
       font-weight: 400;
       text-transform: uppercase;
@@ -933,7 +870,7 @@ It's important to use percentages or there may be gaps on the right side of the 
     /* border: 1px solid blue; */
    }
    .superficie .tit {
-    color: #D5D5D5;
+    color: #767676;
     font-size: 20px;
     font-weight: 500;
     line-height: 1.3em;
@@ -946,28 +883,28 @@ It's important to use percentages or there may be gaps on the right side of the 
    
 
    .superficie .supermetros {
-    color: #D5D5D5;
+    color: #767676;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
   
   .superficie .superft {
-    color: #D5D5D5;
+    color: #767676;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
   
   .superficie .anioproyect {
-    color: #D5D5D5;
+    color: #767676;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
   
   .superficie .anioconstruc {
-    color: #D5D5D5;
+    color: #767676;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

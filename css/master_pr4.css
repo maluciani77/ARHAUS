@@ -9,7 +9,9 @@ html {
 }
 
 body {
-  background-color: rgb(233, 232, 232);
+  background-color: #F5F4F0;
+  color: #333333;
+  font-family: "Work Sans", sans-serif;
   overflow-x: hidden;
 }
 
@@ -57,7 +59,7 @@ body {
   min-width: 100%;
   max-width: 100%;
   font-size: 15px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   position: fixed;
   color: white;
   z-index:3;
@@ -194,7 +196,7 @@ body {
 
 .descripcion {
   font-size: 10px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   color: #1a1a1a;
   margin-top: 40px;
   margin-bottom: 40px;
@@ -206,7 +208,7 @@ body {
 
 .descripcion2 {
   font-size: 10px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   color: #1a1a1a;
   margin-top: 40px;
   margin-bottom: 40px;
@@ -217,7 +219,7 @@ body {
 
 .descripcion2 h2 {
   font-size: 12px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   color: #1a1a1a;
 }
 
@@ -230,7 +232,7 @@ body {
 
 .descripcion h2 {
   font-size: 12px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   color: #1a1a1a;
   text-transform: uppercase;
 }
@@ -245,7 +247,7 @@ body {
 
 .brochure p {
   font-size: 12px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   color: #1a1a1a;
 }
 
@@ -287,7 +289,7 @@ body {
 }
 
   .mapa a {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-weight: 200;
     text-decoration: none;
     color: #000;

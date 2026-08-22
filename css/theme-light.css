@@ -1,0 +1,47 @@
+/* ===================================
+   ARHAUS - Overrides del tema claro
+   footer.css es un bundle de tema viejo, gigante y minificado —
+   en vez de editarlo a mano (riesgoso), lo pisamos acá. Este archivo
+   se carga al final en cada página.
+   =================================== */
+
+.prague-footer,
+footer.prague-footer {
+  background-color: #F5F4F0 !important;
+  color: #333333 !important;
+}
+
+.prague-footer a {
+  color: #333333 !important;
+}
+
+.prague-footer a:hover {
+  color: #880723 !important;
+}
+
+.prague-footer .footer-main-content p,
+.prague-footer .footer-info-block-content p {
+  color: #555555 !important;
+}
+
+.prague-footer .footer-info-block-title {
+  color: #333333 !important;
+}
+
+.prague-footer .footer-copyright p {
+  color: #767676 !important;
+}
+
+.prague-social-nav .fa {
+  color: #333333 !important;
+}
+
+.prague-social-nav a:hover .fa {
+  color: #880723 !important;
+}
+
+/* El ícono de "volver arriba" es blanco — invisible sobre fondo claro
+   sin un fondo oscuro detrás. */
+.ir-arriba {
+  background: rgba(51, 51, 51, 0.75) !important;
+}
