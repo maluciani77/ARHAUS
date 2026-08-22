@@ -1,10 +1,17 @@
 # Config/caché del editor, no es parte del proyecto.
 /.vscode/
 
-# Fotos, renders, videos y PDFs de las obras (~1GB, incluye archivos de
-# más de 100MB que GitHub rechaza directamente). No van al repo: se suben
-# a Hostinger por FTP junto con el resto del sitio, aparte de git.
-/images/proyectos/
+# De images/proyectos/ SI van las fotos (~54 MB, ya comprimidas), asi el
+# sitio se ve completo en GitHub. Quedan afuera los videos (740 MB, y tres
+# superan los 100 MB que GitHub rechaza) y los PDFs de brochures (142 MB):
+# esos se suben a Hostinger por FTP, aparte de git.
+*.mp4
+*.mov
+*.avi
+*.pdf
+*.heic
+*.HEIC
+*.ai
 
 # Base de datos local de pruebas (SQLite) — no se sube.
 /database/arhaus.sqlite
