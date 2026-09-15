@@ -44,3 +44,18 @@ function formatear_fecha(?string $fecha): string
     $timestamp = strtotime($fecha);
     return $timestamp ? date('d/m/Y', $timestamp) : $fecha;
 }
+
+/** true si el pedido vino del script de subida (espera JSON, no HTML). */
+function es_pedido_fetch(): bool
+{
+    return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'fetch';
+}
+
+/** Responde JSON y corta la ejecución. */
+function responder_json(array $datos, int $codigo = 200): never
+{
+    http_response_code($codigo);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($datos, JSON_UNESCAPED_UNICODE);
+    exit;
+}

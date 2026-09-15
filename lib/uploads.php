@@ -62,3 +62,117 @@ function ruta_publica_foto(int $obraId, string $archivo): string
 {
     return 'uploads/obras/' . $obraId . '/' . $archivo;
 }
+
+/**
+ * Con name="fotos[]" PHP arma $_FILES "dado vuelta": una lista por
+ * atributo (name[], tmp_name[], error[]...). Esto lo pasa a una lista
+ * de archivos sueltos, con el mismo formato que un $_FILES['foto'] simple.
+ */
+function normalizar_archivos_subidos(array $campo): array
+{
+    if (!isset($campo['name'])) {
+        return [];
+    }
+    if (!is_array($campo['name'])) {
+        return [$campo];
+    }
+
+    $archivos = [];
+    foreach ($campo['name'] as $i => $nombre) {
+        $archivos[] = [
+            'name' => (string)$nombre,
+            'type' => $campo['type'][$i] ?? '',
+            'tmp_name' => $campo['tmp_name'][$i] ?? '',
+            'error' => $campo['error'][$i] ?? UPLOAD_ERR_NO_FILE,
+            'size' => $campo['size'][$i] ?? 0,
+        ];
+    }
+    return $archivos;
+}
+
+/** Para comparar nombres sin importar mayúsculas (mbstring puede no estar). */
+function texto_comparable(string $texto): string
+{
+    return function_exists('mb_strtolower') ? mb_strtolower($texto, 'UTF-8') : strtolower($texto);
+}
+
+/** Limpia el nombre de etapa escrito a mano: sin espacios de más. */
+function limpiar_nombre_etapa(string $nombre): string
+{
+    $nombre = preg_replace('/\s+/u', ' ', $nombre) ?? $nombre;
+    $nombre = trim($nombre);
+    if (strlen($nombre) > 255) {
+        throw new RuntimeException('El nombre de la etapa es demasiado largo.');
+    }
+    return $nombre;
+}
+
+/**
+ * La etapa se escribe libre. Si ya existe una con ese nombre en la obra
+ * (sin importar mayúsculas) se usa esa; si no, se crea al final.
+ */
+function obtener_o_crear_etapa(int $obraId, string $nombre): int
+{
+    $clave = texto_comparable($nombre);
+
+    $stmt = db()->prepare('SELECT id, nombre FROM etapas WHERE obra_id = ?');
+    $stmt->execute([$obraId]);
+    foreach ($stmt->fetchAll() as $fila) {
+        if (texto_comparable($fila['nombre']) === $clave) {
+            return (int)$fila['id'];
+        }
+    }
+
+    $orden = db()->prepare('SELECT COALESCE(MAX(orden), 0) + 1 FROM etapas WHERE obra_id = ?');
+    $orden->execute([$obraId]);
+    $ins = db()->prepare('INSERT INTO etapas (obra_id, nombre, orden) VALUES (?, ?, ?)');
+    $ins->execute([$obraId, $nombre, (int)$orden->fetchColumn()]);
+    return (int)db()->lastInsertId();
+}
+
+/**
+ * Sube una o varias fotos de una obra. Si una falla, las demás siguen.
+ * Devuelve ['subidas' => int, 'errores' => ["archivo.jpg: motivo", ...]].
+ */
+function subir_fotos_obra(int $obraId, array $campoArchivos, string $etapaEscrita, ?string $descripcion, int $usuarioId): array
+{
+    $archivos = array_values(array_filter(
+        normalizar_archivos_subidos($campoArchivos),
+        fn(array $a): bool => (int)$a['error'] !== UPLOAD_ERR_NO_FILE
+    ));
+
+    if (!$archivos) {
+        return ['subidas' => 0, 'errores' => ['No se seleccionó ninguna foto.']];
+    }
+
+    try {
+        $etapaNombre = limpiar_nombre_etapa($etapaEscrita);
+    } catch (RuntimeException $e) {
+        return ['subidas' => 0, 'errores' => [$e->getMessage()]];
+    }
+
+    // La etapa se crea recién con la primera foto que sale bien: si fallan
+    // todas, no queda una etapa vacía creada de más.
+    $etapaId = null;
+    $etapaResuelta = $etapaNombre === '';
+
+    $ins = db()->prepare('INSERT INTO fotos (obra_id, etapa_id, archivo, descripcion, subido_por) VALUES (?, ?, ?, ?, ?)');
+    $subidas = 0;
+    $errores = [];
+
+    foreach ($archivos as $archivo) {
+        try {
+            $guardado = guardar_foto_subida($archivo, $obraId);
+            if (!$etapaResuelta) {
+                $etapaId = obtener_o_crear_etapa($obraId, $etapaNombre);
+                $etapaResuelta = true;
+            }
+            $ins->execute([$obraId, $etapaId, $guardado, $descripcion, $usuarioId]);
+            $subidas++;
+        } catch (RuntimeException $e) {
+            $errores[] = $archivo['name'] . ': ' . $e->getMessage();
+        }
+    }
+
+    return ['subidas' => $subidas, 'errores' => $errores];
+}

@@ -68,3 +68,17 @@ una terminal mientras probás en el navegador).
   ejecutar PHP ahí adentro.
 - `config.php`, la carpeta `lib/` y `database/` están bloqueadas por
   `.htaccess` para que nadie pueda pedirlas directo desde el navegador.
+
+## Subida de fotos: límite del servidor
+
+El panel deja elegir **muchas fotos de una vez** y las manda de a una, así que
+lo único que importa es cuánto pesa **cada foto**, no el total. La app rechaza
+arriba de 8 MB por foto.
+
+Para que eso funcione, en el servidor `upload_max_filesize` tiene que ser de
+8 MB o más. En Hostinger se cambia desde hPanel → PHP Configuration. Si queda
+más bajo, las fotos de celular (3–5 MB) pueden fallar de a una con el mensaje
+"La foto es demasiado pesada".
+
+En local, el servidor de pruebas ya arranca con el límite subido (está en la
+configuración `arhaus` de `.claude/launch.json`).

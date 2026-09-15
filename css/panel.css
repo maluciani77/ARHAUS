@@ -401,3 +401,106 @@ body.panel-body--centrado {
     padding: 20px;
   }
 }
+
+/* --- Subida de varias fotos --- */
+.panel-form input[type="file"] {
+  padding: 16px 12px;
+  border-style: dashed;
+  cursor: pointer;
+}
+
+.panel-form .panel-subida__ayuda {
+  margin: -8px 0 0;
+  font-size: 0.8rem;
+}
+
+.panel-subida__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* Ojo: el display de arriba pisa al atributo hidden si no se aclara. */
+.panel-subida__lista[hidden],
+.panel-subida__resumen[hidden] {
+  display: none;
+}
+
+.panel-subida__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  align-items: center;
+  padding: 8px 12px;
+  background: #0e0e0e;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.panel-subida__nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--panel-text);
+}
+
+.panel-subida__estado {
+  color: var(--panel-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.panel-subida__barra {
+  grid-column: 1 / -1;
+  height: 3px;
+  background: var(--panel-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.panel-subida__barra span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--panel-red);
+  transition: width 0.2s ease;
+}
+
+.panel-subida__item.is-ok .panel-subida__estado { color: #a8f2c4; }
+.panel-subida__item.is-ok .panel-subida__barra span { background: #2f9c5c; }
+
+.panel-subida__item.is-error { border-color: #5c2f2f; }
+.panel-subida__item.is-error .panel-subida__estado { color: #f2a8a8; }
+
+.panel-subida__error {
+  grid-column: 1 / -1;
+  color: #f2a8a8;
+  font-size: 0.8rem;
+}
+
+.panel-subida__resumen {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #142a1e;
+  border: 1px solid #2f5c40;
+  color: #a8f2c4;
+}
+
+.panel-subida__resumen.is-error {
+  background: #2a1414;
+  border-color: #5c2f2f;
+  color: #f2a8a8;
+}
+
+.panel-form button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

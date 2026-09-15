@@ -51,16 +51,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$etapaId, $obra['id']]);
         redirigir('obra.php?id=' . $obra['id']);
     } elseif ($accion === 'subir_foto') {
-        $etapaId = (int)($_POST['etapa_id'] ?? 0) ?: null;
-        $descripcion = trim((string)($_POST['descripcion'] ?? '')) ?: null;
-        try {
-            $archivo = guardar_foto_subida($_FILES['foto'] ?? [], (int)$obra['id']);
-            $stmt = db()->prepare('INSERT INTO fotos (obra_id, etapa_id, archivo, descripcion, subido_por) VALUES (?, ?, ?, ?, ?)');
-            $stmt->execute([$obra['id'], $etapaId, $archivo, $descripcion, $usuario['id']]);
-            redirigir('obra.php?id=' . $obra['id']);
-        } catch (RuntimeException $e) {
-            $error = $e->getMessage();
+        $resultado = subir_fotos_obra(
+            (int)$obra['id'],
+            $_FILES['fotos'] ?? [],
+            (string)($_POST['etapa'] ?? ''),
+            trim((string)($_POST['descripcion'] ?? '')) ?: null,
+            (int)$usuario['id']
+        );
+
+        // El script de subida manda las fotos de a una y espera JSON.
+        if (es_pedido_fetch()) {
+            responder_json($resultado, $resultado['subidas'] > 0 ? 200 : 422);
         }
+
+        if (!$resultado['errores']) {
+            redirigir('obra.php?id=' . $obra['id']);
+        }
+        $error = ($resultado['subidas'] > 0
+                ? 'Se subieron ' . $resultado['subidas'] . ' fotos, pero otras fallaron: '
+                : '')
+            . implode(' · ', $resultado['errores']);
     } elseif ($accion === 'eliminar_foto') {
         $fotoId = (int)($_POST['foto_id'] ?? 0);
         $stmt = db()->prepare('SELECT * FROM fotos WHERE id = ? AND obra_id = ?');
@@ -163,27 +173,7 @@ $fotos = $stmtFotos->fetchAll();
         <p class="panel-vacio">Todavía no subiste fotos.</p>
     <?php endif; ?>
 
-    <div class="panel-card">
-        <form method="post" enctype="multipart/form-data" class="panel-form">
-            <?= campo_csrf() ?>
-            <input type="hidden" name="accion" value="subir_foto">
-            <label>Foto (JPG, PNG o WEBP, hasta 8 MB)
-                <input type="file" name="foto" accept="image/jpeg,image/png,image/webp" required>
-            </label>
-            <label>Etapa (opcional)
-                <select name="etapa_id">
-                    <option value="">Sin etapa</option>
-                    <?php foreach ($etapas as $etapa): ?>
-                        <option value="<?= (int)$etapa['id'] ?>"><?= e($etapa['nombre']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label>Descripción (opcional)
-                <input type="text" name="descripcion" maxlength="255">
-            </label>
-            <button type="submit">Subir foto</button>
-        </form>
-    </div>
+    <?php include __DIR__ . '/../_form_fotos.php'; ?>
 </main>
 </body>
 </html>
