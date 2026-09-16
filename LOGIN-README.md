@@ -52,8 +52,19 @@ una terminal mientras probás en el navegador).
    'user' => 'el_usuario_que_te_dio_hostinger',
    'password' => 'la_contraseña_que_te_dio_hostinger',
    ```
-4. Subí **todo** el contenido de la carpeta `arhaus/` (tal cual está) a
-   `public_html` por FTP o el Administrador de archivos de hPanel.
+4. Subí el contenido de la carpeta `arhaus/` a `public_html`, por FTP o
+   por el Administrador de archivos de hPanel (que permite subir un .zip
+   y descomprimirlo ahí mismo, mucho más rápido que archivo por archivo).
+
+   **No subas** estas cosas:
+   - `database/arhaus.sqlite` → es la base de pruebas de tu PC. En el
+     servidor los datos viven en MySQL. Si la subís, no rompe nada, pero
+     queda una copia de datos de prueba dando vueltas.
+   - `backups/` y `.git/` → no hacen falta en el servidor.
+
+   Los videos y PDFs de `images/proyectos/` (unos 880 MB) conviene
+   subirlos aparte por FTP con FileZilla: por el navegador un archivo de
+   100 MB se corta fácil.
 5. Entrá a `https://tudominio.com/setup.php` una sola vez para crear tu
    usuario admin real en el servidor.
 6. **Importante**: una vez que ya creaste el admin, borrá `setup.php`

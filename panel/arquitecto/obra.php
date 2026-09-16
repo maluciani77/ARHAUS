@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../lib/csrf.php';
 require_once __DIR__ . '/../../lib/uploads.php';
 
 $raiz = '../../';
-$usuario = requerir_rol($raiz, 'arquitecto');
+$usuario = requerir_rol($raiz, 'arquitecto', 'admin');
 
 $obraId = (int)($_GET['id'] ?? $_POST['obra_id'] ?? 0);
 

@@ -104,7 +104,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $clientes = db()->query("SELECT id, nombre FROM usuarios WHERE rol = 'cliente' ORDER BY nombre")->fetchAll();
-$arquitectos = db()->query("SELECT id, nombre FROM usuarios WHERE rol = 'arquitecto' ORDER BY nombre")->fetchAll();
+$arquitectos = db()->query(
+    // Los admin tambien pueden figurar como arquitecto de una obra: en un
+    // estudio chico la misma persona dirige y administra. Van despues de
+    // los arquitectos en la lista, y se muestran aclarando el rol.
+    "SELECT id, nombre, rol FROM usuarios
+     WHERE rol IN ('arquitecto', 'admin')
+     ORDER BY (rol = 'admin'), nombre"
+)->fetchAll();
 
 $stmtEtapas = db()->prepare('SELECT * FROM etapas WHERE obra_id = ? ORDER BY orden ASC, fecha ASC');
 $stmtEtapas->execute([$obra['id']]);
@@ -161,7 +168,7 @@ $fotos = $stmtFotos->fetchAll();
                 <select name="arquitecto_id">
                     <option value="">Sin asignar</option>
                     <?php foreach ($arquitectos as $a): ?>
-                        <option value="<?= (int)$a['id'] ?>" <?= (int)$a['id'] === (int)$obra['arquitecto_id'] ? 'selected' : '' ?>><?= e($a['nombre']) ?></option>
+                        <option value="<?= (int)$a['id'] ?>" <?= (int)$a['id'] === (int)$obra['arquitecto_id'] ? 'selected' : '' ?>><?= e($a['nombre']) ?><?= $a['rol'] === 'admin' ? ' (admin)' : '' ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>

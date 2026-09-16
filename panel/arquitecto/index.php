@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/helpers.php';
 
 $raiz = '../../';
-$usuario = requerir_rol($raiz, 'arquitecto');
+$usuario = requerir_rol($raiz, 'arquitecto', 'admin');
 
 $stmt = db()->prepare('SELECT * FROM obras WHERE arquitecto_id = ? ORDER BY created_at DESC');
 $stmt->execute([$usuario['id']]);

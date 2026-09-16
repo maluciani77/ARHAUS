@@ -51,8 +51,15 @@ function es_pedido_fetch(): bool
     return ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'fetch';
 }
 
-/** Responde JSON y corta la ejecución. */
-function responder_json(array $datos, int $codigo = 200): never
+/**
+ * Responde JSON y corta la ejecución.
+ *
+ * OJO: el tipo de retorno es "void" y no "never" a propósito. "never"
+ * existe recién desde PHP 8.1, y si el servidor corre 8.0 el archivo
+ * ni siquiera compila: se cae con error 500 TODA página que lo incluya
+ * (login, panel, setup...). Con "void" anda igual y es compatible.
+ */
+function responder_json(array $datos, int $codigo = 200): void
 {
     http_response_code($codigo);
     header('Content-Type: application/json; charset=utf-8');
