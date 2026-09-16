@@ -80,15 +80,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		}, 620);
 	}
 
-	// ---------- Rueda: un giro = una foto ----------
+	// ---------- Rueda: un gesto = una foto ----------
+
+	// Un solo gesto (trackpad con inercia, rueda que gira libre) manda
+	// muchos eventos durante mas de un segundo. Solo se toma el primero:
+	// el gesto se da por terminado recien tras un rato sin eventos.
+	var PAUSA_ENTRE_GESTOS = 220;
+	var ultimaRueda = 0;
 
 	galeria.addEventListener('wheel', function (e) {
 		// Si el gesto ya es horizontal (trackpad), dejarlo pasar tal cual.
 		if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
 
 		e.preventDefault();
-		if (enMovimiento) return;   // todavia esta viajando: ignorar
 		if (e.deltaY === 0) return;
+
+		var ahora = Date.now();
+		var mismoGesto = ahora - ultimaRueda < PAUSA_ENTRE_GESTOS;
+		ultimaRueda = ahora;
+		if (mismoGesto || enMovimiento) return;   // sigue el mismo gesto o todavia viaja
 
 		// OJO: no filtrar por el tamano de deltaY. Segun el navegador y el
 		// mouse, la rueda informa PIXELES (deltaMode 0) o LINEAS (deltaMode 1,
