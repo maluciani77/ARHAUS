@@ -38,6 +38,32 @@ function db(): PDO
     return $pdo;
 }
 
+/**
+ * Crea la tabla con su definición de database/schema.*.sql si todavía no
+ * existe. Así, en un servidor donde la base se importó antes de que la
+ * tabla existiera, alcanza con subir los archivos nuevos.
+ */
+function asegurar_tabla(string $tabla): void
+{
+    static $listas = [];
+    if (isset($listas[$tabla])) {
+        return;
+    }
+
+    try {
+        db()->query('SELECT 1 FROM ' . $tabla . ' LIMIT 1');
+    } catch (PDOException $ex) {
+        $archivo = db_driver() === 'sqlite' ? 'schema.sqlite.sql' : 'schema.mysql.sql';
+        $sql = file_get_contents(__DIR__ . '/../database/' . $archivo);
+        foreach (array_map('trim', explode(';', $sql)) as $sentencia) {
+            if (stripos($sentencia, 'CREATE TABLE IF NOT EXISTS ' . $tabla . ' ') !== false) {
+                db()->exec($sentencia);
+            }
+        }
+    }
+    $listas[$tabla] = true;
+}
+
 /** Driver activo ('sqlite' | 'mysql'), útil para SQL que difiere entre motores. */
 function db_driver(): string
 {

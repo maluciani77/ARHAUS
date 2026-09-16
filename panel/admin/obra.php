@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../lib/helpers.php';
 require_once __DIR__ . '/../../lib/csrf.php';
 require_once __DIR__ . '/../../lib/uploads.php';
 require_once __DIR__ . '/../../lib/presupuestos.php';
+require_once __DIR__ . '/../../lib/calendario.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'admin');
@@ -24,6 +25,8 @@ if (!$obra) {
 
 $error = null;
 $errorPresupuesto = null;
+$errorEtapa = null;
+$errorEvento = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -63,11 +66,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $del = db()->prepare('DELETE FROM etapas WHERE id = ? AND obra_id = ?');
         $del->execute([$etapaId, $obra['id']]);
         redirigir('obra.php?id=' . $obra['id']);
+    } elseif ($accion === 'editar_etapa') {
+        $etapaId = (int)($_POST['etapa_id'] ?? 0);
+        $errorEtapa = actualizar_etapa($etapaId, (int)$obra['id'], $_POST);
+        if ($errorEtapa === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#etapa-' . $etapaId);
+        }
+    } elseif ($accion === 'agregar_evento') {
+        $errorEvento = agregar_evento((int)$obra['id'], $_POST, (int)$usuario['id']);
+        if ($errorEvento === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#calendario');
+        }
+    } elseif ($accion === 'eliminar_evento') {
+        eliminar_evento((int)($_POST['evento_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#calendario');
     } elseif ($accion === 'agregar_presupuesto') {
         $errorPresupuesto = agregar_presupuesto((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorPresupuesto === null) {
             redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
         }
+    } elseif ($accion === 'alternar_monto_oculto') {
+        alternar_monto_oculto((int)($_POST['presupuesto_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
     } elseif ($accion === 'eliminar_presupuesto') {
         eliminar_presupuesto((int)($_POST['presupuesto_id'] ?? 0), (int)$obra['id']);
         redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
@@ -127,12 +147,13 @@ $stmtEtapas = db()->prepare('SELECT * FROM etapas WHERE obra_id = ? ORDER BY ord
 $stmtEtapas->execute([$obra['id']]);
 $etapas = $stmtEtapas->fetchAll();
 
-$stmtFotos = db()->prepare('SELECT * FROM fotos WHERE obra_id = ? ORDER BY created_at DESC');
+$stmtFotos = db()->prepare('SELECT * FROM fotos WHERE obra_id = ? ORDER BY created_at ASC, id ASC');
 $stmtFotos->execute([$obra['id']]);
 $fotos = $stmtFotos->fetchAll();
 
 $presupuestos = presupuestos_de_obra((int)$obra['id']);
-$puedeEditar = true;
+$hoy = hoy_argentina();
+$calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -155,6 +176,13 @@ $puedeEditar = true;
         <?= e($obra['ubicacion'] ?? '') ?>
         · <span class="panel-tag panel-tag--rojo"><?= e(nombre_estado($obra['estado'])) ?></span>
     </p>
+
+    <nav class="panel-secciones" aria-label="Secciones de la obra">
+        <a href="#presupuestos">Presupuestos</a>
+        <a href="#calendario">Calendario</a>
+        <a href="#etapas">Etapas</a>
+        <a href="#fotos">Fotos</a>
+    </nav>
 
     <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
 
@@ -198,62 +226,11 @@ $puedeEditar = true;
 
     <?php include __DIR__ . '/../_presupuestos.php'; ?>
 
-    <h2>Etapas</h2>
-    <?php if ($etapas): ?>
-        <ul class="panel-timeline">
-            <?php foreach ($etapas as $etapa): ?>
-                <li>
-                    <h4><?= e($etapa['nombre']) ?></h4>
-                    <?php if ($etapa['fecha']): ?><time><?= e(formatear_fecha($etapa['fecha'])) ?></time><?php endif; ?>
-                    <?php if ($etapa['descripcion']): ?><p><?= nl2br(e($etapa['descripcion'])) ?></p><?php endif; ?>
-                    <form method="post" style="margin-top:6px;" onsubmit="return confirm('¿Eliminar esta etapa?');">
-                        <?= campo_csrf() ?>
-                        <input type="hidden" name="accion" value="eliminar_etapa">
-                        <input type="hidden" name="etapa_id" value="<?= (int)$etapa['id'] ?>">
-                        <button type="submit" class="panel-btn panel-btn--peligro" style="padding:4px 10px;font-size:0.75rem;">Eliminar</button>
-                    </form>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p class="panel-vacio">Todavía no hay etapas cargadas.</p>
-    <?php endif; ?>
+    <?php include __DIR__ . '/../_calendario_obra.php'; ?>
 
-    <div class="panel-card">
-        <form method="post" class="panel-form">
-            <?= campo_csrf() ?>
-            <input type="hidden" name="accion" value="agregar_etapa">
-            <label>Nombre de la etapa
-                <input type="text" name="nombre" placeholder="Ej: Cimientos" required>
-            </label>
-            <label>Fecha (opcional)
-                <input type="date" name="fecha">
-            </label>
-            <label>Descripción (opcional)
-                <textarea name="descripcion" rows="2"></textarea>
-            </label>
-            <button type="submit">Agregar etapa</button>
-        </form>
-    </div>
+    <?php include __DIR__ . '/../_etapas.php'; ?>
 
-    <h2>Fotos</h2>
-    <?php if ($fotos): ?>
-        <div class="panel-galeria">
-            <?php foreach ($fotos as $foto): ?>
-                <div class="panel-foto">
-                    <img src="<?= e($raiz . ruta_publica_foto((int)$obra['id'], $foto['archivo'])) ?>" alt="<?= e($foto['descripcion'] ?? 'Foto de avance') ?>" loading="lazy">
-                    <form method="post" onsubmit="return confirm('¿Eliminar esta foto?');">
-                        <?= campo_csrf() ?>
-                        <input type="hidden" name="accion" value="eliminar_foto">
-                        <input type="hidden" name="foto_id" value="<?= (int)$foto['id'] ?>">
-                        <button type="submit" title="Eliminar">×</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p class="panel-vacio">Todavía no hay fotos subidas.</p>
-    <?php endif; ?>
+    <?php include __DIR__ . '/../_galeria_etapas.php'; ?>
 
     <?php include __DIR__ . '/../_form_fotos.php'; ?>
 </main>

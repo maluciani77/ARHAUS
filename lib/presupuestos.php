@@ -7,9 +7,9 @@ const MONEDAS_PRESUPUESTO = ['ARS', 'USD'];
 const MONTO_MAXIMO = 999999999999.99; // lo que entra en DECIMAL(14,2)
 
 /**
- * Crea la tabla si todavía no existe. Así, en un servidor donde la base
- * se importó antes de que existieran los presupuestos, alcanza con subir
- * los archivos nuevos: no hace falta volver a importar el esquema.
+ * Crea la tabla (o la columna monto_oculto) si todavía no existe. Así, en
+ * un servidor donde la base se importó antes, alcanza con subir los
+ * archivos nuevos: no hace falta volver a importar el esquema.
  */
 function asegurar_tabla_presupuestos(): void
 {
@@ -18,16 +18,13 @@ function asegurar_tabla_presupuestos(): void
         return;
     }
 
+    asegurar_tabla('presupuestos');
+
     try {
-        db()->query('SELECT 1 FROM presupuestos LIMIT 1');
+        db()->query('SELECT monto_oculto FROM presupuestos LIMIT 1');
     } catch (PDOException $ex) {
-        $archivo = db_driver() === 'sqlite' ? 'schema.sqlite.sql' : 'schema.mysql.sql';
-        $sql = file_get_contents(__DIR__ . '/../database/' . $archivo);
-        foreach (array_map('trim', explode(';', $sql)) as $sentencia) {
-            if (stripos($sentencia, 'CREATE TABLE IF NOT EXISTS presupuestos') !== false) {
-                db()->exec($sentencia);
-            }
-        }
+        $tipo = db_driver() === 'sqlite' ? 'INTEGER' : 'TINYINT(1)';
+        db()->exec("ALTER TABLE presupuestos ADD COLUMN monto_oculto $tipo NOT NULL DEFAULT 0");
     }
     $lista = true;
 }
@@ -111,6 +108,7 @@ function agregar_presupuesto(int $obraId, array $datos, int $usuarioId): ?string
     $moneda = (string)($datos['moneda'] ?? 'ARS');
     $fecha = trim((string)($datos['fecha'] ?? ''));
     $detalle = trim((string)($datos['detalle'] ?? '')) ?: null;
+    $montoOculto = !empty($datos['monto_oculto']) ? 1 : 0;
 
     $fechaValida = DateTime::createFromFormat('Y-m-d', $fecha);
 
@@ -132,7 +130,7 @@ function agregar_presupuesto(int $obraId, array $datos, int $usuarioId): ?string
 
     asegurar_tabla_presupuestos();
     $stmt = db()->prepare(
-        'INSERT INTO presupuestos (obra_id, concepto, monto, moneda, fecha, detalle, cargado_por) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        'INSERT INTO presupuestos (obra_id, concepto, monto, moneda, fecha, detalle, monto_oculto, cargado_por) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     );
     $stmt->execute([
         $obraId,
@@ -141,9 +139,18 @@ function agregar_presupuesto(int $obraId, array $datos, int $usuarioId): ?string
         $moneda,
         $fecha,
         $detalle,
+        $montoOculto,
         $usuarioId,
     ]);
     return null;
+}
+
+/** Muestra u oculta el monto de un presupuesto en el panel del cliente. */
+function alternar_monto_oculto(int $presupuestoId, int $obraId): void
+{
+    asegurar_tabla_presupuestos();
+    $stmt = db()->prepare('UPDATE presupuestos SET monto_oculto = 1 - monto_oculto WHERE id = ? AND obra_id = ?');
+    $stmt->execute([$presupuestoId, $obraId]);
 }
 
 function eliminar_presupuesto(int $presupuestoId, int $obraId): void

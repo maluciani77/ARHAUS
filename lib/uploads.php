@@ -64,6 +64,35 @@ function ruta_publica_foto(int $obraId, string $archivo): string
 }
 
 /**
+ * Arma los grupos etapa → fotos, en el orden de las etapas. Incluye las
+ * etapas sin fotos (fotos = []). Las fotos sin etapa van en un último
+ * grupo con etapa null, solo si hay alguna.
+ */
+function agrupar_fotos_por_etapa(array $etapas, array $fotos): array
+{
+    $grupos = [];
+    foreach ($etapas as $etapa) {
+        $grupos[(int)$etapa['id']] = ['etapa' => $etapa, 'fotos' => []];
+    }
+
+    $sueltas = [];
+    foreach ($fotos as $foto) {
+        $etapaId = (int)($foto['etapa_id'] ?? 0);
+        if (isset($grupos[$etapaId])) {
+            $grupos[$etapaId]['fotos'][] = $foto;
+        } else {
+            $sueltas[] = $foto;
+        }
+    }
+
+    $grupos = array_values($grupos);
+    if ($sueltas) {
+        $grupos[] = ['etapa' => null, 'fotos' => $sueltas];
+    }
+    return $grupos;
+}
+
+/**
  * Con name="fotos[]" PHP arma $_FILES "dado vuelta": una lista por
  * atributo (name[], tmp_name[], error[]...). Esto lo pasa a una lista
  * de archivos sueltos, con el mismo formato que un $_FILES['foto'] simple.
@@ -128,6 +157,35 @@ function obtener_o_crear_etapa(int $obraId, string $nombre): int
     $ins = db()->prepare('INSERT INTO etapas (obra_id, nombre, orden) VALUES (?, ?, ?)');
     $ins->execute([$obraId, $nombre, (int)$orden->fetchColumn()]);
     return (int)db()->lastInsertId();
+}
+
+/**
+ * Cambia nombre, fecha y descripción de una etapa. La fecha puede quedar
+ * vacía. Devuelve null si salió bien, o el mensaje de error para mostrar.
+ */
+function actualizar_etapa(int $etapaId, int $obraId, array $datos): ?string
+{
+    try {
+        $nombre = limpiar_nombre_etapa((string)($datos['nombre'] ?? ''));
+    } catch (RuntimeException $e) {
+        return $e->getMessage();
+    }
+    $fecha = trim((string)($datos['fecha'] ?? ''));
+    $descripcion = trim((string)($datos['descripcion'] ?? '')) ?: null;
+
+    if ($nombre === '') {
+        return 'La etapa necesita un nombre.';
+    }
+    if ($fecha !== '') {
+        $fechaValida = DateTime::createFromFormat('Y-m-d', $fecha);
+        if (!$fechaValida || $fechaValida->format('Y-m-d') !== $fecha) {
+            return 'La fecha de la etapa no es válida.';
+        }
+    }
+
+    $stmt = db()->prepare('UPDATE etapas SET nombre = ?, fecha = ?, descripcion = ? WHERE id = ? AND obra_id = ?');
+    $stmt->execute([$nombre, $fecha ?: null, $descripcion, $etapaId, $obraId]);
+    return null;
 }
 
 /**

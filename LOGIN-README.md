@@ -6,11 +6,22 @@
   el cliente y el arquitecto de cada obra, y puede gestionar todo.
 - **Arquitecto**: ve solo las obras que el admin le asignó. En cada una
   puede cargar **etapas** (línea de tiempo: nombre, fecha, descripción),
-  subir **fotos** de avance y cargar **presupuestos** (concepto, monto en
-  pesos o dólares, fecha y detalle). El admin puede hacer lo mismo en
-  cualquier obra.
-- **Cliente**: ve su obra en modo solo lectura — línea de tiempo de
-  etapas, presupuestos y galería de fotos.
+  subir **fotos** de avance (quedan agrupadas por etapa) y cargar
+  **presupuestos** (concepto, monto en pesos o dólares, fecha y detalle).
+  Cada presupuesto puede tener el **monto oculto al cliente**. También
+  maneja el **calendario** de la obra (eventos propios como visitas o
+  reuniones, con fecha y hora) y puede **editar las etapas** (nombre,
+  fecha y descripción). El admin puede hacer lo mismo en cualquier obra.
+- **Cliente**: ve su obra en modo solo lectura, con la estética del sitio.
+  En la compu tiene un panel a la izquierda con las secciones; en el
+  celular, una barra con íconos abajo:
+  - **Inicio**: portada con la última foto, etapa actual, últimas fotos y
+    actividad reciente.
+  - **Fotos**: cada etapa como un capítulo con sus fotos en grande (se
+    amplían a pantalla completa al tocarlas).
+  - **Calendario**: el mes con las fechas de etapas, presupuestos y días
+    en que se subieron fotos, y la agenda de ese mes.
+  - **Presupuestos**: los montos ocultos no se envían a su navegador.
 
 Si la base de Hostinger ya estaba creada de antes, no hace falta volver a
 importar nada por los presupuestos: la tabla se crea sola la primera vez

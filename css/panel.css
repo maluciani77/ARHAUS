@@ -540,11 +540,228 @@ body.panel-body--centrado {
 
 .panel-presupuestos__acciones {
   width: 1%;
-  text-align: right;
+}
+
+.panel-presupuestos__acciones form {
+  display: inline-block;
+  margin: 0 0 4px 6px;
+}
+
+.panel-presupuestos__oculto {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--panel-text-muted);
+}
+
+.panel-btn--chico {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.panel-form .panel-form__check {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.panel-form__check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--panel-red);
+}
+
+/* --- Fotos agrupadas por etapa --- */
+.panel-galeria__etapa {
+  margin: 24px 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.panel-galeria__etapa span {
+  color: var(--panel-text-muted);
+  font-weight: 400;
+  margin-left: 6px;
 }
 
 @media (max-width: 640px) {
   .panel-form__fila {
     grid-template-columns: 1fr;
+  }
+}
+
+/* --- Accesos a las secciones de una obra --- */
+.panel-secciones {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+  margin: 0 -24px;
+  padding: 10px 24px;
+  overflow-x: auto;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.panel-secciones a {
+  flex: none;
+  padding: 6px 14px;
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  color: var(--panel-text);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.panel-secciones a:hover {
+  border-color: var(--panel-red);
+  color: var(--panel-red);
+}
+
+.panel-main [id] {
+  scroll-margin-top: 64px;
+}
+
+.panel-main h3.panel-agenda__titulo {
+  margin: 20px 0 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--panel-text-muted);
+}
+
+/* --- Etapas: editar --- */
+.panel-sin-fecha {
+  font-style: italic;
+}
+
+.panel-etapa__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.panel-editar summary {
+  list-style: none;
+}
+
+.panel-editar summary::-webkit-details-marker {
+  display: none;
+}
+
+.panel-editar[open] {
+  flex-basis: 100%;
+}
+
+.panel-editar[open] summary {
+  margin-bottom: 4px;
+}
+
+.panel-editar .panel-form {
+  max-width: 520px;
+  margin-top: 8px;
+  padding: 16px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-card);
+}
+
+/* --- Calendario de la obra --- */
+.panel-form__fila--dos {
+  grid-template-columns: 1fr 1fr;
+}
+
+.panel-agenda {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.panel-agenda__item {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  align-items: start;
+  padding: 12px 0 12px 14px;
+  border-bottom: 1px solid var(--panel-border);
+  border-left: 3px solid var(--tipo-color, var(--panel-border));
+}
+
+.panel-agenda__item--etapa { --tipo-color: #e21313; }
+.panel-agenda__item--evento { --tipo-color: #f2f2f2; }
+.panel-agenda__item--presupuesto { --tipo-color: #4fa3ad; }
+.panel-agenda__item--fotos { --tipo-color: #c9a24f; }
+
+.panel-agenda__fecha {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel-agenda__fecha span {
+  display: block;
+  color: var(--panel-text-muted);
+  font-size: 0.8rem;
+}
+
+.panel-agenda__tipo {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--tipo-color);
+}
+
+.panel-agenda__cuerpo p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--panel-text-muted);
+}
+
+.panel-agenda__pasadas {
+  margin: 8px 0 18px;
+}
+
+.panel-agenda__pasadas summary {
+  padding: 8px 0;
+  color: var(--panel-text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.panel-agenda + .panel-alert,
+.panel-agenda__pasadas + .panel-card,
+.panel-agenda__pasadas + .panel-alert,
+.panel-agenda + .panel-card,
+.panel-vacio + .panel-card {
+  margin-top: 18px;
+}
+
+@media (max-width: 640px) {
+  .panel-secciones {
+    margin: 0 -16px;
+    padding: 10px 16px;
+  }
+
+  .panel-form__fila--dos {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-agenda__item {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .panel-agenda__fecha {
+    grid-column: 1 / -1;
   }
 }

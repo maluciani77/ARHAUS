@@ -1,0 +1,3 @@
+# Las secciones del panel del cliente solo se usan via include desde
+# panel/cliente/index.php, nunca se deben poder pedir directo por HTTP.
+Require all denied

@@ -48,6 +48,18 @@ CREATE TABLE IF NOT EXISTS presupuestos (
   moneda TEXT NOT NULL DEFAULT 'ARS',
   fecha TEXT NOT NULL,
   detalle TEXT,
+  monto_oculto INTEGER NOT NULL DEFAULT 0,
+  cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS eventos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  titulo TEXT NOT NULL,
+  fecha TEXT NOT NULL,
+  hora TEXT,
+  detalle TEXT,
   cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
