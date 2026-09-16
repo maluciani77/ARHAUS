@@ -5,10 +5,16 @@
 - **Admin**: crea usuarios (clientes/arquitectos) y obras, asigna quién es
   el cliente y el arquitecto de cada obra, y puede gestionar todo.
 - **Arquitecto**: ve solo las obras que el admin le asignó. En cada una
-  puede cargar **etapas** (línea de tiempo: nombre, fecha, descripción) y
-  subir **fotos** de avance.
+  puede cargar **etapas** (línea de tiempo: nombre, fecha, descripción),
+  subir **fotos** de avance y cargar **presupuestos** (concepto, monto en
+  pesos o dólares, fecha y detalle). El admin puede hacer lo mismo en
+  cualquier obra.
 - **Cliente**: ve su obra en modo solo lectura — línea de tiempo de
-  etapas y galería de fotos.
+  etapas, presupuestos y galería de fotos.
+
+Si la base de Hostinger ya estaba creada de antes, no hace falta volver a
+importar nada por los presupuestos: la tabla se crea sola la primera vez
+que alguien abre una obra en el panel.
 
 Nadie se autoregistra: las cuentas de cliente y arquitecto las creás vos
 desde el panel admin.

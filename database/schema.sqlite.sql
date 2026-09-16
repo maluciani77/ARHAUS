@@ -39,3 +39,15 @@ CREATE TABLE IF NOT EXISTS fotos (
   subido_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS presupuestos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  concepto TEXT NOT NULL,
+  monto NUMERIC NOT NULL,
+  moneda TEXT NOT NULL DEFAULT 'ARS',
+  fecha TEXT NOT NULL,
+  detalle TEXT,
+  cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

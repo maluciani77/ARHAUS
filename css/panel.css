@@ -504,3 +504,47 @@ body.panel-body--centrado {
   opacity: 0.6;
   cursor: progress;
 }
+
+/* --- Presupuestos --- */
+.panel-form__fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 14px;
+}
+
+.panel-tabla-wrap + .panel-alert,
+.panel-tabla-wrap + .panel-card {
+  margin-top: 18px;
+}
+
+.panel-presupuestos td {
+  vertical-align: top;
+}
+
+.panel-presupuestos__fecha {
+  white-space: nowrap;
+  color: var(--panel-text-muted);
+}
+
+.panel-presupuestos__monto {
+  text-align: right !important;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel-presupuestos__detalle {
+  margin: 4px 0 0;
+  color: var(--panel-text-muted);
+  font-size: 0.85rem;
+}
+
+.panel-presupuestos__acciones {
+  width: 1%;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .panel-form__fila {
+    grid-template-columns: 1fr;
+  }
+}

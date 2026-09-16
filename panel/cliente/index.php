@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/helpers.php';
 require_once __DIR__ . '/../../lib/uploads.php';
+require_once __DIR__ . '/../../lib/presupuestos.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'cliente');
@@ -14,6 +15,8 @@ $obra = $stmt->fetch();
 
 $etapas = [];
 $fotos = [];
+$presupuestos = [];
+$puedeEditar = false;
 
 if ($obra) {
     $stmtEtapas = db()->prepare('SELECT * FROM etapas WHERE obra_id = ? ORDER BY orden ASC, fecha ASC');
@@ -23,6 +26,8 @@ if ($obra) {
     $stmtFotos = db()->prepare('SELECT * FROM fotos WHERE obra_id = ? ORDER BY created_at DESC');
     $stmtFotos->execute([$obra['id']]);
     $fotos = $stmtFotos->fetchAll();
+
+    $presupuestos = presupuestos_de_obra((int)$obra['id']);
 }
 ?>
 <!DOCTYPE html>
@@ -61,6 +66,8 @@ if ($obra) {
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
+
+    <?php include __DIR__ . '/../_presupuestos.php'; ?>
 
     <h2>Fotos</h2>
     <?php if (!$fotos): ?>

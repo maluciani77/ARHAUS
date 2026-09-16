@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/helpers.php';
 require_once __DIR__ . '/../../lib/csrf.php';
 require_once __DIR__ . '/../../lib/uploads.php';
+require_once __DIR__ . '/../../lib/presupuestos.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'arquitecto', 'admin');
@@ -27,6 +28,7 @@ if (!$obra) {
 }
 
 $error = null;
+$errorPresupuesto = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -50,6 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = db()->prepare('DELETE FROM etapas WHERE id = ? AND obra_id = ?');
         $stmt->execute([$etapaId, $obra['id']]);
         redirigir('obra.php?id=' . $obra['id']);
+    } elseif ($accion === 'agregar_presupuesto') {
+        $errorPresupuesto = agregar_presupuesto((int)$obra['id'], $_POST, (int)$usuario['id']);
+        if ($errorPresupuesto === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
+        }
+    } elseif ($accion === 'eliminar_presupuesto') {
+        eliminar_presupuesto((int)($_POST['presupuesto_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
     } elseif ($accion === 'subir_foto') {
         $resultado = subir_fotos_obra(
             (int)$obra['id'],
@@ -95,6 +105,9 @@ $etapas = $stmtEtapas->fetchAll();
 $stmtFotos = db()->prepare('SELECT * FROM fotos WHERE obra_id = ? ORDER BY created_at DESC');
 $stmtFotos->execute([$obra['id']]);
 $fotos = $stmtFotos->fetchAll();
+
+$presupuestos = presupuestos_de_obra((int)$obra['id']);
+$puedeEditar = true;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -115,6 +128,8 @@ $fotos = $stmtFotos->fetchAll();
     </p>
 
     <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
+
+    <?php include __DIR__ . '/../_presupuestos.php'; ?>
 
     <h2>Etapas</h2>
     <?php if ($etapas): ?>
