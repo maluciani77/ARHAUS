@@ -4,7 +4,10 @@ declare(strict_types=1);
 /** Escapa texto para imprimir seguro dentro de HTML. */
 function e(?string $texto): string
 {
-    return htmlspecialchars($texto ?? '', ENT_QUOTES, 'UTF-8');
+    // ENT_SUBSTITUTE: si llega un byte que no es UTF-8 válido, se reemplaza
+    // por el carácter de reemplazo en vez de devolver un texto vacío y
+    // hacer desaparecer el mensaje entero sin avisar.
+    return htmlspecialchars($texto ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 /** Redirige (relativo al script actual) y corta la ejecución. */
@@ -43,6 +46,22 @@ function formatear_fecha(?string $fecha): string
     }
     $timestamp = strtotime($fecha);
     return $timestamp ? date('d/m/Y', $timestamp) : $fecha;
+}
+
+
+/**
+ * Largo y recorte de texto contando caracteres, no bytes, para que no se
+ * parta una "ñ" al medio. Como en uploads.php, si el servidor no tiene
+ * mbstring se cae a las funciones de siempre.
+ */
+function largo_texto(string $texto): int
+{
+    return function_exists('mb_strlen') ? mb_strlen($texto, 'UTF-8') : strlen($texto);
+}
+
+function recortar_texto(string $texto, int $largo): string
+{
+    return function_exists('mb_substr') ? mb_substr($texto, 0, $largo, 'UTF-8') : substr($texto, 0, $largo);
 }
 
 /** true si el pedido vino del script de subida (espera JSON, no HTML). */

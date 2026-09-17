@@ -765,3 +765,118 @@ body.panel-body--centrado {
     grid-column: 1 / -1;
   }
 }
+
+/* ---- Dirección de obra (novedades) ---- */
+.panel-novedades {
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.panel-novedad {
+  padding: 16px 18px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  background: var(--panel-card);
+}
+
+.panel-novedad__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.panel-novedad__fecha {
+  color: var(--panel-red);
+}
+
+.panel-novedad__autor {
+  color: var(--panel-text-muted);
+}
+
+.panel-novedad__foto {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.panel-novedad__foto img {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.panel-novedad__texto {
+  margin: 0 0 12px;
+  max-width: 70ch;
+  line-height: 1.6;
+  white-space: normal;
+}
+
+/* ---- Archivos ---- */
+.panel-docs__titulo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 26px 0 10px;
+  font-size: 1.05rem;
+}
+
+.panel-docs__peso {
+  margin-left: 8px;
+  color: var(--panel-text-muted);
+  font-size: 0.82rem;
+}
+
+/* ---- Chat con el cliente ---- */
+.panel-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-chat__mensaje {
+  max-width: min(60ch, 90%);
+  padding: 12px 14px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+}
+
+.panel-chat__mensaje--estudio {
+  align-self: flex-end;
+  border-color: transparent;
+  background: rgba(226, 19, 19, 0.12);
+}
+
+.panel-chat__mensaje--cliente {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.panel-chat__meta {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--panel-text-muted);
+  font-size: 0.8rem;
+}
+
+.panel-chat__meta strong {
+  color: var(--panel-text);
+  font-weight: 500;
+}
+
+.panel-chat__mensaje p {
+  margin: 0 0 8px;
+  line-height: 1.55;
+}

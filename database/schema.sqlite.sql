@@ -63,3 +63,32 @@ CREATE TABLE IF NOT EXISTS eventos (
   cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS novedades (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  texto TEXT,
+  archivo TEXT,
+  autor_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS documentos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  categoria TEXT NOT NULL,
+  titulo TEXT NOT NULL,
+  archivo TEXT NOT NULL,
+  nombre_original TEXT NOT NULL,
+  tamano INTEGER NOT NULL DEFAULT 0,
+  subido_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS mensajes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  autor_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  texto TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

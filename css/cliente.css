@@ -1357,3 +1357,294 @@ body.visor-abierto {
     gap: 6px;
   }
 }
+
+/* ---- Dirección de obra: el día a día, como un diario ---- */
+.book-diario {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--linea);
+}
+
+.book-diario__item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--linea);
+}
+
+.book-diario__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 12px;
+  color: var(--suave);
+  font-size: 0.85rem;
+}
+
+.book-diario__meta time {
+  color: var(--acento);
+  font-weight: 500;
+}
+
+.book-diario__foto {
+  margin: 0 0 14px;
+}
+
+.book-diario__foto a {
+  display: block;
+}
+
+.book-diario__foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio);
+}
+
+.book-diario__texto {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* ---- Archivos: PDF, Excel y demás ---- */
+.book-archivos {
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--linea);
+}
+
+.book-archivo a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: baseline;
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--linea);
+  color: var(--texto);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.book-archivo a:hover {
+  background: var(--hundido);
+}
+
+.book-archivo__tipo {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: var(--radio);
+  background: var(--c-presupuesto-fondo);
+  color: var(--c-presupuesto);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.book-archivo__nombre {
+  flex: 1 1 260px;
+  font-size: 1.02rem;
+}
+
+.book-archivo__dato {
+  color: var(--suave);
+  font-size: 0.85rem;
+}
+
+/* ---- Etapa de obra ---- */
+.book-etapas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.book-etapa {
+  display: flex;
+  gap: 18px;
+  padding-bottom: 26px;
+}
+
+.book-etapa__marca {
+  position: relative;
+  flex: none;
+  width: 34px;
+  text-align: center;
+}
+
+.book-etapa__marca::after {
+  content: "";
+  position: absolute;
+  top: 34px;
+  bottom: -26px;
+  left: 50%;
+  width: 1px;
+  background: var(--linea);
+}
+
+.book-etapa:last-child .book-etapa__marca::after {
+  display: none;
+}
+
+.book-etapa__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--linea);
+  border-radius: 50%;
+  background: var(--superficie);
+  color: var(--suave);
+  font-size: 0.82rem;
+}
+
+.book-etapa.is-pasada .book-etapa__num {
+  background: var(--hundido);
+  color: var(--texto);
+}
+
+.book-etapa.is-actual .book-etapa__num {
+  border-color: var(--acento);
+  background: var(--acento);
+  color: #fff;
+}
+
+.book-etapa__cuerpo h2 {
+  margin: 4px 0 6px;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.book-etapa__fecha {
+  color: var(--suave);
+  font-size: 0.88rem;
+}
+
+.book-etapa__texto {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.book-etapa__fotos {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--acento);
+  font-size: 0.9rem;
+}
+
+/* ---- Mensajes ---- */
+.book-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.book-chat__mensaje {
+  max-width: min(60ch, 88%);
+  padding: 14px 16px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.book-chat__mensaje--propio {
+  align-self: flex-end;
+  border-color: transparent;
+  background: var(--hundido);
+}
+
+.book-chat__meta {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--suave);
+  font-size: 0.8rem;
+}
+
+.book-chat__meta strong {
+  color: var(--texto);
+  font-weight: 500;
+}
+
+.book-chat__mensaje p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.book-chat__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 62ch;
+}
+
+.book-chat__campo {
+  display: block;
+  width: 100%;
+}
+
+.book-chat__campo textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  resize: vertical;
+}
+
+.book-chat__campo textarea:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.book-chat__form button {
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--radio);
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cliente-alerta {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--acento);
+  background: var(--c-etapa-fondo);
+  color: var(--texto);
+}
+
+/* Con muchas solapas, la barra de abajo se desliza en vez de apretarse */
+@media (max-width: 860px) {
+  .cliente-lateral {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .cliente-lateral::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cliente-nav {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .cliente-nav__item {
+    flex: 0 0 auto;
+    width: 78px;
+  }
+}

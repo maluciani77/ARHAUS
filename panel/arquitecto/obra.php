@@ -7,6 +7,9 @@ require_once __DIR__ . '/../../lib/csrf.php';
 require_once __DIR__ . '/../../lib/uploads.php';
 require_once __DIR__ . '/../../lib/presupuestos.php';
 require_once __DIR__ . '/../../lib/calendario.php';
+require_once __DIR__ . '/../../lib/novedades.php';
+require_once __DIR__ . '/../../lib/documentos.php';
+require_once __DIR__ . '/../../lib/mensajes.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'arquitecto', 'admin');
@@ -32,6 +35,9 @@ $error = null;
 $errorPresupuesto = null;
 $errorEtapa = null;
 $errorEvento = null;
+$errorNovedad = null;
+$errorDocumento = null;
+$errorMensaje = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -115,6 +121,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $del->execute([$fotoId]);
         }
         redirigir('obra.php?id=' . $obra['id']);
+    } elseif ($accion === 'agregar_novedad') {
+        $errorNovedad = agregar_novedad((int)$obra['id'], $_POST, $_FILES['foto'] ?? [], (int)$usuario['id']);
+        if ($errorNovedad === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#direccion');
+        }
+    } elseif ($accion === 'eliminar_novedad') {
+        eliminar_novedad((int)($_POST['novedad_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#direccion');
+    } elseif ($accion === 'agregar_documento') {
+        $errorDocumento = agregar_documento(
+            (int)$obra['id'],
+            (string)($_POST['categoria'] ?? ''),
+            $_POST,
+            $_FILES['documento'] ?? [],
+            (int)$usuario['id']
+        );
+        if ($errorDocumento === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#archivos');
+        }
+    } elseif ($accion === 'eliminar_documento') {
+        eliminar_documento((int)($_POST['documento_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#archivos');
+    } elseif ($accion === 'agregar_mensaje') {
+        $errorMensaje = agregar_mensaje((int)$obra['id'], $_POST, (int)$usuario['id']);
+        if ($errorMensaje === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
+        }
+    } elseif ($accion === 'eliminar_mensaje') {
+        eliminar_mensaje((int)($_POST['mensaje_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
     }
 }
 
@@ -128,6 +164,9 @@ $fotos = $stmtFotos->fetchAll();
 
 $presupuestos = presupuestos_de_obra((int)$obra['id']);
 $hoy = hoy_argentina();
+$novedades = novedades_de_obra((int)$obra['id']);
+$documentos = documentos_de_obra((int)$obra['id']);
+$mensajes = mensajes_de_obra((int)$obra['id']);
 $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 ?>
 <!DOCTYPE html>
@@ -149,6 +188,9 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     </p>
 
     <nav class="panel-secciones" aria-label="Secciones de la obra">
+        <a href="#direccion">Dirección de obra</a>
+        <a href="#archivos">Archivos</a>
+        <a href="#mensajes">Mensajes</a>
         <a href="#presupuestos">Presupuestos</a>
         <a href="#calendario">Calendario</a>
         <a href="#etapas">Etapas</a>
@@ -166,6 +208,13 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     <?php include __DIR__ . '/../_galeria_etapas.php'; ?>
 
     <?php include __DIR__ . '/../_form_fotos.php'; ?>
+
+    <?php include __DIR__ . '/../_novedades.php'; ?>
+
+    <?php include __DIR__ . '/../_documentos.php'; ?>
+
+    <?php include __DIR__ . '/../_mensajes.php'; ?>
+
 </main>
 </body>
 </html>
