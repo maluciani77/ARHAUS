@@ -278,7 +278,7 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?= e($raiz) ?>css/cliente.css">
+<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/cliente.css')) ?>">
 </head>
 <body class="cliente">
 <?php if ($mostrarBienvenida): ?>
@@ -386,13 +386,13 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 </div>
 
 <?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion'], true) || es_categoria_documento($seccion))): ?>
-    <script src="<?= e($raiz) ?>js/book-visor.js"></script>
+    <script src="<?= e(recurso($raiz, 'js/book-visor.js')) ?>"></script>
 <?php endif; ?>
 <?php if ($obra && $seccion === 'asistente'): ?>
-    <script src="<?= e($raiz) ?>js/asistente.js"></script>
+    <script src="<?= e(recurso($raiz, 'js/asistente.js')) ?>"></script>
 <?php endif; ?>
 <?php if ($mostrarBienvenida): ?>
-    <script src="<?= e($raiz) ?>js/bienvenida.js"></script>
+    <script src="<?= e(recurso($raiz, 'js/bienvenida.js')) ?>"></script>
 <?php endif; ?>
 <script>
     // En el celular las solapas se deslizan: que la activa quede a la vista.

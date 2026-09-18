@@ -17,7 +17,7 @@ $obras = $stmt->fetchAll();
 <meta charset="UTF-8">
 <title>Mis obras - ARHAUS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<?= e($raiz) ?>css/panel.css">
+<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/panel.css')) ?>">
 </head>
 <body class="panel-body">
 <?php include __DIR__ . '/../_topbar.php'; ?>

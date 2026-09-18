@@ -72,7 +72,7 @@ $arquitectos = db()->query(
 <meta charset="UTF-8">
 <title>Obras - Panel admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<?= e($raiz) ?>css/panel.css">
+<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/panel.css')) ?>">
 </head>
 <body class="panel-body">
 <?php $navLinks = [

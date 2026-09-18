@@ -10,6 +10,18 @@ function e(?string $texto): string
     return htmlspecialchars($texto ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/**
+ * La dirección de un CSS o JS del sitio con su fecha de modificación al
+ * final (css/cliente.css?v=1789...). Cuando el archivo cambia, cambia la
+ * dirección, y el navegador y el CDN lo van a buscar de nuevo en vez de
+ * usar la copia vieja que tenían guardada. $ruta es relativa a la raíz.
+ */
+function recurso(string $raiz, string $ruta): string
+{
+    $archivo = __DIR__ . '/../' . $ruta;
+    return $raiz . $ruta . (is_file($archivo) ? '?v=' . filemtime($archivo) : '');
+}
+
 /** Redirige (relativo al script actual) y corta la ejecución. */
 function redirigir(string $url): void
 {

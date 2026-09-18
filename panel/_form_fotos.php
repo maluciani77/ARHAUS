@@ -39,4 +39,4 @@
         <button type="submit">Subir fotos</button>
     </form>
 </div>
-<script src="<?= e($raiz) ?>js/panel-subida.js"></script>
+<script src="<?= e(recurso($raiz, 'js/panel-subida.js')) ?>"></script>
