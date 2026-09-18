@@ -2061,6 +2061,12 @@ body.visor-abierto {
   gap: 8px;
 }
 
+/* display: flex le gana al atributo hidden: sin esto las sugerencias
+   seguían a la vista después de la primera pregunta. */
+.asistente__sugerencias[hidden] {
+  display: none;
+}
+
 .asistente__sugerencia {
   padding: 8px 14px;
   border: 1px solid var(--linea);
