@@ -52,12 +52,14 @@ $reenvioNovedad = ($_POST['accion'] ?? '') === 'agregar_novedad' ? $_POST : [];
                     <p class="panel-novedad__texto"><?= nl2br(e($novedad['texto'])) ?></p>
                 <?php endif; ?>
 
-                <form method="post" action="#direccion" onsubmit="return confirm('¿Eliminar esta novedad?');">
-                    <?= campo_csrf() ?>
-                    <input type="hidden" name="accion" value="eliminar_novedad">
-                    <input type="hidden" name="novedad_id" value="<?= (int)$novedad['id'] ?>">
-                    <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
-                </form>
+                <?php if (!isset($puedeEliminarNovedad) || $puedeEliminarNovedad($novedad)): ?>
+                    <form method="post" action="#direccion" onsubmit="return confirm('¿Eliminar esta novedad?');">
+                        <?= campo_csrf() ?>
+                        <input type="hidden" name="accion" value="eliminar_novedad">
+                        <input type="hidden" name="novedad_id" value="<?= (int)$novedad['id'] ?>">
+                        <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
+                    </form>
+                <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>

@@ -22,12 +22,14 @@ $gruposConFotos = array_filter(
         <?php foreach ($grupo['fotos'] as $foto): ?>
             <div class="panel-foto">
                 <img src="<?= e($raiz . ruta_publica_foto((int)$obra['id'], $foto['archivo'])) ?>" alt="<?= e($foto['descripcion'] ?? 'Foto de avance') ?>" loading="lazy">
-                <form method="post" onsubmit="return confirm('¿Eliminar esta foto?');">
-                    <?= campo_csrf() ?>
-                    <input type="hidden" name="accion" value="eliminar_foto">
-                    <input type="hidden" name="foto_id" value="<?= (int)$foto['id'] ?>">
-                    <button type="submit" title="Eliminar">×</button>
-                </form>
+                <?php if (!isset($puedeEliminarFoto) || $puedeEliminarFoto($foto)): ?>
+                    <form method="post" onsubmit="return confirm('¿Eliminar esta foto?');">
+                        <?= campo_csrf() ?>
+                        <input type="hidden" name="accion" value="eliminar_foto">
+                        <input type="hidden" name="foto_id" value="<?= (int)$foto['id'] ?>">
+                        <button type="submit" title="Eliminar">×</button>
+                    </form>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>

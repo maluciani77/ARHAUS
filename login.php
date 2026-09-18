@@ -34,6 +34,8 @@ switch ($usuario['rol']) {
         redirigir('panel/admin/index.php');
     case 'arquitecto':
         redirigir('panel/arquitecto/index.php');
+    case 'director':
+        redirigir('panel/director/index.php');
     default:
         redirigir('panel/cliente/index.php');
 }

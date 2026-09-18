@@ -9,6 +9,7 @@ require_once __DIR__ . '/calendario.php';
 require_once __DIR__ . '/novedades.php';
 require_once __DIR__ . '/documentos.php';
 require_once __DIR__ . '/mensajes.php';
+require_once __DIR__ . '/obra_info.php';
 
 /**
  * Asistente del panel del cliente, con Claude. Solo sabe de la obra del
@@ -109,20 +110,15 @@ Cómo responder:
 
 Estilo: español rioplatense con voseo, cálido y profesional. Respuestas cortas, de dos a cinco oraciones, salvo que te pida más detalle. Escribí en texto plano, sin Markdown: nada de asteriscos, numerales ni tablas. Si necesitás una lista, empezá cada línea con un guion.
 
-Las solapas del panel:
-- Inicio: resumen de la obra, la etapa actual, las últimas fotos y la actividad reciente.
-- Asistente: esta conversación.
-- Dirección de obra: el día a día que escribe el director de obra, con fotos y comentarios. El cliente solo lo lee.
-- Fotos: las fotos de avance agrupadas por etapa.
-- Etapa de obra: la línea de tiempo de las etapas y el Gantt (el cronograma) si el estudio lo subió.
-- Renders: imágenes de cómo va a quedar la obra terminada.
-- Proyecto: los planos de arquitectura y las vistas.
-- Municipal: lo que se presentó en la municipalidad.
-- Varios: otros archivos de la obra.
-- Calendario: las fechas de etapas, presupuestos, fotos y reuniones.
-- Presupuestos: los presupuestos de la obra.
+El panel tiene seis botones, y adentro de cada uno, solapas:
+- Proyecto: Anteproyecto (la primera versión del proyecto), Render (cómo va a quedar la obra) y Fotos render (las imágenes de los renders).
+- Datos: Archivos (documentación de la obra), Obra info (la ficha: ubicación, catastro, superficies, trámites y profesionales) y Propietarios (los datos de los dueños, que carga el propio cliente para los trámites).
+- Municipal: Planos aprobados y Planos en proceso (los que siguen en trámite).
 - Mensajes: el chat con el estudio. Para cualquier consulta que el asistente no pueda resolver.
-- Mi cuenta (abajo, con la foto o el nombre): cambiar la contraseña y la foto de perfil.
+- Ejecución de obra: Dirección de obra (el día a día que escribe el director de obra, con fotos y comentarios; el cliente solo lo lee), Fotos de obra (las fotos de avance por etapa), Planificación (el cronograma o Gantt), Etapa de obra (la línea de tiempo de las etapas) y Presupuestos (el cliente los ve, no los modifica).
+- Calendario: las fechas de etapas, presupuestos, fotos y reuniones.
+Además: el logo lleva al Inicio (resumen de la obra), el botón Asistente abre esta conversación, y la foto o el nombre abajo abren Mi cuenta (nombre, foto de perfil y contraseña).
+Los datos personales de los propietarios no los tenés: si preguntan por eso, que lo vean en Datos > Propietarios.
 TXT;
 }
 
@@ -174,6 +170,17 @@ function contexto_obra_asistente(array $obra, array $usuario): string
             . ($etapa['descripcion'] ? ' ' . oracion($etapa['descripcion']) : '');
     }
     $l[] = 'Total de fotos de avance: ' . $totalFotos . '.';
+
+    $info = obra_info($obraId);
+    if ($info) {
+        $l[] = '';
+        $l[] = 'FICHA DE LA OBRA (Datos > Obra info):';
+        foreach (campos_obra_info() as $clave => $definicion) {
+            if (isset($info[$clave])) {
+                $l[] = '- ' . $definicion[0] . ': ' . valor_obra_info_legible($clave, $info[$clave]);
+            }
+        }
+    }
 
     $l[] = '';
     $l[] = 'DIRECCIÓN DE OBRA (lo último primero):';

@@ -27,10 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'El email no es válido.';
         } elseif (strlen($password) < 8) {
             $error = 'La contraseña tiene que tener al menos 8 caracteres.';
-        } elseif (!in_array($rol, ['admin', 'arquitecto', 'cliente'], true)) {
+        } elseif (!in_array($rol, ['admin', 'arquitecto', 'director', 'cliente'], true)) {
             $error = 'Rol inválido.';
         } else {
             try {
+                if ($rol === 'director') {
+                    asegurar_rol_director();
+                }
                 $stmt = db()->prepare('INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES (?, ?, ?, ?)');
                 $stmt->execute([$nombre, $email, password_hash($password, PASSWORD_DEFAULT), $rol]);
                 redirigir('usuarios.php?ok=1');
@@ -72,7 +75,7 @@ $usuarios = db()->query('SELECT * FROM usuarios ORDER BY rol, nombre')->fetchAll
 
 <main class="panel-main">
     <h1>Usuarios</h1>
-    <p class="panel-subtitle">Clientes y arquitectos con acceso a los paneles. Las cuentas se crean acá — nadie se registra solo.</p>
+    <p class="panel-subtitle">Clientes, arquitectos y directores de obra con acceso a los paneles. Las cuentas se crean acá — nadie se registra solo.</p>
 
     <?php if ($exito): ?><p class="panel-alert panel-alert--ok"><?= e($exito) ?></p><?php endif; ?>
     <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
@@ -124,6 +127,7 @@ $usuarios = db()->query('SELECT * FROM usuarios ORDER BY rol, nombre')->fetchAll
                 <select name="rol" required>
                     <option value="cliente">Cliente</option>
                     <option value="arquitecto">Arquitecto</option>
+                    <option value="director">Director de obra (solo ve la ejecución de obra)</option>
                     <option value="admin">Administrador</option>
                 </select>
             </label>

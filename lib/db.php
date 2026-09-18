@@ -88,6 +88,56 @@ function asegurar_columna(string $tabla, string $columna, string $definicion): v
 }
 
 /**
+ * El rol "director" (director de obra) llegó después de crear la tabla
+ * usuarios, y la columna rol no acepta valores nuevos sin tocarla: en
+ * MySQL es un ENUM y en SQLite tiene un CHECK. Esto la actualiza una sola
+ * vez; después no hace nada. También suma obras.director_id.
+ */
+function asegurar_rol_director(): void
+{
+    static $listo = false;
+    if ($listo) {
+        return;
+    }
+
+    if (db_driver() === 'sqlite') {
+        $sql = (string)db()->query("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'usuarios'")->fetchColumn();
+        if ($sql !== '' && str_contains($sql, 'CHECK') && !str_contains($sql, "'director'")) {
+            // SQLite no deja cambiar un CHECK: se rearma la tabla con el mismo
+            // contenido, que es el procedimiento que indica su documentación.
+            $pdo = db();
+            $pdo->exec('PRAGMA foreign_keys = OFF');
+            $pdo->beginTransaction();
+            try {
+                $pdo->exec(str_replace(
+                    ["CREATE TABLE usuarios", "CREATE TABLE \"usuarios\"", "'cliente')"],
+                    ["CREATE TABLE usuarios_nueva", "CREATE TABLE usuarios_nueva", "'cliente','director')"],
+                    $sql
+                ));
+                $pdo->exec('INSERT INTO usuarios_nueva SELECT * FROM usuarios');
+                $pdo->exec('DROP TABLE usuarios');
+                $pdo->exec('ALTER TABLE usuarios_nueva RENAME TO usuarios');
+                $pdo->commit();
+            } catch (Throwable $ex) {
+                $pdo->rollBack();
+                $pdo->exec('PRAGMA foreign_keys = ON');
+                throw $ex;
+            }
+            $pdo->exec('PRAGMA foreign_keys = ON');
+        }
+        asegurar_columna('obras', 'director_id', 'INTEGER');
+    } else {
+        $columna = db()->query("SHOW COLUMNS FROM usuarios LIKE 'rol'")->fetch();
+        if ($columna && !str_contains((string)$columna['Type'], "'director'")) {
+            db()->exec("ALTER TABLE usuarios MODIFY rol ENUM('admin','arquitecto','cliente','director') NOT NULL");
+        }
+        asegurar_columna('obras', 'director_id', 'INT UNSIGNED NULL');
+    }
+
+    $listo = true;
+}
+
+/**
  * Un valor de config.php que no es de la base, como la clave del
  * asistente. Devuelve $defecto si no está cargado.
  */

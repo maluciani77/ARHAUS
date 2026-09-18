@@ -1,7 +1,7 @@
 <?php
 /**
- * Sección Mi cuenta del panel del cliente: la foto de perfil y el cambio
- * de contraseña. Funciona aunque todavía no tenga una obra asignada.
+ * Sección Mi cuenta del panel del cliente: el nombre, la foto de perfil y
+ * el cambio de contraseña. Funciona aunque todavía no tenga una obra asignada.
  * Se incluye desde panel/cliente/index.php.
  */
 
@@ -15,12 +15,31 @@ $accionEnviada = (string)($_POST['accion'] ?? '');
 <header class="cliente-cabecera">
     <p class="cliente-etiqueta"><?= e($perfil['email']) ?></p>
     <h1>Mi cuenta</h1>
-    <p class="cliente-cabecera__intro">Tu foto y tu contraseña para entrar al panel.</p>
+    <p class="cliente-cabecera__intro">Tu nombre, tu foto y tu contraseña para entrar al panel.</p>
 </header>
 
 <?php if ($avisoCuenta): ?>
     <p class="cliente-aviso" role="status"><?= e($avisoCuenta) ?></p>
 <?php endif; ?>
+
+<section class="cliente-bloque" aria-labelledby="titulo-nombre">
+    <h2 id="titulo-nombre">Nombre</h2>
+
+    <?php if ($errorCuenta && $accionEnviada === 'cambiar_nombre'): ?>
+        <p class="cliente-alerta"><?= e($errorCuenta) ?></p>
+    <?php endif; ?>
+
+    <form method="post" action="<?= e(url_seccion('cuenta')) ?>" class="cliente-form cliente-form--angosto">
+        <?= campo_csrf() ?>
+        <input type="hidden" name="accion" value="cambiar_nombre">
+        <label class="cliente-campo">
+            <span class="cliente-etiqueta">Cómo querés que te llamemos</span>
+            <input type="text" name="nombre" value="<?= e($accionEnviada === 'cambiar_nombre' ? (string)($_POST['nombre'] ?? '') : (string)$perfil['nombre']) ?>" required maxlength="150" autocomplete="name">
+        </label>
+        <p class="cliente-ayuda">Es el nombre que ve el estudio y el que sale en el saludo al entrar.</p>
+        <button type="submit" class="cliente-boton">Guardar nombre</button>
+    </form>
+</section>
 
 <section class="cliente-bloque" aria-labelledby="titulo-foto">
     <h2 id="titulo-foto">Foto de perfil</h2>

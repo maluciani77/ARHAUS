@@ -1,7 +1,7 @@
 <?php
 /**
  * Sección Etapa de obra del panel del cliente: la línea de tiempo de las
- * etapas y, arriba, el Gantt que sube el estudio como archivo.
+ * etapas. El Gantt está en su propia solapa, Planificación.
  * Se incluye desde panel/cliente/index.php.
  */
 
@@ -10,9 +10,9 @@ if (!isset($obra)) {
     exit;
 }
 
-$gantts = array_values(array_filter($documentos, static function (array $documento): bool {
-    return (string)$documento['categoria'] === 'etapas';
-}));
+$hayPlanificacion = (bool)array_filter($documentos, static function (array $documento): bool {
+    return (string)$documento['categoria'] === 'planificacion';
+});
 
 $hoyEtapas = $hoy ?? date('Y-m-d');
 $etapaActual = null;
@@ -25,24 +25,10 @@ foreach ($etapas as $etapa) {
 <header class="cliente-cabecera">
     <p class="cliente-etiqueta"><?= e($obra['nombre']) ?></p>
     <h1>Etapa de obra</h1>
-    <p class="cliente-cabecera__intro">En qué anda la obra y el cronograma completo.</p>
+    <p class="cliente-cabecera__intro">
+        En qué anda la obra, etapa por etapa.<?php if ($hayPlanificacion): ?> El cronograma completo está en <a href="<?= e(url_seccion('planificacion')) ?>">Planificación</a>.<?php endif; ?>
+    </p>
 </header>
-
-<?php if ($gantts): ?>
-    <ul class="book-archivos">
-        <?php foreach ($gantts as $documento): ?>
-            <li class="book-archivo">
-                <a href="<?= e($raiz . ruta_publica_documento((int)$obra['id'], $documento['archivo'])) ?>" target="_blank" rel="noopener">
-                    <span class="book-archivo__tipo"><?= e(tipo_documento($documento['archivo'])) ?></span>
-                    <span class="book-archivo__nombre"><?= e($documento['titulo']) ?></span>
-                    <span class="book-archivo__dato">
-                        <?= e(formatear_fecha(substr((string)$documento['created_at'], 0, 10))) ?> · <?= e(tamano_legible((int)$documento['tamano'])) ?>
-                    </span>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
 
 <?php if (!$etapas): ?>
     <p class="cliente-nada">Todavía no hay etapas cargadas.</p>

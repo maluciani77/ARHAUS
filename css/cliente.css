@@ -1627,25 +1627,24 @@ body.visor-abierto {
   color: var(--texto);
 }
 
-/* Con muchas solapas, la barra de abajo se desliza en vez de apretarse */
+/* Seis botones: en el celular se reparten parejo en la barra de abajo */
+.cliente-nav__corto {
+  display: none;
+}
+
 @media (max-width: 860px) {
-  .cliente-lateral {
-    overflow-x: auto;
-    scrollbar-width: none;
+  .cliente-nav__item {
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 0.64rem;
   }
 
-  .cliente-lateral::-webkit-scrollbar {
+  .cliente-nav__largo {
     display: none;
   }
 
-  .cliente-nav {
-    width: max-content;
-    min-width: 100%;
-  }
-
-  .cliente-nav__item {
-    flex: 0 0 auto;
-    width: 78px;
+  .cliente-nav__corto {
+    display: inline;
   }
 }
 
@@ -2110,5 +2109,201 @@ body.visor-abierto {
   .asistente__form {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+/* ---- Solapas dentro de cada botón ---- */
+.cliente-subnav {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 28px;
+  padding-bottom: 2px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--linea);
+  scrollbar-width: none;
+}
+
+.cliente-subnav::-webkit-scrollbar {
+  display: none;
+}
+
+.cliente-subnav__item {
+  flex: none;
+  margin-bottom: -3px;
+  padding: 10px 14px;
+  border-bottom: 2px solid transparent;
+  color: var(--suave);
+  font-size: 0.92rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.cliente-subnav__item:hover {
+  color: var(--texto);
+}
+
+.cliente-subnav__item.is-activa {
+  border-bottom-color: var(--acento);
+  color: var(--texto);
+  font-weight: 500;
+}
+
+/* ---- Ficha de la obra y de los propietarios ---- */
+.ficha {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.ficha__grupo h2 {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--linea);
+  color: var(--acento);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ficha dl,
+.ficha__lista {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.ficha__lista {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.ficha__dato dt {
+  color: var(--suave);
+  font-size: 0.8rem;
+}
+
+.ficha__dato dd {
+  margin: 2px 0 0;
+  font-size: 1rem;
+}
+
+.propietarios {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.propietario {
+  padding: 20px 22px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.propietario__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.propietario__cabecera h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.propietario__acciones {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+a.cliente-boton {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.cliente-form--grilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  align-items: start;
+  max-width: 720px;
+}
+
+.cliente-campo--ancho,
+.cliente-form__acciones {
+  grid-column: 1 / -1;
+}
+
+.cliente-form__acciones {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.cliente-campo input[type="tel"],
+.cliente-campo input[type="email"],
+.cliente-campo input[type="date"],
+.cliente-campo select {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+@media (max-width: 560px) {
+  .cliente-form--grilla {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Botón flotante del asistente ---- */
+.cliente-asistente-flotante {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--acento);
+  box-shadow: 0 8px 24px rgba(136, 7, 35, 0.28);
+  color: #fff;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cliente-asistente-flotante:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(136, 7, 35, 0.34);
+}
+
+@media (max-width: 860px) {
+  /* Arriba de la barra de abajo, solo el ícono */
+  .cliente-asistente-flotante {
+    right: 16px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    padding: 13px;
+  }
+
+  .cliente-asistente-flotante span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
   }
 }

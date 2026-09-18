@@ -6,7 +6,7 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/helpers.php';
 
 /**
- * La cuenta de cada usuario: cambiar la contraseña y la foto de perfil.
+ * La cuenta de cada usuario: el nombre, la contraseña y la foto de perfil.
  *
  * La foto se recorta al cuadrado del medio y se guarda chica (400 px) en
  * uploads/perfiles/, con un nombre inventado. El .htaccess de uploads/
@@ -58,6 +58,28 @@ function iniciales(string $nombre): string
         $iniciales .= function_exists('mb_substr') ? mb_substr($parte, 0, 1, 'UTF-8') : substr($parte, 0, 1);
     }
     return function_exists('mb_strtoupper') ? mb_strtoupper($iniciales, 'UTF-8') : strtoupper($iniciales);
+}
+
+/** El nombre que ve el estudio y que sale en el saludo. Devuelve null o el error. */
+function cambiar_nombre(int $usuarioId, string $nombre): ?string
+{
+    $nombre = trim((string)preg_replace('/\s+/u', ' ', $nombre));
+    if ($nombre === '') {
+        return 'Escribí tu nombre.';
+    }
+    if (largo_texto($nombre) > 150) {
+        return 'El nombre es muy largo (máximo 150 caracteres).';
+    }
+
+    $upd = db()->prepare('UPDATE usuarios SET nombre = ? WHERE id = ?');
+    $upd->execute([$nombre, $usuarioId]);
+
+    // La sesión guarda una copia del nombre: la barra de arriba del estudio la usa.
+    iniciar_sesion_segura();
+    if (isset($_SESSION['usuario'])) {
+        $_SESSION['usuario']['nombre'] = $nombre;
+    }
+    return null;
 }
 
 /** Devuelve null si se cambió, o el mensaje de error. */

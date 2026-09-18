@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   nombre VARCHAR(150) NOT NULL,
   email VARCHAR(190) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
-  rol ENUM('admin','arquitecto','cliente') NOT NULL,
+  rol ENUM('admin','arquitecto','cliente','director') NOT NULL,
   foto VARCHAR(255) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS obras (
   ubicacion VARCHAR(190),
   cliente_id INT UNSIGNED NULL,
   arquitecto_id INT UNSIGNED NULL,
+  director_id INT UNSIGNED NULL,
   estado VARCHAR(30) NOT NULL DEFAULT 'en_curso',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE SET NULL,
@@ -120,4 +121,32 @@ CREATE TABLE IF NOT EXISTS asistente_mensajes (
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
   FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS obra_info (
+  obra_id INT UNSIGNED NOT NULL,
+  campo VARCHAR(40) NOT NULL,
+  valor TEXT NOT NULL,
+  PRIMARY KEY (obra_id, campo),
+  FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS propietarios (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  obra_id INT UNSIGNED NOT NULL,
+  nombre VARCHAR(190) NOT NULL,
+  apellido VARCHAR(190) NOT NULL,
+  dni VARCHAR(8) NOT NULL,
+  cuit VARCHAR(11) NULL,
+  fecha_nacimiento DATE NULL,
+  nacionalidad VARCHAR(190) NULL,
+  estado_civil VARCHAR(40) NULL,
+  domicilio VARCHAR(190) NULL,
+  telefono VARCHAR(60) NULL,
+  email VARCHAR(190) NULL,
+  actualizado_por INT UNSIGNED NULL,
+  updated_at DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE CASCADE,
+  FOREIGN KEY (actualizado_por) REFERENCES usuarios(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

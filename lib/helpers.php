@@ -23,6 +23,7 @@ function nombre_rol(string $rol): string
     return match ($rol) {
         'admin' => 'Administrador',
         'arquitecto' => 'Arquitecto',
+        'director' => 'Director de obra',
         'cliente' => 'Cliente',
         default => $rol,
     };

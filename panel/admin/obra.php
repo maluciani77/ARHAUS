@@ -10,9 +10,12 @@ require_once __DIR__ . '/../../lib/calendario.php';
 require_once __DIR__ . '/../../lib/novedades.php';
 require_once __DIR__ . '/../../lib/documentos.php';
 require_once __DIR__ . '/../../lib/mensajes.php';
+require_once __DIR__ . '/../../lib/obra_info.php';
+require_once __DIR__ . '/../../lib/propietarios.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'admin');
+asegurar_rol_director();
 
 $obraId = (int)($_GET['id'] ?? $_POST['obra_id'] ?? 0);
 
@@ -33,6 +36,7 @@ $errorEvento = null;
 $errorNovedad = null;
 $errorDocumento = null;
 $errorMensaje = null;
+$errorObraInfo = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -43,15 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ubicacion = trim((string)($_POST['ubicacion'] ?? '')) ?: null;
         $clienteId = (int)($_POST['cliente_id'] ?? 0) ?: null;
         $arquitectoId = (int)($_POST['arquitecto_id'] ?? 0) ?: null;
+        $directorId = (int)($_POST['director_id'] ?? 0) ?: null;
         $estado = (string)($_POST['estado'] ?? 'en_curso');
 
         if ($nombre === '') {
             $error = 'La obra necesita un nombre.';
         } else {
             $upd = db()->prepare(
-                'UPDATE obras SET nombre = ?, ubicacion = ?, cliente_id = ?, arquitecto_id = ?, estado = ? WHERE id = ?'
+                'UPDATE obras SET nombre = ?, ubicacion = ?, cliente_id = ?, arquitecto_id = ?, director_id = ?, estado = ? WHERE id = ?'
             );
-            $upd->execute([$nombre, $ubicacion, $clienteId, $arquitectoId, $estado, $obra['id']]);
+            $upd->execute([$nombre, $ubicacion, $clienteId, $arquitectoId, $directorId, $estado, $obra['id']]);
             redirigir('obra.php?id=' . $obra['id']);
         }
     } elseif ($accion === 'agregar_etapa') {
@@ -159,6 +164,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($errorMensaje === null) {
             redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
         }
+    } elseif ($accion === 'guardar_obra_info') {
+        $errorObraInfo = guardar_obra_info((int)$obra['id'], $_POST);
+        if ($errorObraInfo === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#obra-info');
+        }
     } elseif ($accion === 'eliminar_mensaje') {
         eliminar_mensaje((int)($_POST['mensaje_id'] ?? 0), (int)$obra['id']);
         redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
@@ -179,6 +189,8 @@ $arquitectos = db()->query(
      ORDER BY (rol = 'admin'), nombre"
 )->fetchAll();
 
+$directores = db()->query("SELECT id, nombre FROM usuarios WHERE rol = 'director' ORDER BY nombre")->fetchAll();
+
 $stmtEtapas = db()->prepare('SELECT * FROM etapas WHERE obra_id = ? ORDER BY orden ASC, fecha ASC');
 $stmtEtapas->execute([$obra['id']]);
 $etapas = $stmtEtapas->fetchAll();
@@ -192,6 +204,8 @@ $hoy = hoy_argentina();
 $novedades = novedades_de_obra((int)$obra['id']);
 $documentos = documentos_de_obra((int)$obra['id']);
 $mensajes = mensajes_de_obra((int)$obra['id']);
+$obraInfo = obra_info((int)$obra['id']);
+$propietarios = propietarios_de_obra((int)$obra['id']);
 $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 ?>
 <!DOCTYPE html>
@@ -217,6 +231,8 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     </p>
 
     <nav class="panel-secciones" aria-label="Secciones de la obra">
+        <a href="#obra-info">Obra info</a>
+        <a href="#propietarios">Propietarios</a>
         <a href="#direccion">Dirección de obra</a>
         <a href="#archivos">Archivos</a>
         <a href="#mensajes">Mensajes</a>
@@ -255,6 +271,15 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
                     <?php endforeach; ?>
                 </select>
             </label>
+            <label>Director de obra
+                <select name="director_id">
+                    <option value="">Sin asignar</option>
+                    <?php foreach ($directores as $d): ?>
+                        <option value="<?= (int)$d['id'] ?>" <?= (int)$d['id'] === (int)($obra['director_id'] ?? 0) ? 'selected' : '' ?>><?= e($d['nombre']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php if (!$directores): ?><small>Creá un usuario con rol "Director de obra" en Usuarios para poder asignarlo.</small><?php endif; ?>
+            </label>
             <label>Estado
                 <select name="estado">
                     <?php foreach (['en_curso', 'pausada', 'finalizada'] as $est): ?>
@@ -275,6 +300,10 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     <?php include __DIR__ . '/../_galeria_etapas.php'; ?>
 
     <?php include __DIR__ . '/../_form_fotos.php'; ?>
+
+    <?php include __DIR__ . '/../_obra_info.php'; ?>
+
+    <?php include __DIR__ . '/../_propietarios.php'; ?>
 
     <?php include __DIR__ . '/../_novedades.php'; ?>
 

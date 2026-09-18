@@ -1,8 +1,8 @@
 <?php
 /**
- * Listado de archivos de una categoría (renders, proyecto, municipal,
- * varios). Lo incluye cada solapa, que antes define $categoriaDocumento
- * y, si quiere, $introArchivos.
+ * Listado de archivos de una categoría. panel/cliente/index.php lo incluye
+ * para cada solapa que es una carpeta de archivos (Anteproyecto, Render,
+ * Planos aprobados, etc.), después de definir $categoriaDocumento.
  *
  * Las imágenes se muestran como galería; el resto (PDF, Excel, CSV) como
  * una lista para abrir o descargar.
@@ -12,6 +12,16 @@ if (!isset($obra, $categoriaDocumento) || !es_categoria_documento($categoriaDocu
     http_response_code(404);
     exit;
 }
+
+$introArchivos = [
+    'anteproyecto' => 'La primera versión del proyecto: plantas, vistas y la idea general de la casa.',
+    'render' => 'Los renders del proyecto: cómo va a quedar la obra terminada.',
+    'fotos_render' => 'Las imágenes de los renders, para verlas en grande.',
+    'archivos' => 'Documentación de la obra que el estudio comparte con vos.',
+    'planos_aprobados' => 'Los planos que ya aprobó la municipalidad.',
+    'planos_en_proceso' => 'Los planos presentados en la municipalidad que todavía están en trámite.',
+    'planificacion' => 'El cronograma de la obra (Gantt) y la planificación de los trabajos.',
+][$categoriaDocumento] ?? '';
 
 $deLaSeccion = array_values(array_filter($documentos, static function (array $documento) use ($categoriaDocumento): bool {
     return (string)$documento['categoria'] === $categoriaDocumento;

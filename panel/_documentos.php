@@ -1,14 +1,16 @@
 <?php
 /**
- * Archivos de la obra para admin y arquitecto, agrupados en las mismas
- * solapas que ve el cliente: Etapa de obra (el Gantt), Renders, Proyecto,
- * Municipal y Varios.
+ * Archivos de la obra para el estudio, ordenados en los mismos grupos y
+ * solapas que ve el cliente (Proyecto, Datos, Municipal, Ejecución).
  *
  * Antes de incluirlo hay que tener definidos $obra, $documentos (de
- * documentos_de_obra()) y opcionalmente $errorDocumento.
+ * documentos_de_obra()) y opcionalmente $errorDocumento y
+ * $categoriasPermitidas (lista de claves; el director de obra solo maneja
+ * la planificación). Si no se define, se muestran todas.
  */
 
 $reenvioDoc = ($_POST['accion'] ?? '') === 'agregar_documento' ? $_POST : [];
+$categoriasPermitidas = $categoriasPermitidas ?? array_keys(CATEGORIAS_DOCUMENTO);
 
 $porCategoria = array_fill_keys(array_keys(CATEGORIAS_DOCUMENTO), []);
 foreach ($documentos as $documento) {
@@ -32,8 +34,14 @@ foreach ($documentos as $documento) {
         <input type="hidden" name="accion" value="agregar_documento">
         <label>Sección
             <select name="categoria" required>
-                <?php foreach (CATEGORIAS_DOCUMENTO as $clave => $nombre): ?>
-                    <option value="<?= e($clave) ?>" <?= ($reenvioDoc['categoria'] ?? '') === $clave ? 'selected' : '' ?>><?= e($nombre) ?></option>
+                <?php foreach (GRUPOS_DOCUMENTO as $grupo => $claves): ?>
+                    <?php $claves = array_values(array_intersect($claves, $categoriasPermitidas)); ?>
+                    <?php if (!$claves) continue; ?>
+                    <optgroup label="<?= e($grupo) ?>">
+                        <?php foreach ($claves as $clave): ?>
+                            <option value="<?= e($clave) ?>" <?= ($reenvioDoc['categoria'] ?? '') === $clave ? 'selected' : '' ?>><?= e(CATEGORIAS_DOCUMENTO[$clave]) ?></option>
+                        <?php endforeach; ?>
+                    </optgroup>
                 <?php endforeach; ?>
             </select>
         </label>
@@ -47,9 +55,11 @@ foreach ($documentos as $documento) {
     </form>
 </div>
 
-<?php foreach (CATEGORIAS_DOCUMENTO as $clave => $nombre): ?>
+<?php foreach (GRUPOS_DOCUMENTO as $grupo => $clavesGrupo): ?>
+<?php foreach (array_intersect($clavesGrupo, $categoriasPermitidas) as $clave): ?>
+    <?php $nombre = CATEGORIAS_DOCUMENTO[$clave]; ?>
     <h3 class="panel-docs__titulo">
-        <?= e($nombre) ?>
+        <span class="panel-docs__grupo"><?= e($grupo) ?> ·</span> <?= e($nombre) ?>
         <span class="panel-tag"><?= count($porCategoria[$clave]) ?></span>
     </h3>
 
@@ -76,12 +86,14 @@ foreach ($documentos as $documento) {
                             <td><span class="panel-tag"><?= e(tipo_documento($documento['archivo'])) ?></span></td>
                             <td><?= e(formatear_fecha(substr((string)$documento['created_at'], 0, 10))) ?></td>
                             <td>
-                                <form method="post" action="#archivos" onsubmit="return confirm('¿Eliminar este archivo?');">
-                                    <?= campo_csrf() ?>
-                                    <input type="hidden" name="accion" value="eliminar_documento">
-                                    <input type="hidden" name="documento_id" value="<?= (int)$documento['id'] ?>">
-                                    <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
-                                </form>
+                                <?php if (!isset($puedeEliminarDocumento) || $puedeEliminarDocumento($documento)): ?>
+                                    <form method="post" action="#archivos" onsubmit="return confirm('¿Eliminar este archivo?');">
+                                        <?= campo_csrf() ?>
+                                        <input type="hidden" name="accion" value="eliminar_documento">
+                                        <input type="hidden" name="documento_id" value="<?= (int)$documento['id'] ?>">
+                                        <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -89,4 +101,5 @@ foreach ($documentos as $documento) {
             </table>
         </div>
     <?php endif; ?>
+<?php endforeach; ?>
 <?php endforeach; ?>

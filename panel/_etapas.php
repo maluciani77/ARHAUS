@@ -40,12 +40,14 @@
                             <button type="submit">Guardar cambios</button>
                         </form>
                     </details>
-                    <form method="post" onsubmit="return confirm('¿Eliminar esta etapa? Sus fotos no se borran: quedan sin etapa.');">
-                        <?= campo_csrf() ?>
-                        <input type="hidden" name="accion" value="eliminar_etapa">
-                        <input type="hidden" name="etapa_id" value="<?= (int)$etapa['id'] ?>">
-                        <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
-                    </form>
+                    <?php if ($puedeEliminarEtapas ?? true): ?>
+                        <form method="post" onsubmit="return confirm('¿Eliminar esta etapa? Sus fotos no se borran: quedan sin etapa.');">
+                            <?= campo_csrf() ?>
+                            <input type="hidden" name="accion" value="eliminar_etapa">
+                            <input type="hidden" name="etapa_id" value="<?= (int)$etapa['id'] ?>">
+                            <button type="submit" class="panel-btn panel-btn--peligro panel-btn--chico">Eliminar</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </li>
         <?php endforeach; ?>

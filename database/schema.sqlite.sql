@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   nombre TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
-  rol TEXT NOT NULL CHECK (rol IN ('admin','arquitecto','cliente')),
+  rol TEXT NOT NULL CHECK (rol IN ('admin','arquitecto','cliente','director')),
   foto TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS obras (
   ubicacion TEXT,
   cliente_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   arquitecto_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  director_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   estado TEXT NOT NULL DEFAULT 'en_curso',
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -100,5 +101,30 @@ CREATE TABLE IF NOT EXISTS asistente_mensajes (
   obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
   rol TEXT NOT NULL,
   texto TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS obra_info (
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  campo TEXT NOT NULL,
+  valor TEXT NOT NULL,
+  PRIMARY KEY (obra_id, campo)
+);
+
+CREATE TABLE IF NOT EXISTS propietarios (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  apellido TEXT NOT NULL,
+  dni TEXT NOT NULL,
+  cuit TEXT,
+  fecha_nacimiento TEXT,
+  nacionalidad TEXT,
+  estado_civil TEXT,
+  domicilio TEXT,
+  telefono TEXT,
+  email TEXT,
+  actualizado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  updated_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

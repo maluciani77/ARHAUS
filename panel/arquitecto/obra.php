@@ -10,6 +10,8 @@ require_once __DIR__ . '/../../lib/calendario.php';
 require_once __DIR__ . '/../../lib/novedades.php';
 require_once __DIR__ . '/../../lib/documentos.php';
 require_once __DIR__ . '/../../lib/mensajes.php';
+require_once __DIR__ . '/../../lib/obra_info.php';
+require_once __DIR__ . '/../../lib/propietarios.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'arquitecto', 'admin');
@@ -38,6 +40,7 @@ $errorEvento = null;
 $errorNovedad = null;
 $errorDocumento = null;
 $errorMensaje = null;
+$errorObraInfo = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -148,6 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($errorMensaje === null) {
             redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
         }
+    } elseif ($accion === 'guardar_obra_info') {
+        $errorObraInfo = guardar_obra_info((int)$obra['id'], $_POST);
+        if ($errorObraInfo === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#obra-info');
+        }
     } elseif ($accion === 'eliminar_mensaje') {
         eliminar_mensaje((int)($_POST['mensaje_id'] ?? 0), (int)$obra['id']);
         redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
@@ -167,6 +175,8 @@ $hoy = hoy_argentina();
 $novedades = novedades_de_obra((int)$obra['id']);
 $documentos = documentos_de_obra((int)$obra['id']);
 $mensajes = mensajes_de_obra((int)$obra['id']);
+$obraInfo = obra_info((int)$obra['id']);
+$propietarios = propietarios_de_obra((int)$obra['id']);
 $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 ?>
 <!DOCTYPE html>
@@ -188,6 +198,8 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     </p>
 
     <nav class="panel-secciones" aria-label="Secciones de la obra">
+        <a href="#obra-info">Obra info</a>
+        <a href="#propietarios">Propietarios</a>
         <a href="#direccion">Dirección de obra</a>
         <a href="#archivos">Archivos</a>
         <a href="#mensajes">Mensajes</a>
@@ -208,6 +220,10 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     <?php include __DIR__ . '/../_galeria_etapas.php'; ?>
 
     <?php include __DIR__ . '/../_form_fotos.php'; ?>
+
+    <?php include __DIR__ . '/../_obra_info.php'; ?>
+
+    <?php include __DIR__ . '/../_propietarios.php'; ?>
 
     <?php include __DIR__ . '/../_novedades.php'; ?>
 

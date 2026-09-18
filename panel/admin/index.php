@@ -19,6 +19,7 @@ $totales = db()->query("
     SELECT
         (SELECT COUNT(*) FROM usuarios WHERE rol = 'cliente') AS clientes,
         (SELECT COUNT(*) FROM usuarios WHERE rol = 'arquitecto') AS arquitectos,
+        (SELECT COUNT(*) FROM usuarios WHERE rol = 'director') AS directores,
         (SELECT COUNT(*) FROM obras) AS obras
 ")->fetch();
 ?>
@@ -39,7 +40,7 @@ $totales = db()->query("
 <main class="panel-main">
     <h1>Panel de administración</h1>
     <p class="panel-subtitle">
-        <?= (int)$totales['obras'] ?> obras · <?= (int)$totales['clientes'] ?> clientes · <?= (int)$totales['arquitectos'] ?> arquitectos
+        <?= (int)$totales['obras'] ?> obras · <?= (int)$totales['clientes'] ?> clientes · <?= (int)$totales['arquitectos'] ?> arquitectos · <?= (int)$totales['directores'] ?> directores de obra
     </p>
 
     <div class="panel-actions">

@@ -5,9 +5,9 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 
 /**
- * Archivos de la obra que el cliente puede ver y descargar, agrupados en
- * solapas: el Gantt de las etapas, los renders, los PDF del proyecto, lo
- * presentado en la municipalidad y un cajón de "varios".
+ * Archivos de la obra que el cliente puede ver y descargar. Cada categoría
+ * es una solapa del panel del cliente, dentro de uno de sus grupos
+ * (Proyecto, Datos, Municipal, Ejecución de obra).
  *
  * Se guardan en uploads/obras/{obra_id}/docs/ con un nombre inventado, y
  * el nombre lindo queda en la base. El .htaccess de uploads/ ya impide
@@ -15,12 +15,49 @@ require_once __DIR__ . '/helpers.php';
  */
 
 const CATEGORIAS_DOCUMENTO = [
-    'etapas' => 'Etapa de obra',
-    'renders' => 'Renders',
-    'proyecto' => 'Proyecto',
-    'municipal' => 'Municipal',
-    'varios' => 'Varios',
+    'anteproyecto' => 'Anteproyecto',
+    'render' => 'Render',
+    'fotos_render' => 'Fotos render',
+    'archivos' => 'Archivos',
+    'planos_aprobados' => 'Planos aprobados',
+    'planos_en_proceso' => 'Planos en proceso',
+    'planificacion' => 'Planificación',
 ];
+
+/** En qué grupo del panel del cliente cae cada categoría. */
+const GRUPOS_DOCUMENTO = [
+    'Proyecto' => ['anteproyecto', 'render', 'fotos_render'],
+    'Datos' => ['archivos'],
+    'Municipal' => ['planos_aprobados', 'planos_en_proceso'],
+    'Ejecución de obra' => ['planificacion'],
+];
+
+/**
+ * Las categorías de antes de reordenar el panel en grupos, y a cuál pasó
+ * cada una. migrar_categorias_documentos() las actualiza en la base.
+ */
+const CATEGORIAS_DOCUMENTO_ANTERIORES = [
+    'etapas' => 'planificacion',
+    'renders' => 'fotos_render',
+    'proyecto' => 'anteproyecto',
+    'municipal' => 'planos_en_proceso',
+    'varios' => 'archivos',
+];
+
+/** Pasa los archivos cargados con categorías viejas a las nuevas. Una vez por pedido. */
+function migrar_categorias_documentos(): void
+{
+    static $lista = false;
+    if ($lista) {
+        return;
+    }
+    asegurar_tabla('documentos');
+    $upd = db()->prepare('UPDATE documentos SET categoria = ? WHERE categoria = ?');
+    foreach (CATEGORIAS_DOCUMENTO_ANTERIORES as $vieja => $nueva) {
+        $upd->execute([$nueva, $vieja]);
+    }
+    $lista = true;
+}
 
 const DOCUMENTO_TAMANO_MAXIMO = 20 * 1024 * 1024; // 20 MB
 
@@ -73,7 +110,7 @@ function tipo_documento(string $archivo): string
 
 function documentos_de_obra(int $obraId, ?string $categoria = null): array
 {
-    asegurar_tabla('documentos');
+    migrar_categorias_documentos();
 
     if ($categoria !== null) {
         $stmt = db()->prepare('SELECT * FROM documentos WHERE obra_id = ? AND categoria = ? ORDER BY created_at DESC, id DESC');
@@ -85,7 +122,7 @@ function documentos_de_obra(int $obraId, ?string $categoria = null): array
     return $stmt->fetchAll();
 }
 
-/** Cuántos archivos hay en cada categoría: ['renders' => 3, ...]. */
+/** Cuántos archivos hay en cada categoría: ['render' => 3, ...]. */
 function conteo_documentos(int $obraId): array
 {
     $conteo = array_fill_keys(array_keys(CATEGORIAS_DOCUMENTO), 0);
