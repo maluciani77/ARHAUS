@@ -1,0 +1,6 @@
+# Las partes que empiezan con _ (_etapas.php, _obra_info.php...) solo se
+# usan con include desde las páginas del panel: pedidas sueltas por HTTP
+# no tienen que responder nada.
+<FilesMatch "^_">
+    Require all denied
+</FilesMatch>
