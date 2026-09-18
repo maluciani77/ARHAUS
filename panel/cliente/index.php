@@ -182,6 +182,26 @@ function avatar(string $raiz, array $perfil, string $clase = ''): string
     return '<span class="' . e($clases) . ' cliente-avatar--iniciales" aria-hidden="true">' . e(iniciales((string)$perfil['nombre'])) . '</span>';
 }
 
+/**
+ * La imagen de la bienvenida: el render más reciente (cómo va a quedar la
+ * casa) o, si todavía no hay renders, la última foto de avance, que es la
+ * misma de la portada. null si la obra no tiene ninguna imagen.
+ */
+function imagen_bienvenida(string $raiz, ?array $obra, array $documentos, array $fotos): ?string
+{
+    if (!$obra) {
+        return null;
+    }
+    foreach ($documentos as $documento) {
+        if ((string)$documento['categoria'] === 'renders' && tipo_documento($documento['archivo']) === 'Imagen') {
+            return $raiz . ruta_publica_documento((int)$obra['id'], $documento['archivo']);
+        }
+    }
+    return $fotos ? url_foto($raiz, $obra, $fotos[count($fotos) - 1]) : null;
+}
+
+$imagenBienvenida = $mostrarBienvenida ? imagen_bienvenida($raiz, $obra ?: null, $documentos, $fotos) : null;
+
 $nombreSeccion = SECCIONES_CLIENTE[$seccion] ?? SECCIONES_OCULTAS[$seccion];
 $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' · ' . $obra['nombre']) : $nombreSeccion;
 ?>
@@ -199,14 +219,21 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 </head>
 <body class="cliente">
 <?php if ($mostrarBienvenida): ?>
-    <div class="cliente-bienvenida" role="status" aria-live="polite" data-bienvenida>
+    <div class="cliente-bienvenida<?= $imagenBienvenida ? ' cliente-bienvenida--imagen' : '' ?>" role="status" aria-live="polite" data-bienvenida>
+        <?php if ($imagenBienvenida): ?>
+            <div class="cliente-bienvenida__imagen" aria-hidden="true">
+                <img src="<?= e($imagenBienvenida) ?>" alt="" fetchpriority="high">
+            </div>
+        <?php endif; ?>
         <div class="cliente-bienvenida__cuerpo">
-            <?= avatar($raiz, $perfil, 'cliente-avatar--grande') ?>
-            <p class="cliente-bienvenida__saludo">Hola, <?= e(nombre_de_pila((string)$perfil['nombre'])) ?></p>
-            <p class="cliente-bienvenida__texto">
-                <?= $obra ? 'Te damos la bienvenida a ' . e($obra['nombre']) : 'Te damos la bienvenida a ARHAUS' ?>
+            <img class="cliente-bienvenida__logo" src="<?= e($raiz) ?>images/logo-dark.svg" alt="ARHAUS">
+            <p class="cliente-bienvenida__saludo">
+                <span class="cliente-bienvenida__mascara"><span>Hola,</span></span>
+                <span class="cliente-bienvenida__mascara"><span><?= e(nombre_de_pila((string)$perfil['nombre'])) ?></span></span>
             </p>
-            <span class="cliente-bienvenida__linea" aria-hidden="true"></span>
+            <p class="cliente-bienvenida__texto">
+                <span class="cliente-bienvenida__mascara"><span><?= $obra ? e($obra['nombre']) : 'Te damos la bienvenida' ?></span></span>
+            </p>
         </div>
     </div>
 <?php endif; ?>

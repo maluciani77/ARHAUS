@@ -1649,95 +1649,167 @@ body.visor-abierto {
   }
 }
 
-/* ---- Bienvenida al entrar: 2,5 s en total ---- */
+/* ---- Bienvenida al entrar: 3,5 s en total ----
+   0,0 s  la foto del proyecto se abre desde una franja en el medio
+   0,9 s  aparece el logo
+   1,0 s  suben "Hola," y el nombre, y abajo el nombre de la obra
+   2,9 s  todo el cartel sube como una cortina y deja ver el panel
+   Mientras tanto la foto se acerca despacio. */
 .cliente-bienvenida {
   position: fixed;
   inset: 0;
   z-index: 1000;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  align-items: flex-end;
+  padding: clamp(28px, 7vw, 88px);
+  overflow: hidden;
   background: var(--bg);
+  color: var(--texto);
   cursor: pointer;
-  animation: bienvenida-salida 2.5s ease forwards;
+  animation: bienvenida-cortina 3.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+.cliente-bienvenida--imagen {
+  background: #161412;
+  color: #fff;
 }
 
 .cliente-bienvenida.is-saliendo {
-  animation: bienvenida-salteo 0.3s ease forwards;
+  animation: bienvenida-salteo 0.45s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+.cliente-bienvenida__imagen {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(50% 0 50% 0);
+  animation: bienvenida-apertura 1.1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.cliente-bienvenida__imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.22);
+  animation: bienvenida-acercar 3.5s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+}
+
+/* Oscurece abajo para que el texto se lea sobre cualquier foto */
+.cliente-bienvenida__imagen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.78) 100%);
 }
 
 .cliente-bienvenida__cuerpo {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
+  gap: 10px;
 }
 
-.cliente-bienvenida .cliente-avatar {
+.cliente-bienvenida__logo {
+  width: 132px;
+  height: auto;
+  margin-bottom: 18px;
   opacity: 0;
-  animation: bienvenida-entrada 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s forwards;
+  animation: bienvenida-aparecer 0.7s ease 0.9s forwards;
+}
+
+.cliente-bienvenida--imagen .cliente-bienvenida__logo {
+  filter: brightness(0) invert(1);
 }
 
 .cliente-bienvenida__saludo {
-  margin: 6px 0 0;
-  font-size: clamp(2rem, 6vw, 3.4rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.28em;
+  margin: 0;
+  font-size: clamp(2.6rem, 8vw, 5.6rem);
   font-weight: 300;
-  letter-spacing: -0.01em;
-  opacity: 0;
-  animation: bienvenida-entrada 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s forwards;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
 }
 
 .cliente-bienvenida__texto {
   margin: 0;
-  color: var(--suave);
-  font-size: 1.05rem;
-  opacity: 0;
-  animation: bienvenida-entrada 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s forwards;
+  font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.85;
 }
 
-.cliente-bienvenida__linea {
-  display: block;
-  width: 120px;
-  height: 2px;
-  margin-top: 6px;
-  background: var(--acento);
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: bienvenida-linea 1.2s ease-in-out 0.8s forwards;
+/* Cada palabra sube desde atrás de una máscara */
+.cliente-bienvenida__mascara {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  vertical-align: top;
 }
 
-@keyframes bienvenida-entrada {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+.cliente-bienvenida__mascara > span {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: bienvenida-subir 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-@keyframes bienvenida-linea {
-  to { transform: scaleX(1); }
+.cliente-bienvenida__saludo .cliente-bienvenida__mascara:nth-child(1) > span {
+  animation-delay: 1s;
 }
 
-/* Queda quieto hasta los 2 s y se desvanece en el último medio segundo */
-@keyframes bienvenida-salida {
-  0%, 80% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+.cliente-bienvenida__saludo .cliente-bienvenida__mascara:nth-child(2) > span {
+  animation-delay: 1.12s;
+}
+
+.cliente-bienvenida__texto .cliente-bienvenida__mascara > span {
+  animation-delay: 1.35s;
+}
+
+@keyframes bienvenida-apertura {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes bienvenida-acercar {
+  to { transform: scale(1.04); }
+}
+
+@keyframes bienvenida-aparecer {
+  to { opacity: 1; }
+}
+
+@keyframes bienvenida-subir {
+  to { transform: translateY(0); }
+}
+
+/* Quieto hasta los 2,9 s; después sube y se va por arriba */
+@keyframes bienvenida-cortina {
+  0%, 83% { clip-path: inset(0 0 0 0); visibility: visible; }
+  100% { clip-path: inset(0 0 100% 0); visibility: hidden; pointer-events: none; }
 }
 
 @keyframes bienvenida-salteo {
-  to { opacity: 0; visibility: hidden; pointer-events: none; }
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; pointer-events: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cliente-bienvenida .cliente-avatar,
-  .cliente-bienvenida__saludo,
-  .cliente-bienvenida__texto {
+  .cliente-bienvenida,
+  .cliente-bienvenida.is-saliendo {
+    animation: bienvenida-desvanecer 3.5s linear forwards;
+  }
+
+  .cliente-bienvenida__imagen,
+  .cliente-bienvenida__imagen img,
+  .cliente-bienvenida__logo,
+  .cliente-bienvenida__mascara > span {
+    clip-path: none;
     opacity: 1;
+    transform: none;
     animation: none;
   }
 
-  .cliente-bienvenida__linea {
-    transform: none;
-    animation: none;
+  @keyframes bienvenida-desvanecer {
+    0%, 85% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; pointer-events: none; }
   }
 }
 
