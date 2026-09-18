@@ -7,3 +7,10 @@
 
 # Lo mismo para setup.php una vez que ya creaste el usuario admin:
 # borralo del servidor, no hace falta dejarlo online.
+
+# Las dependencias de Composer y sus archivos de control no son parte
+# del sitio: nadie tiene que poder pedirlas por HTTP.
+RedirectMatch 403 ^/vendor(/|$)
+<FilesMatch "^composer\.(json|lock)$">
+    Require all denied
+</FilesMatch>

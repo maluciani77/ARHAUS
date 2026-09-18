@@ -25,3 +25,11 @@
 # (Descomentá la línea de abajo si vas a versionar el repo en un lugar
 # público; si el repo queda privado podés dejarla comentada.)
 # /config.php
+
+# Dependencias de Composer (el SDK de Claude para el asistente). Se
+# regeneran con `composer install` a partir de composer.lock.
+/vendor/
+
+# Fotos de perfil que suben los clientes durante las pruebas locales.
+/uploads/perfiles/*
+!/uploads/perfiles/.gitkeep

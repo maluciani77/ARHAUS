@@ -1648,3 +1648,395 @@ body.visor-abierto {
     width: 78px;
   }
 }
+
+/* ---- Bienvenida al entrar: 2,5 s en total ---- */
+.cliente-bienvenida {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+  cursor: pointer;
+  animation: bienvenida-salida 2.5s ease forwards;
+}
+
+.cliente-bienvenida.is-saliendo {
+  animation: bienvenida-salteo 0.3s ease forwards;
+}
+
+.cliente-bienvenida__cuerpo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.cliente-bienvenida .cliente-avatar {
+  opacity: 0;
+  animation: bienvenida-entrada 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s forwards;
+}
+
+.cliente-bienvenida__saludo {
+  margin: 6px 0 0;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  animation: bienvenida-entrada 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s forwards;
+}
+
+.cliente-bienvenida__texto {
+  margin: 0;
+  color: var(--suave);
+  font-size: 1.05rem;
+  opacity: 0;
+  animation: bienvenida-entrada 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s forwards;
+}
+
+.cliente-bienvenida__linea {
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin-top: 6px;
+  background: var(--acento);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: bienvenida-linea 1.2s ease-in-out 0.8s forwards;
+}
+
+@keyframes bienvenida-entrada {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bienvenida-linea {
+  to { transform: scaleX(1); }
+}
+
+/* Queda quieto hasta los 2 s y se desvanece en el último medio segundo */
+@keyframes bienvenida-salida {
+  0%, 80% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+@keyframes bienvenida-salteo {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cliente-bienvenida .cliente-avatar,
+  .cliente-bienvenida__saludo,
+  .cliente-bienvenida__texto {
+    opacity: 1;
+    animation: none;
+  }
+
+  .cliente-bienvenida__linea {
+    transform: none;
+    animation: none;
+  }
+}
+
+/* ---- Avatar: foto de perfil o iniciales ---- */
+.cliente-avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--hundido);
+  color: var(--texto);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.cliente-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cliente-avatar--iniciales {
+  background: var(--acento);
+  color: #fff;
+}
+
+.cliente-avatar--grande {
+  width: 104px;
+  height: 104px;
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+/* En el pie del lateral: foto + nombre + "Mi cuenta" */
+.cliente-lateral__pie .cliente-lateral__cuenta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 6px;
+  border-radius: var(--radio);
+  color: var(--texto);
+  transition: background 0.2s ease;
+}
+
+.cliente-lateral__pie .cliente-lateral__cuenta:hover,
+.cliente-lateral__pie .cliente-lateral__cuenta.is-activa {
+  background: var(--hundido);
+  color: var(--texto);
+}
+
+.cliente-lateral__cuenta .cliente-lateral__usuario {
+  display: block;
+  width: auto;
+  margin: 0;
+  color: var(--texto);
+}
+
+.cliente-lateral__mi-cuenta {
+  display: block;
+  color: var(--suave);
+  font-size: 0.78rem;
+}
+
+.cliente-cabecera-movil__acciones {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.cliente-cabecera-movil__cuenta {
+  display: inline-flex;
+}
+
+.cliente-cabecera-movil__cuenta .cliente-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 0.75rem;
+}
+
+/* ---- Formularios del panel del cliente ---- */
+.cliente-bloque > h2 {
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--linea);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.cliente-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.cliente-form--angosto {
+  max-width: 420px;
+}
+
+.cliente-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.cliente-campo input[type="password"],
+.cliente-campo input[type="text"] {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+.cliente-campo input:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.cliente-ayuda {
+  margin: -6px 0 0;
+  color: var(--suave);
+  font-size: 0.85rem;
+}
+
+.cliente-boton {
+  padding: 11px 20px;
+  border: 1px solid var(--acento);
+  border-radius: var(--radio);
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.cliente-boton:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.cliente-boton--secundario {
+  background: transparent;
+  color: var(--acento);
+}
+
+.cliente-boton--texto {
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--suave);
+  text-decoration: underline;
+}
+
+.cliente-aviso {
+  margin: 0 0 8px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--c-presupuesto);
+  background: var(--c-presupuesto-fondo);
+}
+
+.cliente-perfil {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.cliente-perfil__acciones {
+  display: flex;
+  flex: 1 1 260px;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- Asistente ---- */
+.asistente {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+}
+
+.asistente__conversacion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.asistente__mensaje {
+  max-width: min(62ch, 90%);
+  padding: 13px 16px;
+  border-radius: 14px;
+  line-height: 1.6;
+}
+
+.asistente__mensaje p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.asistente__mensaje--asistente {
+  align-self: flex-start;
+  border: 1px solid var(--linea);
+  border-bottom-left-radius: 4px;
+  background: var(--superficie);
+}
+
+.asistente__mensaje--cliente {
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  background: var(--hundido);
+}
+
+.asistente__mensaje.is-pensando p {
+  color: var(--suave);
+  animation: asistente-pensando 1.2s ease-in-out infinite;
+}
+
+@keyframes asistente-pensando {
+  50% { opacity: 0.4; }
+}
+
+.asistente__sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.asistente__sugerencia {
+  padding: 8px 14px;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.asistente__sugerencia:hover {
+  border-color: var(--acento);
+  color: var(--acento);
+}
+
+.asistente__form {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.asistente__form textarea {
+  flex: 1;
+  min-height: 52px;
+  padding: 13px 14px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  resize: vertical;
+}
+
+.asistente__form textarea:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.asistente__borrar {
+  align-self: flex-start;
+}
+
+@media (max-width: 560px) {
+  .asistente__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

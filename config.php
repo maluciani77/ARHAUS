@@ -21,4 +21,10 @@ return [
     'database' => 'u000000000_arhaus',
     'user' => 'u000000000_usuario',
     'password' => 'CAMBIAR_ESTO',
+
+    // --- Asistente del panel del cliente (Claude) ---
+    // La clave de la API de Anthropic. Completala SOLO en el config.php del
+    // servidor, nunca en el repo. También se puede usar la variable de
+    // entorno ANTHROPIC_API_KEY, que tiene prioridad.
+    'anthropic_api_key' => '',
 ];

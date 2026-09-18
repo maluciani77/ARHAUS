@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   email TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   rol TEXT NOT NULL CHECK (rol IN ('admin','arquitecto','cliente')),
+  foto TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -89,6 +90,15 @@ CREATE TABLE IF NOT EXISTS mensajes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
   autor_id INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  texto TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS asistente_mensajes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  rol TEXT NOT NULL,
   texto TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

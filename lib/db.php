@@ -64,6 +64,42 @@ function asegurar_tabla(string $tabla): void
     $listas[$tabla] = true;
 }
 
+/**
+ * Agrega una columna a una tabla que ya existe, si todavía no la tiene.
+ * Es el primo de asegurar_tabla(): en Hostinger la tabla usuarios se creó
+ * antes de que existiera la foto de perfil, y así alcanza con subir los
+ * archivos nuevos. $definicion es lo que va después del nombre, por
+ * ejemplo 'VARCHAR(255) NULL'.
+ */
+function asegurar_columna(string $tabla, string $columna, string $definicion): void
+{
+    static $listas = [];
+    $clave = $tabla . '.' . $columna;
+    if (isset($listas[$clave])) {
+        return;
+    }
+
+    try {
+        db()->query('SELECT ' . $columna . ' FROM ' . $tabla . ' LIMIT 1');
+    } catch (PDOException $ex) {
+        db()->exec('ALTER TABLE ' . $tabla . ' ADD COLUMN ' . $columna . ' ' . $definicion);
+    }
+    $listas[$clave] = true;
+}
+
+/**
+ * Un valor de config.php que no es de la base, como la clave del
+ * asistente. Devuelve $defecto si no está cargado.
+ */
+function config_valor(string $clave, $defecto = null)
+{
+    static $config = null;
+    if ($config === null) {
+        $config = require __DIR__ . '/../config.php';
+    }
+    return $config[$clave] ?? $defecto;
+}
+
 /** Driver activo ('sqlite' | 'mysql'), útil para SQL que difiere entre motores. */
 function db_driver(): string
 {
