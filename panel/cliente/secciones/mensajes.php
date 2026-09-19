@@ -15,6 +15,9 @@ if (!isset($obra)) {
     <p class="cliente-etiqueta"><?= e($obra['nombre']) ?></p>
     <h1>Mensajes</h1>
     <p class="cliente-cabecera__intro">Dejale una consulta al estudio. Te responden acá mismo.</p>
+    <a class="cliente-boton cliente-boton--whatsapp" href="<?= e(enlace_whatsapp(WHATSAPP_ESTUDIO, 'Hola, les escribo por la obra ' . $obra['nombre'] . '.')) ?>" target="_blank" rel="noopener">
+        <?= icono('whatsapp') ?> Escribir por WhatsApp
+    </a>
 </header>
 
 <?php if (!$mensajes): ?>

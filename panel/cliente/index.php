@@ -14,48 +14,58 @@ require_once __DIR__ . '/../../lib/cuenta.php';
 require_once __DIR__ . '/../../lib/asistente.php';
 require_once __DIR__ . '/../../lib/obra_info.php';
 require_once __DIR__ . '/../../lib/propietarios.php';
+require_once __DIR__ . '/../../lib/pagos.php';
+require_once __DIR__ . '/../../lib/contactos.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'cliente');
 
 /**
- * Los botones del panel: cada grupo tiene sus solapas, que se ven arriba
- * de la página cuando el grupo tiene más de una. La clave de cada solapa
- * es el ?seccion= de la URL.
+ * El menú del panel, en tres niveles: botón > solapa > sección. Cuando una
+ * solapa tiene más de una sección se ven como una segunda fila de
+ * solapas. La clave de cada sección es el ?seccion= de la URL.
  */
-const GRUPOS_CLIENTE = [
+const MENU_CLIENTE = [
+    'reuniones' => ['Reuniones', [
+        'reuniones' => ['Calendario', ['calendario' => 'Calendario']],
+    ]],
+    'propietarios' => ['Propietarios', [
+        'prop_archivos' => ['Archivos', ['prop_archivos' => 'Archivos']],
+        'datos' => ['Datos personales', ['propietarios' => 'Datos personales']],
+        'contrato' => ['Contrato', ['contrato' => 'Contrato']],
+        'obra_info' => ['Obra info', ['ubicacion' => 'Ubicación', 'info_obra' => 'Info obra']],
+        'referentes' => ['Referentes', ['referentes' => 'Ideas']],
+        'pagos' => ['Pagos', ['pagos' => 'Pagos']],
+    ]],
     'proyecto' => ['Proyecto', [
-        'anteproyecto' => 'Anteproyecto',
-        'render' => 'Render',
-        'fotos_render' => 'Fotos render',
-    ]],
-    'datos' => ['Datos', [
-        'archivos' => 'Archivos',
-        'obra_info' => 'Obra info',
-        'propietarios' => 'Propietarios',
-    ]],
-    'municipal' => ['Municipal', [
-        'planos_aprobados' => 'Planos aprobados',
-        'planos_en_proceso' => 'Planos en proceso',
-    ]],
-    'mensajes' => ['Mensajes', [
-        'mensajes' => 'Mensajes',
+        'anteproyecto' => ['Anteproyecto', ['anteproyecto' => 'Anteproyecto']],
+        'proyecto' => ['Proyecto', ['proy_planificacion' => 'Planificación', 'computo' => 'Cómputo', 'arquitectura' => 'Arquitectura', 'render' => 'Renders']],
+        'municipal' => ['Municipal', ['planos_aprobados' => 'Aprobados', 'planos_en_proceso' => 'En proceso']],
+        'varios' => ['Varios', ['varios' => 'Varios']],
     ]],
     'ejecucion' => ['Ejecución de obra', [
-        'direccion' => 'Dirección de obra',
-        'fotos' => 'Fotos de obra',
-        'planificacion' => 'Planificación',
-        'etapas' => 'Etapa de obra',
-        'presupuestos' => 'Presupuestos',
+        'direccion' => ['Dirección de obra', ['direccion' => 'Seguimiento', 'fotos_dia' => 'Fotos día por día']],
+        'profesionales' => ['Profesionales', ['higiene' => 'Higiene y seguridad', 'gestor' => 'Gestor', 'agrimensor' => 'Agrimensor']],
+        'contratados' => ['Contratados', ['proveedores' => 'Proveedores']],
+        'fotos' => ['Fotos', ['fotos' => 'Fotos']],
+        'informes' => ['Informes', ['informes' => 'Informes']],
+        'presupuestos' => ['Presupuestos', ['presupuestos' => 'Presupuestos']],
+        'planificacion' => ['Planificación', ['etapas' => 'Etapa de obra', 'planificacion' => 'Gantt']],
+        'ejec_archivos' => ['Archivos', ['ejec_archivos' => 'Archivos']],
     ]],
-    'calendario' => ['Calendario', [
-        'calendario' => 'Calendario',
+    'telefonos' => ['Teléfonos útiles', [
+        'telefonos' => ['Teléfonos útiles', ['telefonos' => 'Teléfonos útiles']],
+    ]],
+    'mensajes' => ['Mensajes', [
+        'mensajes' => ['Mensajes', ['mensajes' => 'Mensajes']],
     ]],
 ];
 
 /** Nombres más cortos para la barra de abajo del celular, donde no entran los largos. */
 const NOMBRES_CORTOS_GRUPOS = [
+    'propietarios' => 'Dueños',
     'ejecucion' => 'Ejecución',
+    'telefonos' => 'Teléfonos',
 ];
 
 /** Páginas que no son un botón: Inicio (el logo), el asistente (botón flotante) y Mi cuenta (la foto). */
@@ -65,26 +75,44 @@ const SECCIONES_SUELTAS = [
     'cuenta' => 'Mi cuenta',
 ];
 
-/** Todas las secciones: clave => [nombre, grupo o null]. */
+/** Las secciones que son una lista de contactos, con su tipo. */
+const SECCIONES_CONTACTOS = [
+    'higiene' => 'higiene',
+    'gestor' => 'gestor',
+    'agrimensor' => 'agrimensor',
+    'proveedores' => 'proveedor',
+    'telefonos' => 'telefono',
+];
+
+/** Todas las secciones: clave => [nombre, botón, solapa] (botón y solapa en null si es suelta). */
 function secciones_cliente(): array
 {
     $secciones = [];
-    foreach (GRUPOS_CLIENTE as $grupo => [, $solapas]) {
-        foreach ($solapas as $clave => $nombre) {
-            $secciones[$clave] = [$nombre, $grupo];
+    foreach (MENU_CLIENTE as $grupo => [, $solapas]) {
+        foreach ($solapas as $solapa => [, $hojas]) {
+            foreach ($hojas as $clave => $nombre) {
+                $secciones[$clave] = [$nombre, $grupo, $solapa];
+            }
         }
     }
     foreach (SECCIONES_SUELTAS as $clave => $nombre) {
-        $secciones[$clave] = [$nombre, null];
+        $secciones[$clave] = [$nombre, null, null];
     }
     return $secciones;
+}
+
+/** La primera sección de un botón: adonde lleva al tocarlo. */
+function primera_seccion(array $solapas): string
+{
+    $primera = reset($solapas);
+    return (string)array_key_first($primera[1]);
 }
 
 $seccion = $_GET['seccion'] ?? 'inicio';
 if (!is_string($seccion) || !isset(secciones_cliente()[$seccion])) {
     $seccion = 'inicio';
 }
-[$nombreSeccion, $grupoActual] = secciones_cliente()[$seccion];
+[$nombreSeccion, $grupoActual, $solapaActual] = secciones_cliente()[$seccion];
 
 $stmt = db()->prepare('SELECT * FROM obras WHERE cliente_id = ? LIMIT 1');
 $stmt->execute([$usuario['id']]);
@@ -99,6 +127,8 @@ $errorMensaje = null;
 $errorCuenta = null;
 $errorAsistente = null;
 $errorPropietario = null;
+$errorArchivoCliente = null;
+$errorComprobante = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
     $accion = (string)($_POST['accion'] ?? '');
@@ -131,6 +161,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         eliminar_propietario((int)($_POST['propietario_id'] ?? 0), (int)$obra['id']);
         $_SESSION['aviso_cuenta'] = 'Se quitó el propietario.';
         redirigir('index.php?seccion=propietarios');
+    } elseif ($accion === 'subir_archivo_cliente' && $obra) {
+        // El cliente solo sube a sus propias carpetas (sus documentos y sus ideas).
+        $categoria = (string)($_POST['categoria'] ?? '');
+        if (!in_array($categoria, CATEGORIAS_DEL_CLIENTE, true)) {
+            http_response_code(403);
+            exit('No podés subir archivos a esa sección.');
+        }
+        $errorArchivoCliente = agregar_documento((int)$obra['id'], $categoria, $_POST, $_FILES['documento'] ?? [], (int)$usuario['id']);
+        if ($errorArchivoCliente === null) {
+            $_SESSION['aviso_cuenta'] = 'Listo, se subió el archivo.';
+            redirigir('index.php?seccion=' . $categoria);
+        }
+    } elseif ($accion === 'eliminar_archivo_cliente' && $obra) {
+        // Solo lo que subió él, y solo en sus carpetas.
+        $sel = db()->prepare('SELECT * FROM documentos WHERE id = ? AND obra_id = ? AND subido_por = ?');
+        $sel->execute([(int)($_POST['documento_id'] ?? 0), $obra['id'], $usuario['id']]);
+        $documento = $sel->fetch();
+        if ($documento && in_array($documento['categoria'], CATEGORIAS_DEL_CLIENTE, true)) {
+            eliminar_documento((int)$documento['id'], (int)$obra['id']);
+            $_SESSION['aviso_cuenta'] = 'Se borró el archivo.';
+        }
+        redirigir('index.php?seccion=' . ($documento['categoria'] ?? 'prop_archivos'));
+    } elseif ($accion === 'adjuntar_comprobante' && $obra) {
+        $errorComprobante = adjuntar_comprobante((int)($_POST['pago_id'] ?? 0), (int)$obra['id'], $_FILES['comprobante'] ?? [], (int)$usuario['id']);
+        if ($errorComprobante === null) {
+            $_SESSION['aviso_cuenta'] = 'Listo, se adjuntó el comprobante.';
+            redirigir('index.php?seccion=pagos');
+        }
+    } elseif ($accion === 'quitar_comprobante' && $obra) {
+        // Solo el comprobante que subió él; los del estudio los saca el estudio.
+        $pago = pago_de_obra((int)($_POST['pago_id'] ?? 0), (int)$obra['id']);
+        if ($pago && (int)$pago['comprobante_subido_por'] === (int)$usuario['id']) {
+            quitar_comprobante((int)$pago['id'], (int)$obra['id']);
+            $_SESSION['aviso_cuenta'] = 'Se quitó el comprobante.';
+        }
+        redirigir('index.php?seccion=pagos');
     } elseif ($accion === 'cambiar_nombre') {
         $errorCuenta = cambiar_nombre((int)$usuario['id'], (string)($_POST['nombre'] ?? ''));
         if ($errorCuenta === null) {
@@ -173,6 +239,9 @@ $mensajes = [];
 $conversacion = [];
 $obraInfo = [];
 $propietarios = [];
+$pagos = [];
+$contactos = [];
+$archivosContactos = [];
 $presupuestos = [];
 $eventos = [];
 $hoy = hoy_argentina();
@@ -194,6 +263,9 @@ if ($obra) {
     $conversacion = historial_asistente((int)$usuario['id'], (int)$obra['id']);
     $obraInfo = obra_info((int)$obra['id']);
     $propietarios = propietarios_de_obra((int)$obra['id']);
+    $pagos = pagos_de_obra((int)$obra['id']);
+    $contactos = contactos_de_obra((int)$obra['id']);
+    $archivosContactos = archivos_de_contactos((int)$obra['id']);
     $presupuestos = presupuestos_de_obra((int)$obra['id']);
     $eventos = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 }
@@ -225,6 +297,10 @@ function icono(string $nombre): string
         'municipal' => '<path d="M3 10 12 4l9 6"/><path d="M5 10v9h14v-9M9 19v-5h6v5"/>',
         'mensajes' => '<path d="M4 5h16v11H9l-5 4z"/><circle cx="9" cy="10.5" r="1"/><circle cx="12.5" cy="10.5" r="1"/><circle cx="16" cy="10.5" r="1"/>',
         'ejecucion' => '<path d="M4 17a8 8 0 0 1 16 0"/><path d="M2.5 17h19v2.5h-19zM10 9.2V6.5h4v2.7"/>',
+        'reuniones' => '<rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15.5" r="2.2"/>',
+        'propietarios' => '<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c1.2-3.9 4-5.8 7.5-5.8s6.3 1.9 7.5 5.8"/>',
+        'telefonos' => '<path d="M6.6 3.5h3l1.5 4.2-2.1 1.4a11 11 0 0 0 5.9 5.9l1.4-2.1 4.2 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/>',
+        'whatsapp' => '<path d="M4 20l1.2-3.8A8 8 0 1 1 8.1 19z"/><path d="M9.2 8.6c.2 2.6 3.4 5.9 6 6.1l1.2-1.4-2-1-.9.9c-1-.4-2.3-1.7-2.7-2.7l.9-.9-1-2z"/>',
         'calendario' => '<rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
         'asistente' => '<path d="M12 3.5 13.9 8l4.6 1.9-4.6 1.9L12 16.4l-1.9-4.6L5.5 9.9 10.1 8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/>',
         'salir' => '<path d="M14 4h5v16h-5"/><path d="M10 8l-4 4 4 4M6 12h10"/>',
@@ -316,9 +392,9 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
             </div>
 
             <nav class="cliente-nav" aria-label="Secciones">
-                <?php foreach (GRUPOS_CLIENTE as $grupo => [$nombreGrupo, $solapas]): ?>
+                <?php foreach (MENU_CLIENTE as $grupo => [$nombreGrupo, $solapas]): ?>
                     <?php $activo = $grupo === $grupoActual; ?>
-                    <a class="cliente-nav__item<?= $activo ? ' is-activa' : '' ?>" href="<?= e(url_seccion(array_key_first($solapas))) ?>"<?= $activo ? ' aria-current="page"' : '' ?>>
+                    <a class="cliente-nav__item<?= $activo ? ' is-activa' : '' ?>" href="<?= e(url_seccion(primera_seccion($solapas))) ?>"<?= $activo ? ' aria-current="page"' : '' ?>>
                         <?= icono($grupo) ?>
                         <?php if (isset(NOMBRES_CORTOS_GRUPOS[$grupo])): ?>
                             <span class="cliente-nav__largo"><?= e($nombreGrupo) ?></span>
@@ -361,15 +437,26 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
                 <p>Cuando el estudio vincule tu cuenta a un proyecto, lo vas a ver acá.</p>
             </div>
         <?php else: ?>
-            <?php if ($grupoActual && count(GRUPOS_CLIENTE[$grupoActual][1]) > 1): ?>
-                <nav class="cliente-subnav" aria-label="<?= e(GRUPOS_CLIENTE[$grupoActual][0]) ?>">
-                    <?php foreach (GRUPOS_CLIENTE[$grupoActual][1] as $clave => $nombre): ?>
+            <?php if ($grupoActual && count(MENU_CLIENTE[$grupoActual][1]) > 1): ?>
+                <nav class="cliente-subnav" aria-label="<?= e(MENU_CLIENTE[$grupoActual][0]) ?>">
+                    <?php foreach (MENU_CLIENTE[$grupoActual][1] as $clave => [$nombre, $hojas]): ?>
+                        <?php $activa = $clave === $solapaActual; ?>
+                        <a class="cliente-subnav__item<?= $activa ? ' is-activa' : '' ?>" href="<?= e(url_seccion(array_key_first($hojas))) ?>"<?= $activa ? ' aria-current="page"' : '' ?>><?= e($nombre) ?></a>
+                    <?php endforeach; ?>
+                </nav>
+            <?php endif; ?>
+
+            <?php if ($solapaActual && count(MENU_CLIENTE[$grupoActual][1][$solapaActual][1]) > 1): ?>
+                <nav class="cliente-subnav cliente-subnav--tercer-nivel" aria-label="<?= e(MENU_CLIENTE[$grupoActual][1][$solapaActual][0]) ?>">
+                    <?php foreach (MENU_CLIENTE[$grupoActual][1][$solapaActual][1] as $clave => $nombre): ?>
                         <a class="cliente-subnav__item<?= $clave === $seccion ? ' is-activa' : '' ?>" href="<?= e(url_seccion($clave)) ?>"<?= $clave === $seccion ? ' aria-current="page"' : '' ?>><?= e($nombre) ?></a>
                     <?php endforeach; ?>
                 </nav>
             <?php endif; ?>
 
-            <?php if (es_categoria_documento($seccion)): ?>
+            <?php if (isset(SECCIONES_CONTACTOS[$seccion])): ?>
+                <?php $tipoContacto = SECCIONES_CONTACTOS[$seccion]; include __DIR__ . '/secciones/_contactos.php'; ?>
+            <?php elseif (es_categoria_documento($seccion)): ?>
                 <?php $categoriaDocumento = $seccion; include __DIR__ . '/secciones/_archivos.php'; ?>
             <?php else: ?>
                 <?php include __DIR__ . '/secciones/' . $seccion . '.php'; ?>
@@ -385,7 +472,7 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
     <?php endif; ?>
 </div>
 
-<?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion'], true) || es_categoria_documento($seccion))): ?>
+<?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion', 'fotos_dia', 'info_obra'], true) || es_categoria_documento($seccion))): ?>
     <script src="<?= e(recurso($raiz, 'js/book-visor.js')) ?>"></script>
 <?php endif; ?>
 <?php if ($obra && $seccion === 'asistente'): ?>
@@ -397,13 +484,13 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 <script>
     // En el celular las solapas se deslizan: que la activa quede a la vista.
     (function () {
-        var activa = document.querySelector('.cliente-subnav__item.is-activa');
-        if (!activa) return;
-        var barra = activa.parentNode;
-        if (barra.scrollWidth <= barra.clientWidth) return;
-        var r = activa.getBoundingClientRect();
-        var rb = barra.getBoundingClientRect();
-        barra.scrollLeft += (r.left - rb.left) - (rb.width - r.width) / 2;
+        document.querySelectorAll('.cliente-subnav__item.is-activa').forEach(function (activa) {
+            var barra = activa.parentNode;
+            if (barra.scrollWidth <= barra.clientWidth) return;
+            var r = activa.getBoundingClientRect();
+            var rb = barra.getBoundingClientRect();
+            barra.scrollLeft += (r.left - rb.left) - (rb.width - r.width) / 2;
+        });
     })();
 </script>
 </body>

@@ -128,3 +128,44 @@ CREATE TABLE IF NOT EXISTS propietarios (
   updated_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS pagos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  fecha TEXT NOT NULL,
+  concepto TEXT NOT NULL,
+  monto NUMERIC NOT NULL,
+  moneda TEXT NOT NULL DEFAULT 'ARS',
+  detalle TEXT,
+  comprobante TEXT,
+  comprobante_nombre TEXT,
+  comprobante_subido_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS contactos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  tipo TEXT NOT NULL,
+  nombre TEXT NOT NULL,
+  empresa TEXT,
+  rubro TEXT,
+  telefono TEXT,
+  email TEXT,
+  notas TEXT,
+  cargado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS contacto_archivos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  contacto_id INTEGER NOT NULL REFERENCES contactos(id) ON DELETE CASCADE,
+  obra_id INTEGER NOT NULL REFERENCES obras(id) ON DELETE CASCADE,
+  titulo TEXT NOT NULL,
+  archivo TEXT NOT NULL,
+  nombre_original TEXT NOT NULL,
+  tamano INTEGER NOT NULL DEFAULT 0,
+  subido_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

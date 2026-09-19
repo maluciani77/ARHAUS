@@ -80,7 +80,8 @@ function abrir_archivo_para_asistente(int $documentoId, int $obraId): array
     $stmt = db()->prepare('SELECT * FROM documentos WHERE id = ? AND obra_id = ?');
     $stmt->execute([$documentoId, $obraId]);
     $documento = $stmt->fetch();
-    if (!$documento) {
+    // Los documentos personales (DNI, CUIT) no se abren: ni figuran en la lista.
+    if (!$documento || in_array((string)$documento['categoria'], CATEGORIAS_PRIVADAS, true)) {
         throw new RuntimeException('No hay ningún archivo ' . $documentoId . ' en esta obra. Revisá los números de la lista de ARCHIVOS.');
     }
 

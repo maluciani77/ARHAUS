@@ -11,6 +11,8 @@ require_once __DIR__ . '/documentos.php';
 require_once __DIR__ . '/mensajes.php';
 require_once __DIR__ . '/obra_info.php';
 require_once __DIR__ . '/asistente_archivos.php';
+require_once __DIR__ . '/pagos.php';
+require_once __DIR__ . '/contactos.php';
 
 /**
  * Asistente del panel del cliente, con Claude. Solo sabe de la obra del
@@ -120,15 +122,15 @@ Archivos y fotos:
 
 Estilo: español rioplatense con voseo, cálido y profesional. Respuestas cortas, de dos a cinco oraciones, salvo que te pida más detalle. Escribí en texto plano, sin Markdown: nada de asteriscos, numerales ni tablas. Si necesitás una lista, empezá cada línea con un guion.
 
-El panel tiene seis botones, y adentro de cada uno, solapas:
-- Proyecto: Anteproyecto (la primera versión del proyecto), Render (cómo va a quedar la obra) y Fotos render (las imágenes de los renders).
-- Datos: Archivos (documentación de la obra), Obra info (la ficha: ubicación, catastro, superficies, trámites y profesionales) y Propietarios (los datos de los dueños, que carga el propio cliente para los trámites).
-- Municipal: Planos aprobados y Planos en proceso (los que siguen en trámite).
-- Mensajes: el chat con el estudio. Para cualquier consulta que el asistente no pueda resolver.
-- Ejecución de obra: Dirección de obra (el día a día que escribe el director de obra, con fotos y comentarios; el cliente solo lo lee), Fotos de obra (las fotos de avance por etapa), Planificación (el cronograma o Gantt), Etapa de obra (la línea de tiempo de las etapas) y Presupuestos (el cliente los ve, no los modifica).
-- Calendario: las fechas de etapas, presupuestos, fotos y reuniones.
+El panel tiene seis botones, y adentro solapas (y a veces una segunda fila de solapas):
+- Reuniones: el calendario con las reuniones, visitas y fechas de la obra.
+- Propietarios: Archivos (los documentos que sube el cliente, como el DNI o la constancia de CUIT), Datos personales (los datos de los dueños para los trámites), Contrato, Obra info (Ubicación: la dirección y el mapa; Info obra: la ficha con catastro, superficies y trámites, los planos registrados, la foto más reciente de la obra y archivos varios), Referentes (las ideas que sube el cliente) y Pagos (los pagos registrados, donde el cliente adjunta cada comprobante).
+- Proyecto: Anteproyecto, Proyecto (Planificación, Cómputo, Arquitectura y Renders), Municipal (planos Aprobados y En proceso) y Varios.
+- Ejecución de obra: Dirección de obra (Seguimiento: el día a día que escribe el director; Fotos día por día), Profesionales (Higiene y seguridad, Gestor, Agrimensor), Contratados (Proveedores), Fotos (por etapa), Informes, Presupuestos (el cliente los ve, no los modifica), Planificación (Etapa de obra y Gantt) y Archivos.
+- Teléfonos útiles: los números que carga el estudio, para llamar desde el celular.
+- Mensajes: el chat con el estudio, y un botón para escribirle por WhatsApp. Para cualquier consulta que el asistente no pueda resolver.
 Además: el logo lleva al Inicio (resumen de la obra), el botón Asistente abre esta conversación, y la foto o el nombre abajo abren Mi cuenta (nombre, foto de perfil y contraseña).
-Los datos personales de los propietarios no los tenés: si preguntan por eso, que lo vean en Datos > Propietarios.
+Los datos personales de los propietarios y los documentos que sube el cliente (DNI, CUIT) no los tenés: si preguntan por eso, que los vean en Propietarios > Datos personales o Propietarios > Archivos.
 TXT;
 }
 
@@ -212,6 +214,10 @@ function contexto_obra_asistente(array $obra, array $usuario): string
         $porCategoria[(string)$documento['categoria']][] = $documento;
     }
     foreach (CATEGORIAS_DOCUMENTO as $clave => $nombre) {
+        // Los documentos personales (DNI, CUIT) no salen hacia la API.
+        if (in_array($clave, CATEGORIAS_PRIVADAS, true)) {
+            continue;
+        }
         $lista = $porCategoria[$clave] ?? [];
         if (!$lista) {
             $l[] = '- ' . $nombre . ': sin archivos.';
@@ -234,6 +240,32 @@ function contexto_obra_asistente(array $obra, array $usuario): string
             . ($presupuesto['monto_oculto'] ? 'monto no compartido en el panel' : formatear_monto($presupuesto['monto'], $presupuesto['moneda'])) . '.'
             . ($presupuesto['detalle'] ? ' ' . oracion($presupuesto['detalle']) : '');
     }
+
+    $l[] = '';
+    $l[] = 'PAGOS REGISTRADOS (Propietarios > Pagos):';
+    $pagos = pagos_de_obra($obraId);
+    if (!$pagos) {
+        $l[] = '- Todavía no hay pagos registrados.';
+    }
+    foreach ($pagos as $pago) {
+        $l[] = '- ' . formatear_fecha($pago['fecha']) . ', ' . oracion($pago['concepto']) . ' ' . formatear_monto($pago['monto'], $pago['moneda']) . '.'
+            . ($pago['comprobante'] ? ' Con comprobante.' : ' Sin comprobante todavía.');
+    }
+
+    $l[] = '';
+    $l[] = 'PROFESIONALES, PROVEEDORES Y TELÉFONOS ÚTILES:';
+    $contactos = contactos_de_obra($obraId);
+    if (!$contactos) {
+        $l[] = '- Todavía no hay contactos cargados.';
+    }
+    foreach ($contactos as $contacto) {
+        $l[] = '- ' . TIPOS_CONTACTO[$contacto['tipo']] . ': ' . $contacto['nombre']
+            . ($contacto['rubro'] ? ' (' . $contacto['rubro'] . ')' : '')
+            . ($contacto['empresa'] ? ', ' . $contacto['empresa'] : '')
+            . ($contacto['telefono'] ? ', tel. ' . $contacto['telefono'] : '')
+            . ($contacto['email'] ? ', ' . $contacto['email'] : '') . '.';
+    }
+    $l[] = '- WhatsApp del estudio: ' . WHATSAPP_ESTUDIO . '.';
 
     $l[] = '';
     $l[] = 'CALENDARIO (fechas cargadas por el estudio):';

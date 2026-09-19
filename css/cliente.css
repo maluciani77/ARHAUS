@@ -2313,3 +2313,280 @@ a.cliente-boton {
     clip: rect(0 0 0 0);
   }
 }
+
+/* ---- Segunda fila de solapas (tercer nivel del menú) ---- */
+.cliente-subnav--tercer-nivel {
+  gap: 8px;
+  margin-top: -14px;
+  padding-bottom: 12px;
+  border-bottom: 0;
+}
+
+.cliente-subnav--tercer-nivel .cliente-subnav__item {
+  margin-bottom: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.cliente-subnav--tercer-nivel .cliente-subnav__item.is-activa {
+  border-color: var(--texto);
+  background: var(--texto);
+  color: var(--bg);
+}
+
+/* ---- Archivos que sube el cliente ---- */
+.book-archivo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.book-archivo > a {
+  flex: 1;
+}
+
+.book-archivo__borrar {
+  display: inline;
+}
+
+.book-foto figcaption .book-archivo__borrar {
+  margin-left: 8px;
+}
+
+.cliente-bloque--subir {
+  margin: 0 0 32px;
+  padding: 20px 22px;
+  border: 1px dashed var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.cliente-campo input[type="file"] {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+/* ---- Ubicación ---- */
+.ubicacion__mapa {
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  aspect-ratio: 16 / 9;
+  background: var(--hundido);
+}
+
+.ubicacion__mapa iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.info-obra__foto {
+  max-width: 760px;
+  margin: 0;
+}
+
+.info-obra__foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio);
+}
+
+.info-obra__foto figcaption {
+  margin-top: 8px;
+  color: var(--suave);
+  font-size: 0.88rem;
+}
+
+/* ---- Pagos ---- */
+.pagos__total {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+  margin: 0 0 18px;
+  color: var(--suave);
+}
+
+.pagos__total strong {
+  color: var(--texto);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.pagos {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pago {
+  padding: 18px 20px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.pago__cabecera {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 16px;
+  align-items: baseline;
+}
+
+.pago__cabecera time {
+  color: var(--suave);
+  font-size: 0.85rem;
+}
+
+.pago__cabecera h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.pago__monto {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.pago__detalle {
+  margin: 8px 0 0;
+  color: var(--suave);
+}
+
+.pago__comprobante {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--linea);
+}
+
+.pago__comprobante a.book-archivo__tipo {
+  text-decoration: none;
+}
+
+.pago__estado {
+  color: var(--acento);
+  font-size: 0.85rem;
+}
+
+.pago__estado--ok {
+  color: var(--c-presupuesto);
+}
+
+.pago__subir {
+  display: flex;
+  flex: 1 1 280px;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pago__subir input[type="file"] {
+  max-width: 240px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 560px) {
+  .pago__cabecera {
+    grid-template-columns: 1fr auto;
+  }
+
+  .pago__cabecera time {
+    grid-column: 1 / -1;
+  }
+
+  .pago__subir {
+    justify-content: flex-start;
+  }
+}
+
+/* ---- Contactos: profesionales, proveedores y teléfonos ---- */
+.contactos {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.contacto__cabecera h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.contacto__rol {
+  margin: 2px 0 0;
+  color: var(--suave);
+  font-size: 0.88rem;
+}
+
+.contacto__notas {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.contacto__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.contacto__acciones .cliente-boton {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.contacto__acciones .icono {
+  width: 18px;
+  height: 18px;
+}
+
+.contacto__archivos {
+  margin: 4px 0 0;
+}
+
+/* ---- WhatsApp en Mensajes ---- */
+.cliente-boton--whatsapp {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px;
+  border-color: #1e8a4c;
+  background: #1e8a4c;
+}
+
+.cliente-boton--whatsapp .icono {
+  width: 20px;
+  height: 20px;
+}

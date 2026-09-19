@@ -15,33 +15,58 @@ require_once __DIR__ . '/helpers.php';
  */
 
 const CATEGORIAS_DOCUMENTO = [
+    // Propietarios
+    'prop_archivos' => 'Archivos del propietario',
+    'contrato' => 'Contrato',
+    'referentes' => 'Referentes · Ideas',
+    'info_varios' => 'Archivos varios',
+    // Proyecto
     'anteproyecto' => 'Anteproyecto',
-    'render' => 'Render',
-    'fotos_render' => 'Fotos render',
-    'archivos' => 'Archivos',
+    'proy_planificacion' => 'Planificación del proyecto',
+    'computo' => 'Cómputo',
+    'arquitectura' => 'Arquitectura',
+    'render' => 'Renders',
     'planos_aprobados' => 'Planos aprobados',
     'planos_en_proceso' => 'Planos en proceso',
-    'planificacion' => 'Planificación',
+    'varios' => 'Varios',
+    // Ejecución de obra
+    'informes' => 'Informes',
+    'planificacion' => 'Gantt',
+    'ejec_archivos' => 'Archivos de obra',
 ];
 
-/** En qué grupo del panel del cliente cae cada categoría. */
+/** En qué botón del panel del cliente cae cada categoría (así se ordenan en el panel del estudio). */
 const GRUPOS_DOCUMENTO = [
-    'Proyecto' => ['anteproyecto', 'render', 'fotos_render'],
-    'Datos' => ['archivos'],
-    'Municipal' => ['planos_aprobados', 'planos_en_proceso'],
-    'Ejecución de obra' => ['planificacion'],
+    'Propietarios' => ['prop_archivos', 'contrato', 'referentes', 'info_varios'],
+    'Proyecto' => ['anteproyecto', 'proy_planificacion', 'computo', 'arquitectura', 'render', 'planos_aprobados', 'planos_en_proceso', 'varios'],
+    'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos'],
 ];
 
 /**
- * Las categorías de antes de reordenar el panel en grupos, y a cuál pasó
- * cada una. migrar_categorias_documentos() las actualiza en la base.
+ * Las categorías que carga el propio cliente (sus documentos y sus
+ * ideas). Todas las demás las carga solo el estudio.
+ */
+const CATEGORIAS_DEL_CLIENTE = ['prop_archivos', 'referentes'];
+
+/**
+ * Categorías con datos personales: no se le pasan al asistente ni se
+ * pueden abrir desde él (DNI, constancia de CUIT...).
+ */
+const CATEGORIAS_PRIVADAS = ['prop_archivos'];
+
+/**
+ * Las categorías de versiones anteriores del panel, y a cuál pasó cada
+ * una. migrar_categorias_documentos() las actualiza en la base. Se
+ * aplican en orden: "renders" pasó a "fotos_render" y después a "render".
+ * "varios" no está porque volvió a ser una categoría (Proyecto > Varios).
  */
 const CATEGORIAS_DOCUMENTO_ANTERIORES = [
     'etapas' => 'planificacion',
     'renders' => 'fotos_render',
+    'fotos_render' => 'render',
     'proyecto' => 'anteproyecto',
     'municipal' => 'planos_en_proceso',
-    'varios' => 'archivos',
+    'archivos' => 'ejec_archivos',
 ];
 
 /** Pasa los archivos cargados con categorías viejas a las nuevas. Una vez por pedido. */
@@ -196,6 +221,38 @@ function validar_documento_subido(array $archivo): string
 }
 
 /**
+ * Valida un archivo subido ($_FILES[...]) y lo guarda en la carpeta de
+ * archivos de la obra con un nombre inventado. Devuelve [nombre guardado,
+ * nombre original] o lanza RuntimeException con el mensaje para mostrar.
+ * La usan los documentos, los comprobantes de pago y los adjuntos de los
+ * contactos.
+ */
+function guardar_archivo_obra(int $obraId, array $archivo): array
+{
+    $extension = validar_documento_subido($archivo);
+    $nombreOriginal = basename((string)$archivo['name']);
+
+    $directorio = directorio_documentos($obraId);
+    if (!is_dir($directorio) && !mkdir($directorio, 0777, true) && !is_dir($directorio)) {
+        throw new RuntimeException('No se pudo crear la carpeta de archivos de la obra.');
+    }
+
+    $nombreArchivo = bin2hex(random_bytes(16)) . '.' . $extension;
+    if (!move_uploaded_file($archivo['tmp_name'], $directorio . '/' . $nombreArchivo)) {
+        throw new RuntimeException('No se pudo guardar el archivo en el servidor.');
+    }
+    return [$nombreArchivo, recortar_texto($nombreOriginal, 255)];
+}
+
+/** Borra un archivo de la carpeta de la obra, si existe. */
+function borrar_archivo_obra(int $obraId, ?string $archivo): void
+{
+    if ($archivo && is_file(directorio_documentos($obraId) . '/' . basename($archivo))) {
+        unlink(directorio_documentos($obraId) . '/' . basename($archivo));
+    }
+}
+
+/**
  * Guarda un archivo en una categoría. Devuelve null si salió bien o el
  * mensaje de error listo para mostrar.
  */
@@ -206,23 +263,11 @@ function agregar_documento(int $obraId, string $categoria, array $datos, array $
     }
 
     try {
-        $extension = validar_documento_subido($archivo);
+        [$nombreArchivo, $nombreOriginal] = guardar_archivo_obra($obraId, $archivo);
     } catch (RuntimeException $ex) {
         return $ex->getMessage();
     }
-
-    $nombreOriginal = basename((string)$archivo['name']);
     $titulo = trim((string)($datos['titulo'] ?? '')) ?: pathinfo($nombreOriginal, PATHINFO_FILENAME);
-
-    $directorio = directorio_documentos($obraId);
-    if (!is_dir($directorio) && !mkdir($directorio, 0777, true) && !is_dir($directorio)) {
-        return 'No se pudo crear la carpeta de archivos de la obra.';
-    }
-
-    $nombreArchivo = bin2hex(random_bytes(16)) . '.' . $extension;
-    if (!move_uploaded_file($archivo['tmp_name'], $directorio . '/' . $nombreArchivo)) {
-        return 'No se pudo guardar el archivo en el servidor.';
-    }
 
     asegurar_tabla('documentos');
     $stmt = db()->prepare(

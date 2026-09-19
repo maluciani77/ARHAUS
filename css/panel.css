@@ -909,3 +909,16 @@ body.panel-body--centrado {
   color: var(--panel-text-muted);
   font-weight: 400;
 }
+
+/* ---- Formularios chicos dentro de una fila (comprobantes, adjuntos) ---- */
+.panel-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.panel-inline input[type="text"] {
+  min-width: 180px;
+}

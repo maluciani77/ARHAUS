@@ -12,6 +12,8 @@ require_once __DIR__ . '/../../lib/documentos.php';
 require_once __DIR__ . '/../../lib/mensajes.php';
 require_once __DIR__ . '/../../lib/obra_info.php';
 require_once __DIR__ . '/../../lib/propietarios.php';
+require_once __DIR__ . '/../../lib/pagos.php';
+require_once __DIR__ . '/../../lib/contactos.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'arquitecto', 'admin');
@@ -41,6 +43,8 @@ $errorNovedad = null;
 $errorDocumento = null;
 $errorMensaje = null;
 $errorObraInfo = null;
+$errorPago = null;
+$errorContacto = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verificar_csrf();
@@ -151,6 +155,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($errorMensaje === null) {
             redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
         }
+    } elseif ($accion === 'agregar_pago') {
+        $errorPago = agregar_pago((int)$obra['id'], $_POST, (int)$usuario['id']);
+        if ($errorPago === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+        }
+    } elseif ($accion === 'eliminar_pago') {
+        eliminar_pago((int)($_POST['pago_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+    } elseif ($accion === 'adjuntar_comprobante') {
+        $errorPago = adjuntar_comprobante((int)($_POST['pago_id'] ?? 0), (int)$obra['id'], $_FILES['comprobante'] ?? [], (int)$usuario['id']);
+        if ($errorPago === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+        }
+    } elseif ($accion === 'quitar_comprobante') {
+        quitar_comprobante((int)($_POST['pago_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+    } elseif ($accion === 'agregar_contacto') {
+        $errorContacto = agregar_contacto((int)$obra['id'], $_POST, (int)$usuario['id']);
+        if ($errorContacto === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+        }
+    } elseif ($accion === 'eliminar_contacto') {
+        eliminar_contacto((int)($_POST['contacto_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+    } elseif ($accion === 'adjuntar_archivo_contacto') {
+        $errorContacto = adjuntar_archivo_contacto((int)($_POST['contacto_id'] ?? 0), (int)$obra['id'], $_POST, $_FILES['documento'] ?? [], (int)$usuario['id']);
+        if ($errorContacto === null) {
+            redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+        }
+    } elseif ($accion === 'eliminar_archivo_contacto') {
+        eliminar_archivo_contacto((int)($_POST['archivo_id'] ?? 0), (int)$obra['id']);
+        redirigir('obra.php?id=' . $obra['id'] . '#contactos');
     } elseif ($accion === 'guardar_obra_info') {
         $errorObraInfo = guardar_obra_info((int)$obra['id'], $_POST);
         if ($errorObraInfo === null) {
@@ -177,6 +213,9 @@ $documentos = documentos_de_obra((int)$obra['id']);
 $mensajes = mensajes_de_obra((int)$obra['id']);
 $obraInfo = obra_info((int)$obra['id']);
 $propietarios = propietarios_de_obra((int)$obra['id']);
+$pagos = pagos_de_obra((int)$obra['id']);
+$contactos = contactos_de_obra((int)$obra['id']);
+$archivosContactos = archivos_de_contactos((int)$obra['id']);
 $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
 ?>
 <!DOCTYPE html>
@@ -200,6 +239,8 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     <nav class="panel-secciones" aria-label="Secciones de la obra">
         <a href="#obra-info">Obra info</a>
         <a href="#propietarios">Propietarios</a>
+        <a href="#pagos">Pagos</a>
+        <a href="#contactos">Contactos</a>
         <a href="#direccion">Dirección de obra</a>
         <a href="#archivos">Archivos</a>
         <a href="#mensajes">Mensajes</a>
@@ -224,6 +265,10 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
     <?php include __DIR__ . '/../_obra_info.php'; ?>
 
     <?php include __DIR__ . '/../_propietarios.php'; ?>
+
+    <?php include __DIR__ . '/../_pagos.php'; ?>
+
+    <?php include __DIR__ . '/../_contactos.php'; ?>
 
     <?php include __DIR__ . '/../_novedades.php'; ?>
 
