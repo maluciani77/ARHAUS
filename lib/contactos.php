@@ -81,7 +81,7 @@ function agregar_contacto(int $obraId, array $datos, int $usuarioId): ?string
     if ($limpio['email'] !== '' && !filter_var($limpio['email'], FILTER_VALIDATE_EMAIL)) {
         return 'El email no es válido.';
     }
-    if ($limpio['telefono'] !== '' && !preg_match('/^[0-9+()\s\-.]{6,40}$/', $limpio['telefono'])) {
+    if ($limpio['telefono'] !== '' && !preg_match('/^[0-9+()\s\-.]{3,40}$/', $limpio['telefono'])) {
         return 'El teléfono solo puede tener números, espacios, guiones y el signo +.';
     }
 
