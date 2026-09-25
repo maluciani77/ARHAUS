@@ -2145,8 +2145,32 @@ body.visor-abierto {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Los nombres del segundo nivel (PLANOS, VISUALES, OBRA, GESTIÓN) van en
+   mayúsculas. El tercer nivel no: son pastillas y ahí queda pesado. */
+.cliente-subnav:not(.cliente-subnav--tercer-nivel) .cliente-subnav__item {
+  font-size: 0.86rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
 .cliente-subnav__item:hover {
   color: var(--texto);
+}
+
+/* Cuando la barra no entra en la pantalla se puede agarrar y arrastrar.
+   El cursor de mano solo aparece si de verdad hay para dónde moverse. */
+.cliente-subnav.se-puede-arrastrar {
+  cursor: grab;
+}
+
+.cliente-subnav.esta-arrastrando {
+  cursor: grabbing;
+  user-select: none;
+  scroll-behavior: auto;   /* mientras la mano manda, sin suavizado */
+}
+
+.cliente-subnav.esta-arrastrando .cliente-subnav__item {
+  cursor: grabbing;
 }
 
 .cliente-subnav__item.is-activa {

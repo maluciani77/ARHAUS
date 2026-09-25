@@ -20,15 +20,15 @@ const CATEGORIAS_DOCUMENTO = [
     'contrato' => 'Contrato',
     'referentes' => 'Referentes · Ideas',
     'info_varios' => 'Archivos varios',
-    // Proyecto > Arquitectura
-    'planos_arq' => 'Planos arq',
-    'planos_electricos' => 'Planos eléctricos',
-    'planos_sanitarios' => 'Planos sanitarios',
-    'planos_carpinteria' => 'Planos carpintería',
-    'planos_cielorrasos' => 'Planos cielorrasos',
-    'plano_estructura' => 'Plano estructura',
-    'planos_amoblamiento' => 'Planos amoblamiento',
-    'planos_municipales' => 'Planos municipales',
+    // Proyecto > Planos
+    'planos_arq' => 'Arq',
+    'planos_electricos' => 'Eléctricos',
+    'planos_sanitarios' => 'Sanitarios',
+    'planos_carpinteria' => 'Carpintería',
+    'planos_cielorrasos' => 'Cielorrasos',
+    'plano_estructura' => 'Estructura',
+    'planos_amoblamiento' => 'Amoblamiento',
+    'planos_municipales' => 'Municipales',
     'demolicion' => 'Demolición',
     'arq_varios' => 'Varios',
     // Proyecto > Visuales
@@ -49,7 +49,7 @@ const CATEGORIAS_DOCUMENTO = [
 /** En qué botón del panel del cliente cae cada categoría (así se ordenan en el panel del estudio). */
 const GRUPOS_DOCUMENTO = [
     'Propietarios' => ['prop_archivos', 'contrato', 'referentes', 'info_varios'],
-    'Proyecto · Arquitectura' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
+    'Proyecto · Planos' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
     'Proyecto · Visuales' => ['brochure', 'render', 'videos'],
     'Proyecto · Obra' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
     'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos'],

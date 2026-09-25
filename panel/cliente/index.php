@@ -38,15 +38,15 @@ const MENU_CLIENTE = [
         'pagos' => ['Pagos', ['pagos' => 'Pagos']],
     ]],
     'proyecto' => ['Proyecto', [
-        'arquitectura' => ['Arquitectura', [
-            'planos_arq' => 'Planos arq',
-            'planos_electricos' => 'Planos eléctricos',
-            'planos_sanitarios' => 'Planos sanitarios',
-            'planos_carpinteria' => 'Planos carpintería',
-            'planos_cielorrasos' => 'Planos cielorrasos',
-            'plano_estructura' => 'Plano estructura',
-            'planos_amoblamiento' => 'Planos amoblamiento',
-            'planos_municipales' => 'Planos municipales',
+        'arquitectura' => ['Planos', [
+            'planos_arq' => 'Arq',
+            'planos_electricos' => 'Eléctricos',
+            'planos_sanitarios' => 'Sanitarios',
+            'planos_carpinteria' => 'Carpintería',
+            'planos_cielorrasos' => 'Cielorrasos',
+            'plano_estructura' => 'Estructura',
+            'planos_amoblamiento' => 'Amoblamiento',
+            'planos_municipales' => 'Municipales',
             'demolicion' => 'Demolición',
             'arq_varios' => 'Varios',
         ]],
@@ -496,6 +496,9 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 <?php endif; ?>
 <?php if ($mostrarBienvenida): ?>
     <script src="<?= e(recurso($raiz, 'js/bienvenida.js')) ?>"></script>
+<?php endif; ?>
+<?php if ($obra): ?>
+    <script src="<?= e(recurso($raiz, 'js/barras-arrastre.js')) ?>"></script>
 <?php endif; ?>
 <script>
     // En el celular las solapas se deslizan: que la activa quede a la vista.
