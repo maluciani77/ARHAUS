@@ -29,6 +29,10 @@ if (!$usuario) {
 
 iniciar_login($usuario);
 
+if (!empty($_POST['recordarme'])) {
+    recordar_este_dispositivo((int)$usuario['id']);
+}
+
 switch ($usuario['rol']) {
     case 'admin':
         redirigir('panel/admin/index.php');

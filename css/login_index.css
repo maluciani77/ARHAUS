@@ -1,169 +1,161 @@
-body  {
+/* ========================================
+   LOGIN
+   La tarjeta va centrada sobre la foto del estudio. Todo un poco más
+   grande que antes, y los campos con su propia caja en vez de una
+   rayita: así el relleno automático del navegador no le dibuja encima
+   un cuadro blanco (ver más abajo).
+   ======================================== */
+
+body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-    height: 100vh;
+    font-family: "Work Sans", sans-serif;
+    min-height: 100vh;
     background:
-    /* top, transparent black, faked with gradient */ 
-    linear-gradient(
-        rgba(0, 0, 0, 0.7),
-        rgba(0, 0, 0, 0.7)
+        /* velo negro encima de la foto, para que se lea la tarjeta */
+        linear-gradient(
+            rgba(0, 0, 0, 0.7),
+            rgba(0, 0, 0, 0.7)
         ),
-    /* bottom, image */
-    url(../images/fondo-estudio.jpg) no-repeat center center fixed;
+        url(../images/fondo-estudio.jpg) no-repeat center center fixed;
     background-size: cover;
-    overflow: hidden;
+    /* Nada de overflow:hidden: en pantallas bajas la tarjeta tiene que
+       poder desplazarse en vez de quedar cortada. */
+    overflow-x: hidden;
 }
 
-.text {
-    position: relative;
-    font-size: 35px;
-    text-align: center;
-    top: 250px;
-    font-family: 'Quicksand', sans-serif;
-  }
-
-
-span {
-    text-shadow: 3px 3px 2px #000;
-    color: rgb(207, 206, 206);
+/* El div que envuelve la tarjeta: es el que la centra */
+body > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 110px 16px 48px;
+    box-sizing: border-box;
 }
 
 .login-box {
-    width: 320px;
-    height: 420px;
-    background: #000;
-    opacity: 80%;
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    /* Alto libre: antes estaba clavado en 420px y cualquier cosa que se
+       agregara quedaba afuera de la tarjeta. */
+    height: auto;
+    padding: 40px 34px 34px;
     box-sizing: border-box;
-    padding: 70px 30px;
-    border-radius: 10px;
+    /* El color con transparencia va en el propio fondo. Con opacity se
+       desteñía TAMBIÉN el texto y los botones de adentro. */
+    background: rgba(8, 8, 8, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #fff;
 }
 
 .login-box .avatar {
-    width: 135px;
-    height: 135px;
+    width: 150px;
+    height: 150px;
     position: absolute;
-    top: -65px;
-    left: calc(50% - 65px) ;
+    top: -72px;
+    left: calc(50% - 75px);
 }
 
 .login-box h1 {
-    margin: 0;
-    padding: 0 0 20px;
+    margin: 0 0 25px;
+    padding: 0 0 6px;
     text-align: center;
-    font-size: 22px;
-    margin-bottom: 25px;
-    padding-bottom: 6px;
+    font-size: 24px;
     border-bottom: 1px ridge rgb(175, 16, 16);
 }
 
+/* ---------- Los campos ---------- */
+
 .login-box label {
-    margin: 0;
-    padding: 0;
-    font-weight: bold;
     display: block;
+    margin: 0 0 7px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-.login-box input {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-/* El email iba sin estilo y se veía como un cuadrito gris del navegador,
-   distinto a los demás campos. */
 .login-box input[type="text"],
 .login-box input[type="email"],
 .login-box input[type="password"] {
-    border: none;
-    border-bottom: 1px solid #fff;
-    background: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    height: 48px;
+    margin-bottom: 20px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9px;
+    /* Fondo propio y OPACO. Es lo que permite tapar el relleno
+       automático (ver la regla de :-webkit-autofill). */
+    background: #151517;
     outline: none;
-    height: 40px;
-    color: rgb(128, 9, 9);
-    font-size: 14px;
-    font-weight: bold;
-    
-}
-
-.login-box .text_user,
-.login-box .text_password {
-    text-transform: lowercase;
-}
-
-.login-box input[type="submit"] {
-    border: none;
-    outline: none;
-    height: 40px;
-    background: #b80f22;
     color: #fff;
-    font-size: 18px;
-    border-radius: 20px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    transition: border-color 0.2s ease;
 }
 
-.login-box a {
-    text-decoration: none;
-    font-size: 12px;
-    line-height: 20px;
-    color: darkgray;
+.login-box input[type="text"]:focus,
+.login-box input[type="email"]:focus,
+.login-box input[type="password"]:focus {
+    border-color: #b80f22;
 }
 
-.login-box a:hover {
-    color: #fff;
+.login-box input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
 }
 
-/* ========================================
-   EL OJITO DE LA CONTRASEÑA
-   Deja ver lo que se está escribiendo, para revisarlo antes de mandar.
-   ======================================== */
-
-.login-box .campo-clave {
-    position: relative;
-    display: flex;
+/* IMPORTANTISIMO: cuando el navegador rellena solo el mail y la clave
+   guardados, Chrome le pinta al campo un fondo celeste/blanco que no se
+   puede cambiar con "background". El único modo de taparlo es una
+   sombra interior enorme del color que uno quiere. Sin esto, quien
+   tiene los datos guardados ve dos cuadros blancos. */
+.login-box input:-webkit-autofill,
+.login-box input:-webkit-autofill:hover,
+.login-box input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #151517 inset;
+    box-shadow: 0 0 0 1000px #151517 inset;
+    -webkit-text-fill-color: #fff;
+    caret-color: #fff;
 }
 
-.login-box .campo-clave input {
-    flex: 1;
-    /* Lugar para el botón, que va encima del borde de abajo */
-    padding-right: 38px;
-}
+/* ---------- Mostrar la contraseña ---------- */
 
 .login-box .ver-clave {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: -10px 0 20px;
     padding: 0;
     border: none;
     background: transparent;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.65);
+    font-family: inherit;
+    font-size: 13px;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
 .login-box .ver-clave:hover,
 .login-box .ver-clave:focus-visible {
-    color: #ffffff;
+    color: #fff;
 }
 
 .login-box .ver-clave svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
     stroke-linecap: round;
+    flex: 0 0 auto;
 }
 
-/* Sin ver la contraseña, el ojo va tachado; al mostrarla, se destacha */
+/* Sin ver la contraseña el ojo va tachado; al mostrarla, se destacha */
 .login-box .ver-clave .ver-clave__tachado {
     transition: opacity 0.2s ease;
 }
@@ -172,18 +164,16 @@ span {
     opacity: 0;
 }
 
-/* ========================================
-   ENTRAR CON GOOGLE
-   ======================================== */
+/* ---------- Entrar con Google ---------- */
 
-/* El "o" con una línea a cada lado, entre el formulario y el botón */
+/* El "o" con una línea a cada lado */
 .login-box .o-bien {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 18px 0 14px;
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 12px;
+    margin: 4px 0 18px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
 }
 
 .login-box .o-bien::before,
@@ -191,7 +181,7 @@ span {
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* El botón lo dibuja Google adentro de un iframe: no se le puede tocar
@@ -199,4 +189,69 @@ span {
 .login-box .g_id_signin {
     display: flex;
     justify-content: center;
+    margin-bottom: 22px;
+}
+
+/* ---------- Entrar ---------- */
+
+.login-box .recordarme {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 22px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+}
+
+.login-box .recordarme input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: #b80f22;
+    cursor: pointer;
+}
+
+.login-box input[type="submit"] {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    background: #b80f22;
+    color: #fff;
+    font-family: inherit;
+    font-size: 19px;
+    font-weight: 500;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.login-box input[type="submit"]:hover {
+    background: #d2142a;
+}
+
+.login-box .pie-login {
+    margin: 16px 0 0;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.login-box a {
+    text-decoration: none;
+    color: darkgray;
+}
+
+.login-box a:hover {
+    color: #fff;
+}
+
+#login-error {
+    margin: 0 0 14px;
+    color: #ff6b6b;
+    font-size: 14px;
+    line-height: 1.5;
 }

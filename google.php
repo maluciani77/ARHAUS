@@ -57,6 +57,10 @@ if (!$usuario) {
 google_enganchar((int)$usuario['id'], $revision['google_id']);
 iniciar_login($usuario);
 
+// Entrar con Google deja el acceso guardado sin preguntar: es lo que se
+// espera de un botón así, y Google ya pidió permiso de su lado.
+recordar_este_dispositivo((int)$usuario['id']);
+
 switch ($usuario['rol']) {
     case 'admin':
         redirigir('panel/admin/index.php');

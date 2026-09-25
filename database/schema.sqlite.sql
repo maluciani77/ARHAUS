@@ -169,3 +169,12 @@ CREATE TABLE IF NOT EXISTS contacto_archivos (
   subido_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS recordatorios (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  selector TEXT NOT NULL UNIQUE,
+  validador_hash TEXT NOT NULL,
+  expira TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

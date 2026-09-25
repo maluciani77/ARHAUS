@@ -20,44 +20,49 @@
                 <input type="email" id="email" name="email" placeholder="" required autofocus>
                 <!-- PASSWORD -->
                 <label for="password">Password</label>
-                <div class="campo-clave">
-                    <input type="password" id="password" name="password" placeholder="" required>
-                    <button type="button" class="ver-clave" data-ver-clave aria-label="Mostrar la contraseña" aria-pressed="false" title="Mostrar la contraseña">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path class="ver-clave__ojo" d="M1.8 12S5.4 5.5 12 5.5 22.2 12 22.2 12 18.6 18.5 12 18.5 1.8 12 1.8 12Z"/>
-                            <circle class="ver-clave__ojo" cx="12" cy="12" r="3.2"/>
-                            <path class="ver-clave__tachado" d="M4 20 20 4"/>
-                        </svg>
-                    </button>
-                </div>
+                <input type="password" id="password" name="password" placeholder="" required>
+
+                <button type="button" class="ver-clave" data-ver-clave aria-pressed="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path class="ver-clave__ojo" d="M1.8 12S5.4 5.5 12 5.5 22.2 12 22.2 12 18.6 18.5 12 18.5 1.8 12 1.8 12Z"/>
+                        <circle class="ver-clave__ojo" cx="12" cy="12" r="3.2"/>
+                        <path class="ver-clave__tachado" d="M4 20 20 4"/>
+                    </svg>
+                    <span data-ver-clave-texto>Mostrar contraseña</span>
+                </button>
+
+                <div class="o-bien"><span>o</span></div>
+
+                <!-- Entrar con Google. El identificador de acá abajo NO es
+                     un secreto (va en el HTML a la vista); el mismo está en
+                     lib/google.php, que es donde el servidor comprueba que
+                     el acceso sea de este sitio. Si se rehace la credencial,
+                     hay que cambiarlo en los dos lados. -->
+                <div id="g_id_onload"
+                     data-client_id="218470589355-9f5d0u0d492m26mtqftorf07pd2i2sf2.apps.googleusercontent.com"
+                     data-login_uri="https://arhaus.com.ar/google.php"
+                     data-context="signin"
+                     data-ux_mode="redirect"
+                     data-auto_prompt="false"></div>
+
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-theme="filled_black"
+                     data-shape="pill"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-locale="es-419"
+                     data-logo_alignment="center"></div>
+
+                <label class="recordarme">
+                    <input type="checkbox" name="recordarme" value="1">
+                    <span>Mantener la sesión iniciada</span>
+                </label>
 
                 <input type="submit" value="Log In">
 
-                <p style="font-size:0.85rem;opacity:0.8;margin-top:10px;">¿No tenés cuenta? Pedísela al estudio.</p>
+                <p class="pie-login">¿No tenés cuenta? Pedísela al estudio.</p>
             </form>
-
-            <div class="o-bien"><span>o</span></div>
-
-            <!-- Entrar con Google. El identificador de acá abajo NO es un
-                 secreto (va en el HTML a la vista); el mismo está en
-                 lib/google.php, que es donde el servidor comprueba que el
-                 acceso sea de este sitio. Si se rehace la credencial, hay
-                 que cambiarlo en los dos lados. -->
-            <div id="g_id_onload"
-                 data-client_id="218470589355-9f5d0u0d492m26mtqftorf07pd2i2sf2.apps.googleusercontent.com"
-                 data-login_uri="https://arhaus.com.ar/google.php"
-                 data-context="signin"
-                 data-ux_mode="redirect"
-                 data-auto_prompt="false"></div>
-
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-theme="filled_black"
-                 data-shape="pill"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-locale="es-419"
-                 data-logo_alignment="center"></div>
         </div>
     </div>
 
@@ -97,9 +102,8 @@
                 campo.type = seVe ? 'password' : 'text';
                 boton.classList.toggle('esta-viendo', !seVe);
                 boton.setAttribute('aria-pressed', String(!seVe));
-                var texto = seVe ? 'Mostrar la contraseña' : 'Ocultar la contraseña';
-                boton.setAttribute('aria-label', texto);
-                boton.setAttribute('title', texto);
+                var rotulo = boton.querySelector('[data-ver-clave-texto]');
+                if (rotulo) rotulo.textContent = seVe ? 'Mostrar contraseña' : 'Ocultar contraseña';
                 // El foco vuelve al campo, al final del texto, para poder seguir escribiendo.
                 campo.focus();
                 var largo = campo.value.length;
