@@ -38,10 +38,21 @@ const MENU_CLIENTE = [
         'pagos' => ['Pagos', ['pagos' => 'Pagos']],
     ]],
     'proyecto' => ['Proyecto', [
-        'anteproyecto' => ['Anteproyecto', ['anteproyecto' => 'Anteproyecto']],
-        'proyecto' => ['Proyecto', ['proy_planificacion' => 'Planificación', 'computo' => 'Cómputo', 'arquitectura' => 'Arquitectura', 'render' => 'Renders']],
-        'municipal' => ['Municipal', ['planos_aprobados' => 'Aprobados', 'planos_en_proceso' => 'En proceso']],
-        'varios' => ['Varios', ['varios' => 'Varios']],
+        'arquitectura' => ['Arquitectura', [
+            'planos_arq' => 'Planos arq',
+            'planos_electricos' => 'Planos eléctricos',
+            'planos_sanitarios' => 'Planos sanitarios',
+            'planos_carpinteria' => 'Planos carpintería',
+            'planos_cielorrasos' => 'Planos cielorrasos',
+            'plano_estructura' => 'Plano estructura',
+            'planos_amoblamiento' => 'Planos amoblamiento',
+            'planos_municipales' => 'Planos municipales',
+            'demolicion' => 'Demolición',
+            'arq_varios' => 'Varios',
+        ]],
+        'visuales' => ['Visuales', ['brochure' => 'Brochure', 'render' => 'Renders', 'videos' => 'Videos']],
+        'obra' => ['Obra', ['computo' => 'Cómputo', 'presupuesto_proy' => 'Presupuesto', 'planificacion_gantt' => 'Planificación (Gantt)', 'obra_otros' => 'Otros']],
+        'gestion' => ['Gestión', ['gestion_gestor' => 'Gestor', 'gestion_ingeniero' => 'Ingeniero', 'gestion_proveedores' => 'Proveedores', 'gestion_administracion' => 'Administración']],
     ]],
     'ejecucion' => ['Ejecución de obra', [
         'direccion' => ['Dirección de obra', ['direccion' => 'Seguimiento', 'fotos_dia' => 'Fotos día por día']],
@@ -82,6 +93,12 @@ const SECCIONES_CONTACTOS = [
     'agrimensor' => 'agrimensor',
     'proveedores' => 'proveedor',
     'telefonos' => 'telefono',
+    // Proyecto > Gestión. El gestor y los proveedores son los mismos que
+    // en Ejecución: se cargan una vez y se ven en los dos lados.
+    'gestion_gestor' => 'gestor',
+    'gestion_ingeniero' => 'ingeniero',
+    'gestion_proveedores' => 'proveedor',
+    'gestion_administracion' => 'administracion',
 ];
 
 /** Todas las secciones: clave => [nombre, botón, solapa] (botón y solapa en null si es suelta). */

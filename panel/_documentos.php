@@ -51,6 +51,10 @@ foreach ($documentos as $documento) {
         <label>Archivo
             <input type="file" name="documento" required accept=".pdf,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp">
         </label>
+        <label class="panel-check">
+            <input type="checkbox" name="aprobado" value="1" <?= !empty($reenvioDoc['aprobado']) ? 'checked' : '' ?>>
+            <span>Ya está aprobado por la municipalidad <small>(solo cuenta en Planos municipales; es lo que hace que aparezca en Obra info)</small></span>
+        </label>
         <button type="submit">Subir archivo</button>
     </form>
 </div>

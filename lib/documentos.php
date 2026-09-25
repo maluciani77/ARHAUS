@@ -20,15 +20,26 @@ const CATEGORIAS_DOCUMENTO = [
     'contrato' => 'Contrato',
     'referentes' => 'Referentes · Ideas',
     'info_varios' => 'Archivos varios',
-    // Proyecto
-    'anteproyecto' => 'Anteproyecto',
-    'proy_planificacion' => 'Planificación del proyecto',
-    'computo' => 'Cómputo',
-    'arquitectura' => 'Arquitectura',
+    // Proyecto > Arquitectura
+    'planos_arq' => 'Planos arq',
+    'planos_electricos' => 'Planos eléctricos',
+    'planos_sanitarios' => 'Planos sanitarios',
+    'planos_carpinteria' => 'Planos carpintería',
+    'planos_cielorrasos' => 'Planos cielorrasos',
+    'plano_estructura' => 'Plano estructura',
+    'planos_amoblamiento' => 'Planos amoblamiento',
+    'planos_municipales' => 'Planos municipales',
+    'demolicion' => 'Demolición',
+    'arq_varios' => 'Varios',
+    // Proyecto > Visuales
+    'brochure' => 'Brochure',
     'render' => 'Renders',
-    'planos_aprobados' => 'Planos aprobados',
-    'planos_en_proceso' => 'Planos en proceso',
-    'varios' => 'Varios',
+    'videos' => 'Videos',
+    // Proyecto > Obra
+    'computo' => 'Cómputo',
+    'presupuesto_proy' => 'Presupuesto',
+    'planificacion_gantt' => 'Planificación (Gantt)',
+    'obra_otros' => 'Otros',
     // Ejecución de obra
     'informes' => 'Informes',
     'planificacion' => 'Gantt',
@@ -38,7 +49,9 @@ const CATEGORIAS_DOCUMENTO = [
 /** En qué botón del panel del cliente cae cada categoría (así se ordenan en el panel del estudio). */
 const GRUPOS_DOCUMENTO = [
     'Propietarios' => ['prop_archivos', 'contrato', 'referentes', 'info_varios'],
-    'Proyecto' => ['anteproyecto', 'proy_planificacion', 'computo', 'arquitectura', 'render', 'planos_aprobados', 'planos_en_proceso', 'varios'],
+    'Proyecto · Arquitectura' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
+    'Proyecto · Visuales' => ['brochure', 'render', 'videos'],
+    'Proyecto · Obra' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
     'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos'],
 ];
 
@@ -57,17 +70,37 @@ const CATEGORIAS_PRIVADAS = ['prop_archivos'];
 /**
  * Las categorías de versiones anteriores del panel, y a cuál pasó cada
  * una. migrar_categorias_documentos() las actualiza en la base. Se
- * aplican en orden: "renders" pasó a "fotos_render" y después a "render".
- * "varios" no está porque volvió a ser una categoría (Proyecto > Varios).
+ * aplican EN ORDEN, así que las cadenas se resuelven solas: "renders"
+ * pasó a "fotos_render" y de ahí a "render".
  */
 const CATEGORIAS_DOCUMENTO_ANTERIORES = [
     'etapas' => 'planificacion',
     'renders' => 'fotos_render',
     'fotos_render' => 'render',
-    'proyecto' => 'anteproyecto',
-    'municipal' => 'planos_en_proceso',
     'archivos' => 'ejec_archivos',
+    // El árbol de Proyecto que pidió el estudio (25/09/2026)
+    'proyecto' => 'arq_varios',
+    'anteproyecto' => 'arq_varios',
+    'varios' => 'arq_varios',
+    'arquitectura' => 'planos_arq',
+    'proy_planificacion' => 'planificacion_gantt',
+    'municipal' => 'planos_municipales',
+    'planos_aprobados' => 'planos_municipales',
+    'planos_en_proceso' => 'planos_municipales',
 ];
+
+/**
+ * Las dos carpetas municipales se juntaron en una sola, pero la
+ * diferencia sigue importando: Obra info muestra los planos registrados,
+ * que son los aprobados. Por eso cada archivo de esa carpeta lleva su
+ * marca, y al juntarlas los que venían de "aprobados" la arrancan puesta.
+ */
+const CATEGORIA_CON_APROBACION = 'planos_municipales';
+
+function categoria_lleva_aprobacion(string $categoria): bool
+{
+    return $categoria === CATEGORIA_CON_APROBACION;
+}
 
 /** Pasa los archivos cargados con categorías viejas a las nuevas. Una vez por pedido. */
 function migrar_categorias_documentos(): void
@@ -77,6 +110,12 @@ function migrar_categorias_documentos(): void
         return;
     }
     asegurar_tabla('documentos');
+    asegurar_columna('documentos', 'aprobado', db_driver() === 'sqlite' ? 'INTEGER NOT NULL DEFAULT 0' : 'TINYINT(1) NOT NULL DEFAULT 0');
+
+    // Lo que estaba en "Planos aprobados" queda marcado como aprobado
+    // ANTES de juntar las carpetas; después ya no se sabría cuál era cuál.
+    db()->prepare('UPDATE documentos SET aprobado = 1 WHERE categoria = ?')->execute(['planos_aprobados']);
+
     $upd = db()->prepare('UPDATE documentos SET categoria = ? WHERE categoria = ?');
     foreach (CATEGORIAS_DOCUMENTO_ANTERIORES as $vieja => $nueva) {
         $upd->execute([$nueva, $vieja]);
@@ -269,11 +308,13 @@ function agregar_documento(int $obraId, string $categoria, array $datos, array $
     }
     $titulo = trim((string)($datos['titulo'] ?? '')) ?: pathinfo($nombreOriginal, PATHINFO_FILENAME);
 
-    asegurar_tabla('documentos');
+    migrar_categorias_documentos();   // deja lista la columna "aprobado"
+    $aprobado = categoria_lleva_aprobacion($categoria) && !empty($datos['aprobado']) ? 1 : 0;
+
     $stmt = db()->prepare(
-        'INSERT INTO documentos (obra_id, categoria, titulo, archivo, nombre_original, tamano, subido_por) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        'INSERT INTO documentos (obra_id, categoria, titulo, archivo, nombre_original, tamano, subido_por, aprobado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     );
-    $stmt->execute([$obraId, $categoria, recortar_texto($titulo, 190), $nombreArchivo, recortar_texto($nombreOriginal, 255), (int)$archivo['size'], $usuarioId]);
+    $stmt->execute([$obraId, $categoria, recortar_texto($titulo, 190), $nombreArchivo, recortar_texto($nombreOriginal, 255), (int)$archivo['size'], $usuarioId, $aprobado]);
 
     return null;
 }

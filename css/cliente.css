@@ -2734,3 +2734,31 @@ a.cliente-boton {
   width: 20px;
   height: 20px;
 }
+
+/* ========================================
+   APROBADO / EN TRÁMITE
+   Los planos municipales están todos en una carpeta; el cartelito es lo
+   que dice cuáles ya pasaron por la municipalidad.
+   ======================================== */
+
+.book-archivo__marca {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.book-archivo__marca--ok {
+  background: rgba(28, 110, 60, 0.12);
+  color: #1C6E3C;
+}
+
+.book-archivo__marca--tramite {
+  background: rgba(136, 7, 35, 0.1);
+  color: #880723;
+}

@@ -18,14 +18,26 @@ $introArchivos = [
     'prop_archivos' => 'Tus documentos para los trámites de la obra: DNI, constancia de CUIT y lo que te pida el estudio. Solo los ven vos y el estudio.',
     'contrato' => 'El contrato de la obra y sus anexos.',
     'referentes' => 'Tus ideas para la casa: fotos, revistas, capturas de lo que te gusta. Subilas acá para que el estudio las vea.',
-    'anteproyecto' => 'La primera versión del proyecto: plantas, vistas y la idea general de la casa.',
-    'proy_planificacion' => 'La planificación del proyecto: tiempos de diseño, entregas y aprobaciones.',
-    'computo' => 'El cómputo de materiales y el presupuesto por rubros del proyecto.',
-    'arquitectura' => 'Los planos de arquitectura: plantas, cortes, vistas y detalles.',
+    // Proyecto > Arquitectura
+    'planos_arq' => 'Los planos de arquitectura: plantas, cortes, vistas y detalles.',
+    'planos_electricos' => 'La instalación eléctrica: bocas, llaves, tableros y circuitos.',
+    'planos_sanitarios' => 'La instalación sanitaria: agua, desagües y artefactos.',
+    'planos_carpinteria' => 'Las carpinterías: puertas, ventanas y placares, con sus medidas.',
+    'planos_cielorrasos' => 'Los cielorrasos: niveles, luminarias y detalles del techo.',
+    'plano_estructura' => 'La estructura: fundaciones, columnas, vigas y losas.',
+    'planos_amoblamiento' => 'El amoblamiento: cómo se acomodan los muebles en cada ambiente.',
+    'planos_municipales' => 'Los planos que van a la municipalidad. Cada uno dice si ya está aprobado o si sigue en trámite.',
+    'demolicion' => 'Qué se demuele y qué se conserva de lo que había.',
+    'arq_varios' => 'Otros archivos del proyecto, incluido el anteproyecto: la primera versión, con la idea general de la casa.',
+    // Proyecto > Visuales
+    'brochure' => 'El brochure del proyecto, para ver o compartir.',
     'render' => 'Los renders del proyecto: cómo va a quedar la obra terminada.',
-    'planos_aprobados' => 'Los planos que ya aprobó la municipalidad.',
-    'planos_en_proceso' => 'Los planos presentados en la municipalidad que todavía están en trámite.',
-    'varios' => 'Otros archivos del proyecto.',
+    'videos' => 'Los videos del proyecto: recorridos y animaciones.',
+    // Proyecto > Obra
+    'computo' => 'El cómputo de materiales del proyecto, por rubro.',
+    'presupuesto_proy' => 'Los presupuestos del proyecto.',
+    'planificacion_gantt' => 'La planificación del proyecto (Gantt): cuándo va cada etapa.',
+    'obra_otros' => 'Otros archivos de obra del proyecto.',
     'informes' => 'Los informes de avance de la obra.',
     'planificacion' => 'El cronograma de la obra (Gantt): cuándo empieza y termina cada tarea.',
     'ejec_archivos' => 'Documentación de la obra que el estudio comparte con vos.',
@@ -45,6 +57,21 @@ $imagenes = array_values(array_filter($deLaSeccion, $esImagen));
 $otros = array_values(array_filter($deLaSeccion, static function (array $d) use ($esImagen): bool {
     return !$esImagen($d);
 }));
+
+/**
+ * El cartelito de aprobado / en trámite. Solo en los planos municipales:
+ * las dos carpetas que había antes se juntaron en una, y esto es lo que
+ * conserva la diferencia.
+ */
+$marcaAprobado = static function (array $documento) use ($categoriaDocumento): void {
+    if (!categoria_lleva_aprobacion($categoriaDocumento)) {
+        return;
+    }
+    $aprobado = !empty($documento['aprobado']);
+    ?>
+    <span class="book-archivo__marca book-archivo__marca--<?= $aprobado ? 'ok' : 'tramite' ?>"><?= $aprobado ? 'Aprobado' : 'En trámite' ?></span>
+    <?php
+};
 
 /** El botón para borrar, solo en lo que subió el propio cliente. */
 $botonBorrar = static function (array $documento) use ($esDelCliente, $usuario): void {
@@ -111,6 +138,7 @@ $botonBorrar = static function (array $documento) use ($esDelCliente, $usuario):
                     </a>
                     <figcaption>
                         <?= e($documento['titulo']) ?>
+                        <?php $marcaAprobado($documento); ?>
                         <?php $botonBorrar($documento); ?>
                     </figcaption>
                 </figure>
@@ -129,6 +157,7 @@ $botonBorrar = static function (array $documento) use ($esDelCliente, $usuario):
                             <?= e(formatear_fecha(substr((string)$documento['created_at'], 0, 10))) ?> · <?= e(tamano_legible((int)$documento['tamano'])) ?>
                         </span>
                     </a>
+                    <?php $marcaAprobado($documento); ?>
                     <?php $botonBorrar($documento); ?>
                 </li>
             <?php endforeach; ?>

@@ -18,7 +18,12 @@ unset($gruposFicha['Ubicación']);
 $delaCategoria = static function (string $categoria) use ($documentos): array {
     return array_values(array_filter($documentos, static fn (array $d): bool => (string)$d['categoria'] === $categoria));
 };
-$planosRegistrados = $delaCategoria('planos_aprobados');
+// "Registrados" son los municipales que ya están aprobados: las dos
+// carpetas de antes se juntaron y la diferencia quedó en cada archivo.
+$planosRegistrados = array_values(array_filter(
+    $delaCategoria('planos_municipales'),
+    static fn (array $d): bool => !empty($d['aprobado'])
+));
 $archivosVarios = $delaCategoria('info_varios');
 $fotoHoy = $fotos ? $fotos[count($fotos) - 1] : null;
 

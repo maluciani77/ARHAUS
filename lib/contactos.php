@@ -16,6 +16,8 @@ const TIPOS_CONTACTO = [
     'higiene' => 'Higiene y seguridad',
     'gestor' => 'Gestor',
     'agrimensor' => 'Agrimensor',
+    'ingeniero' => 'Ingeniero',
+    'administracion' => 'Administración',
     'proveedor' => 'Proveedor',
     'telefono' => 'Teléfono útil',
 ];

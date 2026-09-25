@@ -18,6 +18,8 @@ $intro = [
     'higiene' => 'El profesional de higiene y seguridad de la obra, y su documentación.',
     'gestor' => 'Quién hace los trámites de la obra.',
     'agrimensor' => 'El agrimensor de la obra, con la mensura y los planos que haya presentado.',
+    'ingeniero' => 'El ingeniero del proyecto: estructura, instalaciones y sus cálculos.',
+    'administracion' => 'Quién lleva la administración del proyecto.',
     'proveedor' => 'Las empresas y los proveedores contratados para la obra.',
     'telefono' => 'Los teléfonos que te pueden hacer falta. Desde el celular, tocá el número para llamar.',
 ][$tipoContacto];
