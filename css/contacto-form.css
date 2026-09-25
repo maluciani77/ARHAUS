@@ -1,0 +1,241 @@
+/* ========================================
+   CONTACTO
+   Los datos del estudio de un lado y el formulario del otro. Se carga
+   al final, después de master_contacto.css, para poder desarmar el
+   posicionamiento absoluto que traía la página vieja.
+   ======================================== */
+
+.contacto {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vh, 64px) clamp(20px, 5vw, 56px) clamp(60px, 10vh, 110px);
+}
+
+.contacto__titulo {
+    margin: 0 0 clamp(26px, 5vh, 48px);
+    font-family: "Work Sans", sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 200;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #333333;
+}
+
+.contacto__grilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+}
+
+/* ---------- Los datos ---------- */
+
+/* OJO: la página vieja ponía este bloque en position:absolute con un
+   ancho fijo de 400px. Acá entra en la grilla como uno más. */
+.contacto .contenedor {
+    position: static;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    cursor: auto;
+}
+
+.contacto .contenedor h2 {
+    margin: 0 0 14px;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.06em;
+}
+
+.contacto .contenedor h2 i {
+    font-style: normal;
+}
+
+.contacto .contenedor h2 a {
+    color: #333333;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.3);
+    transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.contacto .contenedor h2 a:hover {
+    color: #880723;
+    border-color: #880723;
+}
+
+.contacto .contenedor p {
+    line-height: 1.9;
+    font-size: 0.82rem;
+}
+
+.contacto__dato {
+    margin-top: 26px;
+}
+
+.contacto__dato dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #767676;
+}
+
+.contacto__dato dd {
+    margin: 4px 0 0;
+    font-size: 0.92rem;
+    font-weight: 300;
+}
+
+.contacto__dato dd a {
+    color: #333333;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.25);
+}
+
+.contacto__dato dd a:hover {
+    color: #880723;
+    border-color: #880723;
+}
+
+/* ---------- El formulario ---------- */
+
+.contacto__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    padding: clamp(22px, 3vw, 34px);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-radius: 16px;
+    background: #FFFFFF;
+}
+
+.contacto__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.contacto__campo--ancho {
+    grid-column: 1 / -1;
+}
+
+.contacto__campo label {
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #767676;
+}
+
+.contacto__campo input,
+.contacto__campo textarea {
+    padding: 12px 14px;
+    border: 1px solid rgba(51, 51, 51, 0.18);
+    border-radius: 10px;
+    background: #FBFAF8;
+    color: #333333;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.contacto__campo textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.contacto__campo input:focus,
+.contacto__campo textarea:focus {
+    outline: none;
+    border-color: #880723;
+    background: #FFFFFF;
+}
+
+/* La trampa para robots: invisible, pero sin display:none, que algunos
+   detectan. Fuera de la pantalla y fuera del recorrido del teclado. */
+.contacto__trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.contacto__enviar {
+    grid-column: 1 / -1;
+    justify-self: start;
+    padding: 13px 34px;
+    border: 1px solid #333333;
+    border-radius: 999px;
+    background: #333333;
+    color: #F5F4F0;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+
+.contacto__enviar:hover {
+    background: transparent;
+    color: #333333;
+}
+
+.contacto__enviar:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.contacto__aviso {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.contacto__aviso[hidden] {
+    display: none;
+}
+
+.contacto__aviso--ok {
+    background: rgba(28, 110, 60, 0.08);
+    color: #1C6E3C;
+}
+
+.contacto__aviso--mal {
+    background: rgba(136, 7, 35, 0.08);
+    color: #880723;
+}
+
+/* ---------- El reloj ---------- */
+
+/* Venía fijo abajo a la derecha de la pantalla; acá acompaña a los datos. */
+.contacto .clock {
+    position: static;
+    margin: 36px 0 0;
+    transform: none;
+}
+
+/* ---------- Pantalla angosta ---------- */
+
+@media (max-width: 860px) {
+    .contacto__grilla {
+        grid-template-columns: 1fr;
+    }
+
+    .contacto__form {
+        grid-template-columns: 1fr;
+    }
+
+    .contacto__enviar {
+        justify-self: stretch;
+        text-align: center;
+    }
+
+    .contacto .clock {
+        margin-top: 28px;
+    }
+}

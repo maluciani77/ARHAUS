@@ -21,6 +21,8 @@
 	<!--<link rel="icon" href="favicon.svg" sizes="32x32" />-->
 	<!--<link href='https://arhaus.com.ar/favicon.svg' rel='icon' type='image/x-icon'/>-->
 	<link rel="shortcut icon" href="favicon.svg" type="image/svg">
+	<!-- Va al final: desarma el posicionamiento absoluto de master_contacto.css -->
+	<link rel="stylesheet" href="css/contacto-form.css">
 </head>
 <body>
 	
@@ -37,28 +39,77 @@
     </nav>
 
 	<!-- CONTACTO -->
-	<div class="contenedor" >
-		<h2> <i> INFO@ARHAUS.COM.AR </i></h2>
-		<p> NORDELTA, TIGRE </p>
-		<p> B1642GKB</p>
-		<p> BUENOS AIRES, ARGENTINA</p>
-	</div>
-	<!-- <div class="datos-contacto">
-		<img src="assets/qr/mail-qr.PNG" alt="qr">
-		<p class="mapa"><a href="https://www.google.com/maps/place/Emilio+Mitre+207,+Tigre,+Provincia+de+Buenos+Aires/@-34.4159757,-58.5872668,17.25z/data=!4m5!3m4!1s0x95bca5c784febebd:0xf0c317945d2a9355!8m2!3d-34.41601!4d-58.5863295" target="_blank"><i class="fas fa-map-marker-alt"></i>MAPA</a></p>
-	</div> -->
-	
-	<div class="clock">
-		<div class="hour">
-			<div class="hr" id="hr"></div>
+	<main class="contacto">
+		<h1 class="contacto__titulo">Hablemos de tu proyecto</h1>
+
+		<div class="contacto__grilla">
+			<div>
+				<div class="contenedor">
+					<h2><i><a href="mailto:info@arhaus.com.ar">INFO@ARHAUS.COM.AR</a></i></h2>
+					<p> NORDELTA, TIGRE </p>
+					<p> B1642GKB</p>
+					<p> BUENOS AIRES, ARGENTINA</p>
+				</div>
+
+				<dl class="contacto__dato">
+					<dt>En el mapa</dt>
+					<dd><a href="https://www.google.com/maps/place/Emilio+Mitre+207,+Tigre,+Provincia+de+Buenos+Aires/@-34.4159757,-58.5872668,17.25z" target="_blank" rel="noopener">Emilio Mitre 207, Tigre</a></dd>
+				</dl>
+
+				<dl class="contacto__dato">
+					<dt>Instagram</dt>
+					<dd><a href="https://www.instagram.com/arhausdevelopers/" target="_blank" rel="noopener">@arhausdevelopers</a></dd>
+				</dl>
+
+				<div class="clock">
+					<div class="hour">
+						<div class="hr" id="hr"></div>
+					</div>
+					<div class="min">
+						<div class="mn" id="mn"></div>
+					</div>
+					<div class="sec">
+						<div class="sc" id="sc"></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sin JavaScript el formulario va igual: cae en contacto.php,
+			     que manda el mail y dibuja el resultado en su propia página. -->
+			<form class="contacto__form" method="post" action="contacto.php" data-contacto>
+				<div class="contacto__campo">
+					<label for="contacto-nombre">Nombre</label>
+					<input type="text" id="contacto-nombre" name="nombre" maxlength="80" required autocomplete="name">
+				</div>
+
+				<div class="contacto__campo">
+					<label for="contacto-email">Correo</label>
+					<input type="email" id="contacto-email" name="email" maxlength="120" required autocomplete="email">
+				</div>
+
+				<div class="contacto__campo contacto__campo--ancho">
+					<label for="contacto-telefono">Teléfono <span>(opcional)</span></label>
+					<input type="tel" id="contacto-telefono" name="telefono" maxlength="40" autocomplete="tel">
+				</div>
+
+				<div class="contacto__campo contacto__campo--ancho">
+					<label for="contacto-mensaje">Mensaje</label>
+					<textarea id="contacto-mensaje" name="mensaje" maxlength="3000" required placeholder="Contanos qué tenés en mente: el lugar, la idea, en qué etapa estás."></textarea>
+				</div>
+
+				<div class="contacto__trampa" aria-hidden="true">
+					<label for="contacto-sitio">No completar</label>
+					<input type="text" id="contacto-sitio" name="sitio_web" tabindex="-1" autocomplete="off">
+				</div>
+
+				<p class="contacto__aviso" data-aviso role="status" hidden></p>
+
+				<button type="submit" class="contacto__enviar" data-enviar>Enviar mensaje</button>
+			</form>
 		</div>
-		<div class="min">
-			<div class="mn" id="mn"></div>
-		</div>
-		<div class="sec">
-			<div class="sc" id="sc"></div>
-		</div>
-	</div>
+	</main>
+
 	<script src="js/clock.js"></script>
+	<script src="js/contacto.js"></script>
 </body>
 </html>
