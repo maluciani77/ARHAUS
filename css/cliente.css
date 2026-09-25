@@ -2297,6 +2297,150 @@ a.cliente-boton {
   box-shadow: 0 12px 28px rgba(136, 7, 35, 0.34);
 }
 
+/* ========================================
+   EL CAJÓN DEL ASISTENTE
+   Se abre a un costado, encima del panel, sin irse de la página: así se
+   puede seguir mirando la obra mientras se pregunta. No lleva velo atrás
+   a propósito — el resto del panel se sigue viendo y se sigue usando.
+   ======================================== */
+
+.asistente-cajon {
+  position: fixed;
+  right: 24px;
+  bottom: 88px;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  width: min(410px, calc(100vw - 32px));
+  height: min(600px, calc(100vh - 150px));
+  border: 1px solid var(--linea);
+  border-radius: 18px;
+  background: var(--superficie);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+  transform-origin: 100% 100%;
+  transition: opacity 0.25s ease, transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* IMPORTANTISIMO: el atributo hidden esconde con display:none, pero el
+   display:flex de arriba se lo pisa. Sin esta regla el cajón quedaría
+   invisible pero PRESENTE, comiéndose los clics de media pantalla. */
+.asistente-cajon[hidden] {
+  display: none;
+}
+
+.asistente-cajon.esta-abierto {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.asistente-cajon__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--linea);
+  background: var(--superficie-2, var(--superficie));
+}
+
+.asistente-cajon__titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.asistente-cajon__obra {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+}
+
+.asistente-cajon__cerrar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto-suave);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.asistente-cajon__cerrar:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--texto);
+}
+
+.asistente-cajon__cerrar svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.asistente-cajon__cuerpo {
+  flex: 1;
+  min-height: 0;   /* sin esto, el hijo que scrollea desborda la caja */
+  display: flex;
+  padding: 14px 16px 16px;
+}
+
+/* Adentro del cajón el chat ocupa todo y la conversación es lo único
+   que se desplaza: el campo para escribir queda siempre abajo a la vista. */
+.asistente-cajon .asistente {
+  flex: 1;
+  min-height: 0;
+  max-width: none;
+  gap: 12px;
+}
+
+.asistente-cajon .asistente__conversacion {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  scroll-behavior: smooth;
+}
+
+.asistente-cajon .asistente__mensaje {
+  max-width: 92%;
+}
+
+.asistente-cajon .asistente__form textarea {
+  min-height: 46px;
+  max-height: 120px;
+}
+
+.asistente-cajon .asistente__borrar {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  /* En el celular es una hoja que sube desde abajo, a todo lo ancho */
+  .asistente-cajon {
+    right: 8px;
+    left: 8px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    width: auto;
+    height: min(74vh, calc(100vh - 150px));
+    transform-origin: 50% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asistente-cajon {
+    transition-duration: 0.01s;
+  }
+}
+
 @media (max-width: 860px) {
   /* Arriba de la barra de abajo, solo el ícono */
   .cliente-asistente-flotante {

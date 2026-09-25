@@ -465,17 +465,16 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
     </main>
 
     <?php if ($obra && $seccion !== 'asistente'): ?>
-        <a class="cliente-asistente-flotante" href="<?= e(url_seccion('asistente')) ?>">
-            <?= icono('asistente') ?>
-            <span>Asistente</span>
-        </a>
+        <?php include __DIR__ . '/_asistente_flotante.php'; ?>
     <?php endif; ?>
 </div>
 
 <?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion', 'fotos_dia', 'info_obra'], true) || es_categoria_documento($seccion))): ?>
     <script src="<?= e(recurso($raiz, 'js/book-visor.js')) ?>"></script>
 <?php endif; ?>
-<?php if ($obra && $seccion === 'asistente'): ?>
+<?php if ($obra): ?>
+    <?php /* El chat va en todas las páginas: en el cajón flotante, y en la
+             suya propia para quien llegue sin JavaScript. */ ?>
     <script src="<?= e(recurso($raiz, 'js/asistente.js')) ?>"></script>
 <?php endif; ?>
 <?php if ($mostrarBienvenida): ?>
