@@ -74,7 +74,10 @@ span {
     margin-bottom: 20px;
 }
 
+/* El email iba sin estilo y se veía como un cuadrito gris del navegador,
+   distinto a los demás campos. */
 .login-box input[type="text"],
+.login-box input[type="email"],
 .login-box input[type="password"] {
     border: none;
     border-bottom: 1px solid #fff;
@@ -111,4 +114,60 @@ span {
 
 .login-box a:hover {
     color: #fff;
+}
+
+/* ========================================
+   EL OJITO DE LA CONTRASEÑA
+   Deja ver lo que se está escribiendo, para revisarlo antes de mandar.
+   ======================================== */
+
+.login-box .campo-clave {
+    position: relative;
+    display: flex;
+}
+
+.login-box .campo-clave input {
+    flex: 1;
+    /* Lugar para el botón, que va encima del borde de abajo */
+    padding-right: 38px;
+}
+
+.login-box .ver-clave {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.login-box .ver-clave:hover,
+.login-box .ver-clave:focus-visible {
+    color: #ffffff;
+}
+
+.login-box .ver-clave svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+}
+
+/* Sin ver la contraseña, el ojo va tachado; al mostrarla, se destacha */
+.login-box .ver-clave .ver-clave__tachado {
+    transition: opacity 0.2s ease;
+}
+
+.login-box .ver-clave.esta-viendo .ver-clave__tachado {
+    opacity: 0;
 }
