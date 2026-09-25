@@ -6,6 +6,10 @@
 # superan los 100 MB que GitHub rechaza) y los PDFs de brochures (142 MB):
 # esos se suben a Hostinger por FTP, aparte de git.
 *.mp4
+# Menos el de la portada: pesa 3,7 MB (entra de sobra en GitHub) y es el
+# fondo del inicio, asi que el repo tiene que traerlo o la portada queda
+# sin video.
+!/images/proyectos/video/nordelta_el_golf.mp4
 *.mov
 *.avi
 *.pdf

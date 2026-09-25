@@ -18,10 +18,10 @@
         <div class="preloader__linea"></div>
     </div>
 
-    <!-- NAV: un punto blanco arriba a la derecha; abre el menu a pantalla completa -->
+    <!-- NAV: un signo mas arriba a la derecha; abre el menu en un globito -->
     <nav class="nav--boton">
         <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
-            <span class="nav__punto"></span>
+            <span class="nav__mas" aria-hidden="true"></span>
         </button>
 
         <div class="nav__panel" id="menu-principal" hidden>
@@ -36,19 +36,47 @@
     <!-- GALERIA: fotos a pantalla completa, se avanza hacia la derecha -->
     <main class="galeria-h" id="galeria" tabindex="0" aria-label="Galeria de proyectos, se avanza hacia la derecha">
         <div class="galeria-h__pista">
-            <section class="panel panel--con-marca">
-                <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Alvear Chico, Tortuguitas">
+            <section class="panel panel--con-marca panel--video">
+                <!-- Fondo: el video de Nordelta, el mismo que ya usan las
+                     paginas de proyecto. Si el navegador no lo puede reproducir
+                     (iOS en ahorro de energia, datos cortados), abajo queda la
+                     foto y la portada se ve igual. -->
+                <img class="panel__respaldo" src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Alvear Chico, Tortuguitas">
+                <video class="panel__video" src="images/proyectos/video/nordelta_el_golf.mp4" autoplay muted loop playsinline preload="auto" tabindex="-1" aria-hidden="true"></video>
                 <div class="panel__marca">
                     <h1 class="hero-brand__name"><svg class="marca" viewBox="0 0 150.22 45.58" role="img" aria-label="ARHAUS Developers" xmlns="http://www.w3.org/2000/svg"><g class="marca__pieza marca__pieza--roja" style="--i:0"><path d="M24.94,29.2A3.28,3.28,0,0,1,22,27.27L12.84,6.87h-.49V7a14.19,14.19,0,0,1-1.26,3.22L3.32,27.27A3.28,3.28,0,0,1,.42,29.2H0v.54H7.12V29.2H6.71a1.38,1.38,0,0,1-1.14-.55,1.29,1.29,0,0,1-.07-1.26l6.9-16.31L19,27.36A1.32,1.32,0,0,1,19,28.65a1.38,1.38,0,0,1-1.14.55H17.4v.54h7.94V29.2Z"/></g><g class="marca__pieza marca__pieza--roja" style="--i:1"><path d="M48.48,29.2c-1.88,0-3.1-.88-4.58-2.37l0,0c-1.32-1.34-4.21-5.16-4.24-5.2a9.47,9.47,0,0,0-2.13-2.07A6.15,6.15,0,0,0,43,13.38c0-3.74-2.61-6.07-6.81-6.07H26.86v.54h.54a2.42,2.42,0,0,1,.54.07,1.73,1.73,0,0,1,.32.11h0l.09,0a2.1,2.1,0,0,1,.23.14l.07,0,.1.08a1,1,0,0,0,.5.16h4.82c.76,0,1.41,0,2,.05,2.47.12,4.06,1.93,4.14,4.73A5.89,5.89,0,0,1,40,15.13c-1,2.79-3.45,3.18-5.25,3.22-1,0-1.8,0-1.8,0h-.11v.52H33c1.16,0,2.11,1,3.06,2.1l1.67,2.21c1.22,1.63,2.61,3.48,2.84,3.73a7.71,7.71,0,0,0,6.06,2.82h2V29.2Z"/></g><g class="marca__pieza marca__pieza--barra" style="--i:2"><rect x="53.48" width="1.16" height="36.79"/></g><g class="marca__pieza marca__pieza--clara" style="--i:3"><path d="M83,7.73h.55V7.19H75.81v.54h.55a2,2,0,0,1,2.08,1.84v8.37H64.64V9.59a2,2,0,0,1,2.08-1.86h.55V7.19H59.55v.54h.54A2,2,0,0,1,62.19,9.6V27.2a2,2,0,0,1-2.09,1.88h-.54v.54h7.72v-.54h-.55a2,2,0,0,1-2.08-1.88V19.12h13.8v8.1a2,2,0,0,1-2.08,1.86h-.55v.54h7.72v-.54H83a2,2,0,0,1-2.08-1.88V9.61A2,2,0,0,1,83,7.73Z"/></g><g class="marca__pieza marca__pieza--clara" style="--i:4"><path d="M110,29.2a3.28,3.28,0,0,1-2.91-1.93L97.92,6.87h-.49V7a14.19,14.19,0,0,1-1.26,3.22L88.4,27.27a3.28,3.28,0,0,1-2.9,1.93h-.42v.54H92.2V29.2h-.42a1.37,1.37,0,0,1-1.13-.55,1.29,1.29,0,0,1-.07-1.26l6.9-16.31,6.61,16.28a1.35,1.35,0,0,1-.06,1.29,1.38,1.38,0,0,1-1.14.55h-.41v.54h7.94V29.2Z"/></g><g class="marca__pieza marca__pieza--clara" style="--i:5"><path d="M127.57,7.73h.67a1.59,1.59,0,0,1,1.7,1.41V21.66c0,4.3-3,7.18-7.52,7.18-4.28,0-7.16-3.05-7.16-7.59V9.15a1.59,1.59,0,0,1,1.69-1.42h.67V7.19h-7.18v.54h.67a1.58,1.58,0,0,1,1.7,1.46V21.72c0,5,3.86,8.34,9.61,8.34,5.59,0,9.35-3.37,9.35-8.4V9.12a1.59,1.59,0,0,1,1.69-1.39h.67V7.19h-6.55Z"/></g><g class="marca__pieza marca__pieza--clara" style="--i:6"><path d="M148.46,20.07l-6.73-5.77a3.75,3.75,0,0,1-1.34-2.84c0-2.22,2.09-3.54,4.11-3.54A4,4,0,0,1,147.4,9a2.88,2.88,0,0,1,.84,2.09v.11h.55V7.07h-1.45a16.36,16.36,0,0,0-3-.32c-4,0-6.13,2.75-6.13,5.47a5.23,5.23,0,0,0,1.9,4l6.56,5.65A3.62,3.62,0,0,1,148,24.75c0,2.3-1.85,4-4.49,4.14a4.68,4.68,0,0,1-3.78-1.41,4.61,4.61,0,0,1-1.05-3.67l0-.12h-.51l0,.07a9.09,9.09,0,0,0-.4,4.49v0l0,0c1.45,1.39,4.38,1.76,5.88,1.76,3.9,0,6.52-2.43,6.52-6A4.88,4.88,0,0,0,148.46,20.07Z"/></g><g class="marca__pieza marca__tagline" style="--i:7"><path d="M4.5,41.21a3,3,0,0,0-2.21-.66H0v.26c.58,0,.67.1.67.75v3c0,.64-.06.69-.67.75v.26H2a3.59,3.59,0,0,0,2.21-.63,2.48,2.48,0,0,0,1-2A2.21,2.21,0,0,0,4.5,41.21Zm-2.16,4c-.57,0-.74-.17-.74-.73V41.39c0-.25,0-.36.09-.43a.82.82,0,0,1,.51-.1,1.9,1.9,0,0,1,1.27.38A2.19,2.19,0,0,1,4.14,43C4.14,44.41,3.5,45.21,2.34,45.21Z"/><path d="M20.93,44.27c-.05.2-.25,1.06-.33,1.27H16.71v-.25c.7-.07.75-.11.75-.75v-3c0-.66-.08-.7-.63-.75v-.26h2.44c.78,0,1.06,0,1.16,0,0,.16,0,.77.08,1.22l-.28,0a2,2,0,0,0-.29-.66c-.14-.2-.26-.24-.68-.24h-.58c-.27,0-.3,0-.3.26V42.8h.79c.48,0,.54-.12.65-.66h.28v1.67h-.28c-.11-.56-.18-.65-.66-.65h-.78v1.39c0,.53.07.65.52.66h.6c.44,0,.54-.06.71-.26a3.32,3.32,0,0,0,.45-.75Z"/><path d="M37.65,40.83c-.5.06-.64.13-.92.83s-1.1,2.66-1.59,3.92h-.36c-.3-.82-1.16-3.12-1.52-4-.23-.56-.33-.66-.82-.71v-.25h2.18v.25c-.55.07-.56.14-.45.44.22.61.78,2.15,1.12,3,.43-1,.87-2.14,1.11-2.8.18-.49.12-.59-.51-.66v-.25h1.77Z"/><path d="M53.39,44.27c0,.2-.26,1.06-.33,1.27H49.17v-.25c.71-.07.75-.11.75-.75v-3c0-.66-.09-.7-.63-.75v-.26h2.44c.78,0,1.06,0,1.16,0,0,.16,0,.77.07,1.22l-.27,0a1.84,1.84,0,0,0-.3-.66c-.13-.2-.25-.24-.67-.24h-.58c-.27,0-.29,0-.29.26V42.8h.78c.48,0,.54-.12.65-.66h.28v1.67h-.28c-.11-.56-.17-.65-.65-.65h-.78v1.39c0,.53.06.65.51.66H52c.44,0,.54-.06.71-.26a3.32,3.32,0,0,0,.45-.75Z"/><path d="M69.55,44.22c-.06.3-.28,1.11-.35,1.33H65.47v-.26c.68-.06.74-.1.74-.75v-3c0-.65-.07-.7-.66-.75v-.26h2.28v.26c-.61,0-.69.1-.69.75v3c0,.44,0,.6.47.61h.47a.78.78,0,0,0,.72-.28,3.13,3.13,0,0,0,.48-.8Z"/><path d="M83.79,40.55a2.46,2.46,0,0,0-2.55,2.52,2.5,2.5,0,1,0,5-.08A2.38,2.38,0,0,0,83.79,40.55Zm.07,4.69c-1,0-1.59-1-1.59-2.33s.62-2.06,1.4-2.06,1.55.86,1.55,2.35S84.63,45.24,83.86,45.24Z"/><path d="M100,43.57l.23,0A1.63,1.63,0,0,0,102,42a1.3,1.3,0,0,0-.57-1.13,2.36,2.36,0,0,0-1.36-.32H98v.26c.58,0,.67.1.67.76v3c0,.65-.06.68-.67.75v.26h2.33v-.26c-.68-.07-.74-.1-.74-.74v-1.1Zm-.48-2.37a.36.36,0,0,1,.08-.28.58.58,0,0,1,.35-.08c.55,0,1,.31,1,1.16s-.59,1.23-1,1.23a1.12,1.12,0,0,1-.47-.09Z"/><path d="M118.3,44.27c0,.2-.25,1.06-.32,1.27h-3.89v-.25c.7-.07.75-.11.75-.75v-3c0-.66-.09-.7-.63-.75v-.26h2.44c.78,0,1,0,1.16,0,0,.16,0,.77.07,1.22l-.27,0a1.84,1.84,0,0,0-.3-.66c-.13-.2-.26-.24-.67-.24h-.58c-.27,0-.3,0-.3.26V42.8h.79c.48,0,.54-.12.65-.66h.27v1.67h-.27c-.12-.56-.18-.65-.66-.65h-.78v1.39c0,.53.07.65.51.66h.6c.45,0,.55-.06.72-.26a3.32,3.32,0,0,0,.45-.75Z"/><path d="M134.29,45a6.82,6.82,0,0,1-.59-.79c-.22-.35-.53-.85-.65-1.08a1.34,1.34,0,0,0,1-1.26,1.16,1.16,0,0,0-.51-1,2.33,2.33,0,0,0-1.33-.28h-2.12v.26c.59,0,.67.12.67.74v3c0,.63-.07.67-.67.74v.26h2.24v-.26c-.59-.07-.67-.11-.67-.74V43.37h.19c.3,0,.4,0,.53.26a12.3,12.3,0,0,0,.79,1.31c.27.38.55.56,1.38.61h.24l.05-.25A1,1,0,0,1,134.29,45Zm-1.63-2.11a1.14,1.14,0,0,1-.78.21h-.26V41.24c0-.17,0-.25.08-.3a.62.62,0,0,1,.37-.08c.48,0,1,.29,1,1.1A1.06,1.06,0,0,1,132.66,42.87Z"/><path d="M149.77,41.83c-.13-.47-.34-1-1-1a.7.7,0,0,0-.73.75c0,.44.29.69.93,1,.82.41,1.28.78,1.28,1.5a1.54,1.54,0,0,1-1.72,1.45,3.76,3.76,0,0,1-1.2-.23c-.05-.18-.16-.86-.21-1.22l.27-.06c.14.47.52,1.22,1.26,1.22a.72.72,0,0,0,.77-.79c0-.47-.28-.72-.91-1.06s-1.25-.78-1.25-1.51.59-1.35,1.65-1.35a4.69,4.69,0,0,1,1,.14c0,.26.08.62.13,1.09Z"/></g></svg></h1>
                 </div>
             </section>
-            <section class="panel panel--con-texto">
-                <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/interiores/INTERIOR 1_2.jpg" alt="Interior de Alvear Chico">
-                <div class="panel__texto">
-                    <div class="panel__texto-caja">
-                        <h2>El estudio</h2>
-                        <p>Somos un estudio de arquitectura joven formado en la UBA, con posgrado especializado en diseño, dirección, ejecución y gerenciamiento de obras y proyectos, centrándonos en la transformación de espacios con una concepción interdisciplinaria.</p>
+            <!-- Esta foto va partida al medio: de un lado el texto del
+                 estudio, del otro la maqueta 3D que gira sola. -->
+            <section class="panel panel--con-texto panel--partido">
+                <div class="panel__mitad panel__mitad--foto">
+                    <img src="images/proyectos/venta/Tortuguitas/BarrioAlvear1/interiores/INTERIOR 1_2.jpg" alt="Interior de Alvear Chico">
+                    <div class="panel__texto">
+                        <div class="panel__texto-caja">
+                            <h2>El estudio</h2>
+                            <p>Somos un estudio de arquitectura joven formado en la UBA, con posgrado especializado en diseño, dirección, ejecución y gerenciamiento de obras y proyectos, centrándonos en la transformación de espacios con una concepción interdisciplinaria.</p>
+                        </div>
                     </div>
+                </div>
+                <div class="panel__mitad panel__mitad--maqueta">
+                    <model-viewer
+                        class="maqueta"
+                        src="models/martin.glb"
+                        alt="Maqueta 3D del proyecto"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 58deg auto"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 130%"
+                        shadow-intensity="0.7"
+                        exposure="1.05"
+                        environment-image="neutral"
+                        loading="lazy"
+                        reveal="auto"></model-viewer>
+                    <p class="maqueta__pie">Maqueta 3D · gira sola, o agarrala con el mouse para verla de otro lado</p>
                 </div>
             </section>
             <section class="panel">
@@ -106,7 +134,9 @@
         </div>
     </main>
 
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
     <script src="js/galeria-horizontal.js"></script>
+    <script src="js/maqueta-3d.js"></script>
     <script src="js/nav-boton.js"></script>
     <script src="js/main.js"></script>
 </body>

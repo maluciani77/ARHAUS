@@ -35,16 +35,29 @@ document.addEventListener('DOMContentLoaded', function () {
 		setTimeout(unaVez, 2600); // red de seguridad
 	}
 
+	// El logo no aparece de entrada: primero se deja ver el video solo, y
+	// a los 3,5 segundos de abrir la pagina se arma la marca encima.
+	var ESPERA_MARCA = 3500;
+
+	function faltaParaLaMarca() {
+		// performance.now() cuenta desde que se abrio la pagina, asi que
+		// el velo de carga no le suma tiempo: si tardo 1 segundo, aca
+		// quedan 3. El minimo es para no encimar la marca con el velo
+		// justo cuando se esta desvaneciendo.
+		var pasado = (window.performance && performance.now) ? performance.now() : ESPERA_MARCA;
+		return Math.max(400, ESPERA_MARCA - pasado);
+	}
+
 	var preloader = document.getElementById('preloader');
 	if (preloader && !preloader.classList.contains('is-oculto')) {
 		document.addEventListener('arhaus:loader-oculto', function () {
-			setTimeout(arrancarMarca, 250);
+			setTimeout(arrancarMarca, faltaParaLaMarca());
 		}, { once: true });
-		setTimeout(arrancarMarca, 5000);
+		// Red de seguridad por si ese aviso nunca llega (el velo se saca
+		// solo a los 6 segundos como maximo).
+		setTimeout(arrancarMarca, 6400);
 	} else {
-		requestAnimationFrame(function () {
-			requestAnimationFrame(arrancarMarca);
-		});
+		setTimeout(arrancarMarca, faltaParaLaMarca());
 	}
 
 	// ---------- Ir de una foto a otra ----------
@@ -52,10 +65,98 @@ document.addEventListener('DOMContentLoaded', function () {
 	var indice = 0;
 	var enMovimiento = false;
 	var temporizadorMovimiento = null;
-	var soportaSuave = 'scrollBehavior' in document.documentElement.style;
+	var animacion = false;
+	var destinoViaje = 0;
+	var menosMovimiento = window.matchMedia
+		? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		: false;
 
 	function indiceActual() {
 		return Math.round(galeria.scrollLeft / galeria.clientWidth);
+	}
+
+	// Un cuadro de animacion. Se pide por las dos vias a la vez y manda la
+	// que llegue primero: requestAnimationFrame es la buena, pero hay
+	// situaciones (ventana tapada por otra, pestana en segundo plano) en
+	// las que el navegador deja de dar cuadros y la galeria se quedaria
+	// clavada a mitad de camino. El reloj de respaldo la termina igual.
+	var cuadroRaf = null;
+	var cuadroReloj = null;
+
+	function pedirCuadro(hacer) {
+		var usado = false;
+		function unaVez() {
+			if (usado) return;
+			usado = true;
+			cortarCuadro();
+			hacer(now());
+		}
+		cuadroRaf = requestAnimationFrame(unaVez);
+		cuadroReloj = setTimeout(unaVez, 32);
+	}
+
+	function cortarCuadro() {
+		if (cuadroRaf !== null) { cancelAnimationFrame(cuadroRaf); cuadroRaf = null; }
+		if (cuadroReloj !== null) { clearTimeout(cuadroReloj); cuadroReloj = null; }
+	}
+
+	function now() {
+		return window.performance && performance.now ? performance.now() : Date.now();
+	}
+
+	function cortarViaje() {
+		animacion = false;
+		cortarCuadro();
+	}
+
+	function plantarEnDestino() {
+		cortarViaje();
+		galeria.scrollLeft = destinoViaje;
+		galeria.classList.remove('esta-moviendose');
+	}
+
+	// Si la pestana se va a segundo plano mientras la galeria viaja, los
+	// cuadros se congelan: se la deja ya puesta en la foto de destino.
+	document.addEventListener('visibilitychange', function () {
+		if (document.hidden && animacion) plantarEnDestino();
+	});
+
+	// El viaje de una foto a otra lo anima el propio JS, cuadro a cuadro,
+	// en lugar de pedirle scrollTo({behavior:'smooth'}) al navegador. Es a
+	// proposito: el scroll suave del navegador se pelea con el scroll-snap
+	// (lo cancela a mitad de camino) y ademas hay navegadores que lo tienen
+	// apagado, y ahi la galeria no se movia nunca.
+	function animarHasta(destino) {
+		cortarViaje();
+		destino = Math.round(destino);
+		destinoViaje = destino;
+		var desde = galeria.scrollLeft;
+		var avance = destino - desde;
+
+		// Mientras viaja, el snap obligatorio estorba: se apaga y se
+		// vuelve a prender al llegar, ya parado en la foto justa.
+		galeria.classList.add('esta-moviendose');
+
+		if (menosMovimiento || document.hidden || Math.abs(avance) < 2) {
+			plantarEnDestino();
+			return;
+		}
+
+		var arranque = now();
+		var DURACION = 520;
+		animacion = true;
+
+		(function paso(ahora) {
+			if (!animacion) return;
+			var parte = Math.min(1, (ahora - arranque) / DURACION);
+			var suave = 1 - Math.pow(1 - parte, 3);   // frena al final
+			galeria.scrollLeft = desde + avance * suave;
+			if (parte < 1) {
+				pedirCuadro(paso);
+			} else {
+				plantarEnDestino();
+			}
+		})(arranque);
 	}
 
 	function irA(nuevo) {
@@ -64,13 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		indice = nuevo;
 		enMovimiento = true;
-
-		var destino = indice * galeria.clientWidth;
-		if (soportaSuave) {
-			galeria.scrollTo({ left: destino, behavior: 'smooth' });
-		} else {
-			galeria.scrollLeft = destino;
-		}
+		animarHasta(indice * galeria.clientWidth);
 
 		// Ventana en la que se ignoran gestos nuevos, para que un solo
 		// giro de rueda (o el rebote del trackpad) no salte varias fotos.
@@ -109,35 +204,78 @@ document.addEventListener('DOMContentLoaded', function () {
 		irA(indice + (e.deltaY > 0 ? 1 : -1));
 	}, { passive: false });
 
-	// ---------- Arrastrar ----------
+	// ---------- Arrastrar con el mouse ----------
+
+	// Se usan eventos de puntero y no de mouse porque asi el navegador
+	// avisa aunque el cursor se vaya de la ventana. En el celular no se
+	// tocan: el dedo ya arrastra solo, y meterse al medio lo empeora.
 
 	var arrastrando = false;
 	var inicioX = 0;
 	var inicioScroll = 0;
 	var seMovio = false;
+	var punteroId = null;
 
-	galeria.addEventListener('mousedown', function (e) {
+	galeria.addEventListener('pointerdown', function (e) {
+		if (e.pointerType === 'touch') return;   // el dedo se arregla solo
+		if (e.button !== 0) return;              // solo el boton izquierdo
+		// La maqueta 3D se gira con el mismo gesto: ahi el arrastre es
+		// de ella, no de la galeria.
+		if (e.target.closest('a, button, model-viewer')) return;
+
 		arrastrando = true;
 		seMovio = false;
+		punteroId = e.pointerId;
 		inicioX = e.clientX;
 		inicioScroll = galeria.scrollLeft;
 		galeria.classList.add('esta-arrastrando');
+
+		// Cortar el viaje que pudiera estar en curso: si no, sigue
+		// corriendo solo y se pelea con la mano.
+		cortarViaje();
+		clearTimeout(temporizadorMovimiento);
+		enMovimiento = false;
+
+		try { galeria.setPointerCapture(e.pointerId); } catch (err) {}
 	});
 
-	window.addEventListener('mousemove', function (e) {
-		if (!arrastrando) return;
+	galeria.addEventListener('pointermove', function (e) {
+		if (!arrastrando || e.pointerId !== punteroId) return;
+		e.preventDefault();
 		var avance = e.clientX - inicioX;
 		if (Math.abs(avance) > 3) seMovio = true;
 		galeria.scrollLeft = inicioScroll - avance;
 	});
 
-	window.addEventListener('mouseup', function () {
-		if (!arrastrando) return;
+	function soltar(e) {
+		if (!arrastrando || (e && e.pointerId !== punteroId)) return;
 		arrastrando = false;
+		punteroId = null;
+
+		// Al soltar, acomodar en la foto mas cercana. Si el arrastre fue
+		// largo, la de al lado; si fue un tironcito, vuelve a la misma.
+		var avance = e ? e.clientX - inicioX : 0;
+		var salto = 0;
+		if (Math.abs(avance) > galeria.clientWidth * 0.12) {
+			salto = avance < 0 ? 1 : -1;
+		}
+		var desde = Math.round(inicioScroll / galeria.clientWidth);
+		var cercana = indiceActual();
+
+		// OJO CON EL ORDEN: primero se marca que sigue en movimiento y
+		// recien despues se saca la clase de arrastre. Las dos apagan el
+		// snap; si por un instante quedan las dos afuera, el navegador
+		// devuelve la galeria de un saltito a la foto anterior y encima
+		// cancela el viaje que arranca aca abajo.
+		galeria.classList.add('esta-moviendose');
 		galeria.classList.remove('esta-arrastrando');
-		// Al soltar, acomodar en la foto mas cercana.
-		irA(indiceActual());
-	});
+
+		irA(salto ? desde + salto : cercana);
+	}
+
+	galeria.addEventListener('pointerup', soltar);
+	galeria.addEventListener('pointercancel', soltar);
+	window.addEventListener('blur', function () { soltar(null); });
 
 	// Que arrastrar no dispare el click de los enlaces
 	galeria.addEventListener('click', function (e) {
@@ -165,4 +303,37 @@ document.addEventListener('DOMContentLoaded', function () {
 	window.addEventListener('resize', function () {
 		galeria.scrollLeft = indice * galeria.clientWidth;
 	});
+});
+
+// ========================================
+// VIDEO DE LA PORTADA
+// Aparece con un fundido cuando ya tiene imagen para mostrar. Si no
+// llega a reproducirse (celular en ahorro de energia, autoplay
+// bloqueado), abajo queda la foto de respaldo y no se nota.
+// ========================================
+
+document.addEventListener('DOMContentLoaded', function () {
+	var video = document.querySelector('.panel__video');
+	if (!video) return;
+
+	function mostrar() {
+		video.classList.add('esta-lista');
+	}
+
+	if (video.readyState >= 2) {
+		mostrar();
+	} else {
+		video.addEventListener('loadeddata', mostrar, { once: true });
+	}
+
+	// Algunos navegadores no arrancan el autoplay hasta que la pestana
+	// esta a la vista; se reintenta y, si igual no va, queda la foto.
+	var intento = video.play();
+	if (intento && typeof intento.catch === 'function') {
+		intento.catch(function () {
+			document.addEventListener('click', function () {
+				video.play().then(mostrar, function () {});
+			}, { once: true });
+		});
+	}
 });

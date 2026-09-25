@@ -312,7 +312,10 @@ body.con-hero {
 
 
 /* ===================================
-   NAV: UN PUNTO BLANCO + MENU A PANTALLA COMPLETA
+   NAV: UN PUNTO BLANCO + MENU EN GLOBO
+   El menu ya no tapa la pantalla: cae como un globito debajo del punto,
+   arriba a la derecha. Asi se puede seguir moviendo la web con el menu
+   abierto.
    =================================== */
 
 nav.nav--boton {
@@ -323,7 +326,9 @@ nav.nav--boton {
     background: transparent;
     border: none;
     z-index: 1000;
-    padding: clamp(18px, 2.4vw, 30px);
+    /* El globo lo usa para alinearse con el punto */
+    --nav-margen: clamp(18px, 2.4vw, 30px);
+    padding: var(--nav-margen);
 }
 
 .nav__toggle {
@@ -346,48 +351,146 @@ nav.nav--boton {
     outline-offset: 2px;
 }
 
-.nav__punto {
+/* El signo mas: dos barritas cruzadas. Al pasar el cursor pega media
+   vuelta rapida; como el mas es simetrico, termina igual que empezo y lo
+   que se ve es el giro. Con el menu abierto queda a 45 grados, o sea
+   hecho una cruz, que es la forma de decir "tocame para cerrar". */
+.nav__mas {
+    position: relative;
     display: block;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
+    width: 17px;
+    height: 17px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.5, 1);
+}
+
+.nav__mas::before,
+.nav__mas::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
     background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.nav__toggle:hover .nav__punto {
-    transform: scale(1.3);
+.nav__mas::before {          /* la barra acostada */
+    width: 17px;
+    height: 2px;
+    margin: -1px 0 0 -8.5px;
 }
 
-.nav__toggle.esta-abierto .nav__punto {
-    transform: scale(0.72);
-    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.18),
-                0 0 10px rgba(0, 0, 0, 0.45);
+.nav__mas::after {           /* la barra parada */
+    width: 2px;
+    height: 17px;
+    margin: -8.5px 0 0 -1px;
 }
 
-/* El menu ocupa toda la pantalla, con los enlaces en el medio */
+.nav__toggle:hover .nav__mas,
+.nav__toggle:focus-visible .nav__mas {
+    transform: rotate(180deg);
+}
+
+.nav__toggle.esta-abierto .nav__mas {
+    transform: rotate(45deg);
+}
+
+.nav__toggle.esta-abierto:hover .nav__mas,
+.nav__toggle.esta-abierto:focus-visible .nav__mas {
+    transform: rotate(225deg);
+}
+
+/* A quien pide menos animacion no se le gira: solo se abre la cruz */
+@media (prefers-reduced-motion: reduce) {
+    .nav__mas {
+        transition-duration: 0.01s;
+    }
+
+    .nav__toggle:hover .nav__mas,
+    .nav__toggle:focus-visible .nav__mas {
+        transform: none;
+    }
+
+    .nav__toggle.esta-abierto:hover .nav__mas,
+    .nav__toggle.esta-abierto:focus-visible .nav__mas {
+        transform: rotate(45deg);
+    }
+}
+
+/* El globo: una tarjeta alta y transparente, pegada debajo del mas.
+   Casi no tiene color propio: lo que la hace legible es el desenfoque
+   del fondo, asi el video se sigue viendo detras sin ensuciarse. */
 .nav__panel {
     position: fixed;
-    inset: 0;
+    top: calc(var(--nav-margen) + 46px);
+    right: var(--nav-margen);
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(18px, 3vh, 34px);
-    padding: 40px 24px;
-    background: rgba(12, 12, 12, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    gap: 6px;
+    width: max-content;
+    min-width: 208px;
+    max-width: calc(100vw - var(--nav-margen) * 2);
+    padding: 14px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    background: rgba(16, 16, 16, 0.3);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    /* Sombra suave y amplia: apoya la tarjeta sin marcarle un borde duro */
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32),
+                inset 0 1px 0 rgba(255, 255, 255, 0.07);
     opacity: 0;
-    transition: opacity 0.45s ease;
+    transform: translateY(-10px) scale(0.94);
+    transform-origin: 100% 0;
+    transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Si el navegador no sabe desenfocar el fondo, el texto quedaria ilegible
+   sobre el video: ahi y solo ahi se le pone fondo opaco. */
+@supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+    .nav__panel {
+        background: rgba(14, 14, 14, 0.8);
+    }
+
+    .nav__panel::after {
+        background: rgba(14, 14, 14, 0.8);
+    }
+}
+
+/* Puente invisible entre el signo mas y la tarjeta. Entre uno y otra
+   queda un pedacito de pantalla vacia; sin este puente, el mouse que baja
+   a elegir un enlace "sale" del menu por un instante. No se ve: solo
+   estira la zona sensible hacia arriba. */
+.nav__panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: -14px;
+    top: -26px;
+    height: 26px;
+}
+
+/* La puntita que lo engancha con el signo mas */
+.nav__panel::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: 13px;
+    width: 11px;
+    height: 11px;
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 2px 0 0 0;
+    background: rgba(16, 16, 16, 0.3);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    transform: rotate(45deg);
 }
 
 /* IMPORTANTISIMO: el atributo hidden funciona poniendo display:none,
    pero el "display: flex" de arriba lo pisa. Sin esta regla el panel
-   quedaba invisible (opacidad 0) pero PRESENTE a pantalla completa,
-   tapando la galeria y comiendose la rueda del mouse y los clics. */
+   quedaba invisible (opacidad 0) pero PRESENTE, comiendose los clics. */
 .nav__panel[hidden] {
     display: none;
 }
@@ -399,54 +502,80 @@ nav.nav--boton {
 
 .nav__panel.esta-abierto {
     opacity: 1;
+    transform: translateY(0) scale(1);
     pointer-events: auto;
 }
 
 .nav__panel .nav__item {
-    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    padding: 14px 18px 14px 20px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.92);
     font-family: "Work Sans", sans-serif;
-    font-size: clamp(1.7rem, 5.5vw, 3.4rem);
-    font-weight: 200;
-    letter-spacing: 0.04em;
+    font-size: 1.05rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
     text-decoration: none;
-    transition: color 0.25s ease, transform 0.5s ease, opacity 0.5s ease;
+    white-space: nowrap;
+    /* Con la tarjeta tan transparente, un toque de sombra mantiene el
+       texto legible cuando abajo pasa una parte clara del video. */
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    transition: color 0.2s ease, background 0.2s ease, transform 0.35s ease, opacity 0.35s ease;
     /* Entran escalonados, de arriba hacia abajo */
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(-6px);
 }
 
 .nav__panel.esta-abierto .nav__item {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: calc(var(--i) * 60ms);
+    transition-delay: calc(var(--i) * 40ms);
 }
 
-/* Linea roja que crece debajo del enlace al pasar el cursor */
+/* Barrita roja que crece a la izquierda del enlace al pasar el cursor */
 .nav__panel .nav__item::before {
     display: block;
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -0.12em;
-    width: 100%;
-    height: 2px;
+    left: 8px;
+    top: 50%;
+    bottom: auto;
+    width: 2px;
+    height: 17px;
+    margin-top: -8.5px;
+    border-radius: 2px;
     background: #c2183c;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .nav__panel .nav__item:hover::before,
 .nav__panel .nav__item:focus-visible::before {
-    transform: scaleX(1);
+    transform: scaleY(1);
 }
 
-.nav__panel .nav__item:hover {
+.nav__panel .nav__item:hover,
+.nav__panel .nav__item:focus-visible {
     color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* En el celular los enlaces se tocan con el dedo: mas altos */
+@media (max-width: 768px) {
+    .nav__panel {
+        min-width: 212px;
+        padding: 14px 12px;
+    }
+
+    .nav__panel .nav__item {
+        padding: 15px 18px 15px 20px;
+        font-size: 1.05rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .nav__panel,
     .nav__panel .nav__item {
         transition-duration: 0.01s;
     }
