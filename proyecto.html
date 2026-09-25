@@ -6,18 +6,21 @@
     <!-- utiliza la anchura del dispositivo donde se visualiza la web como nuevo viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Autor" content="Monterno Augusto | Arq">   </meta>
-	<link rel="stylesheet" href="css/master_proyecto.css">
-	<link rel="stylesheet" href="css/nav-vertical.css">
+	<!-- OJO: el ?v= de los css y js de abajo es lo que hace que el navegador
+	     y el CDN sirvan la versión nueva. Si se cambia alguno de esos archivos,
+	     hay que subirle el número acá, o la gente sigue viendo el viejo. -->
+	<link rel="stylesheet" href="css/master_proyecto.css?v=20260925">
+	<link rel="stylesheet" href="css/nav-vertical.css?v=20260925">
 	<!-- Link con CSS principal --> 
 	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/footer.css"> 
-    <link rel="stylesheet" href="css/theme-light.css">
+    <link rel="stylesheet" href="css/footer.css?v=20260925"> 
+    <link rel="stylesheet" href="css/theme-light.css?v=20260925">
 	<!-- OJO: esta va al final, despues de footer.css y del tema: le pisa
 	     el alto fijo del pie y los colores claros. -->
-	<link rel="stylesheet" href="css/proyectos-indice.css">
-	<link rel="stylesheet" type="text/css" href="css/fontello.css"> <!-- Link con CSS de icono Up -->
-	<script src="js/jquery-3.3.1.min.js"></script> <!-- Link con JQuery -->
-	<script src="js/main.js" defer></script> <!-- Link con JavaScript principal -->
+	<link rel="stylesheet" href="css/proyectos-indice.css?v=20260925">
+	<link rel="stylesheet" type="text/css" href="css/fontello.css?v=20260925"> <!-- Link con CSS de icono Up -->
+	<script src="js/jquery-3.3.1.min.js?v=20260925"></script> <!-- Link con JQuery -->
+	<script src="js/main.js?v=20260925" defer></script> <!-- Link con JavaScript principal -->
 	<script src='js/script.js'></script> <!-- Link con JavaScript principal 2 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -204,7 +207,7 @@
         </div>
     </section>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
-    <script src="js/proyectos-indice.js" defer></script>
+    <script src="js/proyectos-indice.js?v=20260925" defer></script>
 <!--
 <div class="container">
     <div class="menu">
@@ -255,7 +258,7 @@
 </div>-->
 
 
-<script src="js/filtro.js"></script>
+<script src="js/filtro.js?v=20260925"></script>
 
 
 <!-- START FOOTER -->
@@ -305,6 +308,6 @@
 </footer>
 
 <!-- END FOOTER -->
-<script src="js/animar.js"></script>  
+<script src="js/animar.js?v=20260925"></script>  
 </body>
 </html>
