@@ -6,6 +6,7 @@
     <title>Login | ARHAUS</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/login_index.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div>
@@ -34,14 +35,54 @@
 
                 <p style="font-size:0.85rem;opacity:0.8;margin-top:10px;">¿No tenés cuenta? Pedísela al estudio.</p>
             </form>
+
+            <div class="o-bien"><span>o</span></div>
+
+            <!-- Entrar con Google. El identificador de acá abajo NO es un
+                 secreto (va en el HTML a la vista); el mismo está en
+                 lib/google.php, que es donde el servidor comprueba que el
+                 acceso sea de este sitio. Si se rehace la credencial, hay
+                 que cambiarlo en los dos lados. -->
+            <div id="g_id_onload"
+                 data-client_id="218470589355-9f5d0u0d492m26mtqftorf07pd2i2sf2.apps.googleusercontent.com"
+                 data-login_uri="https://arhaus.com.ar/google.php"
+                 data-context="signin"
+                 data-ux_mode="redirect"
+                 data-auto_prompt="false"></div>
+
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-theme="filled_black"
+                 data-shape="pill"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-locale="es-419"
+                 data-logo_alignment="center"></div>
         </div>
     </div>
 
     <script>
-        if (new URLSearchParams(location.search).get('error') === '1') {
-            var p = document.getElementById('login-error');
-            p.textContent = 'Email o contraseña incorrectos.';
-            p.style.display = 'block';
+        var parametros = new URLSearchParams(location.search);
+        var aviso = document.getElementById('login-error');
+
+        if (parametros.get('error') === '1') {
+            aviso.textContent = 'Email o contraseña incorrectos.';
+            aviso.style.display = 'block';
+        }
+
+        // Lo que puede salir mal al entrar con Google. El servidor manda
+        // un motivo corto y acá se traduce a algo que se entienda.
+        var motivosGoogle = {
+            'sin-cuenta': 'Ese correo de Google no está dado de alta. Pedile el acceso al estudio, o entrá con tu email y contraseña.',
+            'invalido': 'No pudimos confirmar tu cuenta de Google. Probá de nuevo.',
+            'sin-google': 'No pudimos hablar con Google en este momento. Probá de nuevo o entrá con tu email y contraseña.',
+            'csrf': 'Se venció el intento de entrar con Google. Probá de nuevo.',
+            'sin-token': 'Google no nos mandó los datos. Probá de nuevo.'
+        };
+        var motivo = parametros.get('google');
+        if (motivo && motivosGoogle[motivo]) {
+            aviso.textContent = motivosGoogle[motivo];
+            aviso.style.display = 'block';
         }
 
         // El ojito: muestra la contraseña mientras se escribe, para poder

@@ -171,3 +171,32 @@ span {
 .login-box .ver-clave.esta-viendo .ver-clave__tachado {
     opacity: 0;
 }
+
+/* ========================================
+   ENTRAR CON GOOGLE
+   ======================================== */
+
+/* El "o" con una línea a cada lado, entre el formulario y el botón */
+.login-box .o-bien {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 14px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12px;
+}
+
+.login-box .o-bien::before,
+.login-box .o-bien::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* El botón lo dibuja Google adentro de un iframe: no se le puede tocar
+   el estilo, solo acomodarlo. */
+.login-box .g_id_signin {
+    display: flex;
+    justify-content: center;
+}
