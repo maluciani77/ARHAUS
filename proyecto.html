@@ -12,6 +12,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/footer.css"> 
     <link rel="stylesheet" href="css/theme-light.css">
+	<!-- OJO: esta va al final, despues de footer.css y del tema: le pisa
+	     el alto fijo del pie y los colores claros. -->
+	<link rel="stylesheet" href="css/proyectos-indice.css">
 	<link rel="stylesheet" type="text/css" href="css/fontello.css"> <!-- Link con CSS de icono Up -->
 	<script src="js/jquery-3.3.1.min.js"></script> <!-- Link con JQuery -->
 	<script src="js/main.js" defer></script> <!-- Link con JavaScript principal -->
@@ -25,9 +28,9 @@
 	</header>  
 
 	<!-- NAV -->
-    <nav>
+    <nav class="nav--oscuro">
         <div class="nav__container">
-            <a href="index.html"><img src="images/logo-dark.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
+            <a href="index.html"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
             <label for="menu" class="nav__label"></label>
             <input type="checkbox" id="menu" class="nav__input">
             <div class="nav__menu">
@@ -95,75 +98,113 @@
 
         </div>
     </section>--> 
-    <!-- GALERIA CON FILTRADO POR CATAGORIA -->
-    <div class="wrap">
-		<div class="store-wrapper">
-			<div class="category_list">
-				<a href="#" class="category_item" category="all">todos</a>
-				<a href="#" class="category_item" category="terminados">Obras Finalizadas</a>
-				<a href="#" class="category_item" category="proyectos">proyectos</a>
-			</div>
-			<section class="products-list">
-				<div class="product-item" category="terminados">
-                    <div class="card">
-                        <img src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="" >
-					    <div class="info">
-                            <a href="pr_1.html" class="portfolio_link_class">
-                                <span class="thin_plus_only_icon">+</span>
-                            </a>
-                        </div>
-                        <div class="portfolio_description">
-                            <h5>Tortuguitas</h5>
-                            <span class="project_category">Casas / Proyectos</span>
-                        </div>
-                    </div>
-				</div>
-				<div class="product-item" category="proyectos">
-                    <div class="card">
-                        <img src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/02-Render-11NOV2021.png" alt="" >
-					    <div class="info">
-                            <a href="pr_2.html" class="portfolio_link_class">
-                                <span class="thin_plus_only_icon">+</span>
-                            </a>
-                        </div>
-                        <div class="portfolio_description">
-                            <h5>Martinez</h5>
-                            <span class="project_category">Casas / Proyectos</span>
-                        </div>
-                    </div>
-				</div>
-                <div class="product-item" category="proyectos">
-                    <div class="card">
-                        <img src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="" >
-					    <div class="info">
-                            <a href="pr_3.html" class="portfolio_link_class">
-                                <span class="thin_plus_only_icon">+</span>
-                            </a>
-                        </div>
-                        <div class="portfolio_description">
-                            <h5>House~424</h5>
-                            <span class="project_category">Casas / Proyectos</span>
-                        </div>
-                    </div>
-				</div>
-                <div class="product-item" category="proyectos">
-                    <div class="card">
-                        <img src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="" >
-					    <div class="info">
-                            <a href="pr_4.html" class="portfolio_link_class">
-                                <span class="thin_plus_only_icon">+</span>
-                            </a>
-                        </div>
-                        <div class="portfolio_description">
-                            <h5>House~425</h5>
-                            <span class="project_category">Casas / Proyectos</span>
-                        </div>
-                    </div>
-				</div>
-			</section>
-		</div>
-	</div>
-    <script src="js/filter.js"></script>
+    <!-- MOSAICO DE PROYECTOS -->
+    <section class="mosaico">
+        <h1 class="mosaico__titulo-oculto">Proyectos</h1>
+
+        <div class="mosaico__grilla">
+                <a class="mosaico__cuadro" href="pr_1.html" data-pieza="p1" data-categoria="terminados" data-leyenda="Tortuguitas · Alvear Chico" style="--escala: 1">
+                    <img class="mosaico__foto" data-src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Tortuguitas, Alvear Chico" loading="lazy">
+                    <span class="mosaico__nombre">Tortuguitas</span>
+                    <span class="mosaico__pie">
+                        <span>Alvear Chico</span>
+                        <span class="mosaico__estado">Obra finalizada</span>
+                    </span>
+                </a>
+                <a class="mosaico__cuadro" href="pr_2.html" data-pieza="p2" data-categoria="proyectos" data-leyenda="Martínez · maqueta 3D — agarrala con el mouse para girarla" style="--escala: 0.72">
+                    <img class="mosaico__foto" data-src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/02-Render-11NOV2021.png" alt="Martínez, Azcuénaga · Casa I" loading="lazy">
+                    <span class="mosaico__nombre">Martínez</span>
+                    <span class="mosaico__pie">
+                        <span>Azcuénaga · Casa I</span>
+                        <span class="mosaico__estado">Proyecto</span>
+                    </span>
+                </a>
+                <a class="mosaico__cuadro" href="pr_3.html" data-pieza="p3" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casa 424" style="--escala: 0.6">
+                    <img class="mosaico__foto" data-src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="Pilar del Este, San Ramiro · Casa 424" loading="lazy">
+                    <span class="mosaico__nombre">Pilar del Este</span>
+                    <span class="mosaico__pie">
+                        <span>San Ramiro · Casa 424</span>
+                        <span class="mosaico__estado">Proyecto</span>
+                    </span>
+                </a>
+                <a class="mosaico__cuadro" href="pr_4.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casa 425" style="--escala: 0.86">
+                    <img class="mosaico__foto" data-src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="Pilar del Este, San Ramiro · Casa 425" loading="lazy">
+                    <span class="mosaico__nombre">Pilar del Este</span>
+                    <span class="mosaico__pie">
+                        <span>San Ramiro · Casa 425</span>
+                        <span class="mosaico__estado">Proyecto</span>
+                    </span>
+                </a>
+                <div class="mosaico__cuadro" data-pieza="p5" data-categoria="ejemplo" data-leyenda="San Martín de los Andes · maqueta 3D de ejemplo — agarrala con el mouse" style="--escala: 0.68">
+                    <model-viewer class="mosaico__foto" src="models/villa.glb" alt="Maqueta 3D de ejemplo de una casa"
+                        auto-rotate rotation-per-second="18deg" auto-rotate-delay="0" interaction-prompt="none"
+                        camera-orbit="35deg 74deg 92%" shadow-intensity="0.6" exposure="1.15"
+                        environment-image="neutral" loading="lazy" reveal="auto"></model-viewer>
+                    <span class="mosaico__nombre">San Martín de los Andes</span>
+                    <span class="mosaico__pie">
+                        <span>Lote del bosque</span>
+                        <span class="mosaico__estado mosaico__estado--ejemplo">Ejemplo</span>
+                    </span>
+                </div>
+                <div class="mosaico__cuadro" data-pieza="p6" data-categoria="ejemplo" data-leyenda="Nordelta · El Golf — imagen de ejemplo" style="--escala: 0.8">
+                    <img class="mosaico__foto" data-src="images/Casa.jpg" alt="Nordelta, El Golf" loading="lazy">
+                    <span class="mosaico__nombre">Nordelta</span>
+                    <span class="mosaico__pie">
+                        <span>El Golf</span>
+                        <span class="mosaico__estado mosaico__estado--ejemplo">Ejemplo</span>
+                    </span>
+                </div>
+
+            <!-- El medio: aparece la maqueta del cuadro que se esta mirando.
+                 Va al final a proposito, para que la cuenta de los tonos en
+                 damero de los cuadros no se corra. -->
+            <div class="mosaico__centro" aria-hidden="true">
+                    <img class="mosaico__pieza" data-pieza="p1"
+                         data-src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Render de Tortuguitas" decoding="async">
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p2"
+                        data-src="models/martin.glb"
+                        alt="Maqueta 3D del proyecto de Martínez"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 58deg 74%"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 130%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
+                    <img class="mosaico__pieza" data-pieza="p3"
+                         data-src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="Render de San Ramiro, Casa 424" decoding="async">
+                    <img class="mosaico__pieza" data-pieza="p4"
+                         data-src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="Render de San Ramiro, Casa 425" decoding="async">
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p5"
+                        data-src="models/villa.glb"
+                        alt="Maqueta 3D de ejemplo de una casa"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="35deg 74deg 70%"
+                        min-camera-orbit="auto 30deg 60%"
+                        max-camera-orbit="auto 88deg 130%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
+                    <img class="mosaico__pieza" data-pieza="p6"
+                         data-src="images/Casa.jpg" alt="Render de ejemplo" decoding="async">
+                <p class="mosaico__leyenda"></p>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+    <script src="js/proyectos-indice.js" defer></script>
 <!--
 <div class="container">
     <div class="menu">
@@ -218,7 +259,7 @@
 
 
 <!-- START FOOTER -->
-<footer class="prague-footer default">
+<footer class="prague-footer default prague-footer--compacto">
     <div class="footer-content-outer">
         <div class="footer-top-content">
             <div class="prague-footer-main-block">

@@ -1,0 +1,464 @@
+/* ========================================
+   MOSAICO DE PROYECTOS
+   Cuadros grandes, uno por lugar, cada ubicacion en un tamano distinto.
+   Al pasar el cursor por uno aparece SU maqueta 3D (o su render) en el
+   medio de la grilla; al sacar el cursor se va y el medio queda vacio.
+   Tocando el cuadro se entra al proyecto, que quedo igual que siempre.
+   ======================================== */
+
+.mosaico {
+    /* OJO: el hueco para la barra fija del nav ya lo pone el padding del
+       body (66px, viene de la hoja del tema). Si se le sumara otro aca,
+       quedaba una franja clara de mas arriba de los cuadros. */
+    --alto-nav: 66px;
+    background: #121212;
+}
+
+/* El titulo queda solo para quien lee la pagina con un lector de
+   pantalla: en pantalla no va, los cuadros ocupan todo. */
+.mosaico__titulo-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---------- La grilla de cuadros ---------- */
+
+/* La grilla no es pareja a proposito: doce columnas finas de las que
+   cada cuadro toma un pedazo distinto, y tres filas de alturas
+   distintas. Cuatro cuadros iguales parecian una planilla; asi hay
+   composicion. Las sumas de cada fila tienen que dar 12. */
+.mosaico__grilla {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1.22fr 0.86fr 1.06fr;
+    min-height: calc(100vh - var(--alto-nav));
+}
+
+.mosaico__cuadro:nth-child(1) { grid-column: span 7; }
+.mosaico__cuadro:nth-child(2) { grid-column: span 5; }
+.mosaico__cuadro:nth-child(3) { grid-column: span 4; }
+.mosaico__cuadro:nth-child(4) { grid-column: span 8; }
+.mosaico__cuadro:nth-child(5) { grid-column: span 8; }
+.mosaico__cuadro:nth-child(6) { grid-column: span 4; }
+
+/* Y el texto no siempre en el mismo rincon: unos arriba, otros abajo */
+.mosaico__cuadro:nth-child(1),
+.mosaico__cuadro:nth-child(4),
+.mosaico__cuadro:nth-child(5) { justify-content: flex-start; }
+
+.mosaico__cuadro:nth-child(2),
+.mosaico__cuadro:nth-child(3),
+.mosaico__cuadro:nth-child(6) { justify-content: flex-end; }
+
+.mosaico__cuadro {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: clamp(150px, 20vh, 240px);
+    padding: clamp(22px, 3vw, 44px);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    /* La tinta viaja por variables: asi el nombre, la rayita que lo
+       subraya y los datos cambian todos juntos al encenderse. */
+    --tinta: rgba(255, 255, 255, 0.88);
+    --tinta-suave: rgba(255, 255, 255, 0.42);
+    color: var(--tinta);
+    text-decoration: none;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* IMPORTANTISIMO: el atributo hidden esconde poniendo display:none, pero
+   el "display: flex" de arriba lo pisa. Sin esta regla, los filtros
+   marcaban el boton y no escondian ningun cuadro. */
+.mosaico__cuadro[hidden] {
+    display: none;
+}
+
+/* Tonos en damero, para que los cuadros se lean como bloques y no como
+   una tabla. Con dos columnas, 1-4-5 quedan de un tono y 2-3-6 del otro. */
+.mosaico__cuadro:nth-child(4n+1),
+.mosaico__cuadro:nth-child(4n+4) { background: #141414; }
+
+.mosaico__cuadro:nth-child(4n+2),
+.mosaico__cuadro:nth-child(4n+3) { background: #1B1B1B; }
+
+/* Los de la derecha llevan el nombre pegado a SU borde de afuera: si
+   fueran todos a la izquierda, la maqueta del medio se los comeria. */
+.mosaico__cuadro:nth-child(even) {
+    align-items: flex-end;
+    text-align: right;
+}
+
+/* El cuadro que se esta mirando se prende en blanco: todo el contraste
+   de la pagina concentrado en uno solo. */
+.mosaico__cuadro.esta-activo {
+    background: #FFFFFF;
+    --tinta: #141414;
+    --tinta-suave: #6E6E6E;
+}
+
+/* Cada ubicacion en un tamano distinto: es lo que le da ritmo a la
+   grilla y evita que parezca una planilla. El numero lo pone el HTML. */
+.mosaico__nombre {
+    display: inline;
+    background-image: linear-gradient(var(--tinta), var(--tinta));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    font-family: "Work Sans", sans-serif;
+    font-size: calc(clamp(1.4rem, 3.2vw, 2.7rem) * var(--escala, 1));
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    transition: background-size 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.mosaico__cuadro.esta-activo .mosaico__nombre {
+    background-size: 100% 1px;
+}
+
+.mosaico__pie {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin-top: 18px;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.8rem;
+    color: var(--tinta-suave);
+    /* Como en la referencia: los datos asoman cuando mirás el cuadro */
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.mosaico__cuadro.esta-activo .mosaico__pie {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mosaico__estado {
+    /* Sobre negro el borgoña del logo no se leia: va su version viva */
+    color: #C2183C;
+}
+
+.mosaico__cuadro.esta-activo .mosaico__estado {
+    color: #880723;   /* ya sobre blanco, vuelve el borgoña del logo */
+}
+
+.mosaico__estado--ejemplo {
+    color: var(--tinta-suave);
+    font-style: italic;
+}
+
+.mosaico__cuadro:focus-visible {
+    outline: 2px solid #C2183C;
+    outline-offset: -6px;
+}
+
+/* ---------- El medio: la maqueta del proyecto que se esta mirando ---------- */
+
+.mosaico__centro {
+    /* Pegada a la pantalla y no a la grilla: con seis cuadros la grilla
+       es mas alta que la ventana, y si la maqueta fuera al medio de la
+       grilla te quedaria abajo, fuera de la vista, justo cuando pasas el
+       cursor por los cuadros de arriba. */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    /* Grande: la maqueta es la protagonista. El tope de 80vw/76vh no es
+       capricho — deja un margen a los costados para poder entrar con el
+       cursor a los cuadros de atras, que es como se cambia de proyecto. */
+    width: min(80vw, 1170px);
+    height: min(84vh, 900px);
+    transform: translate(-50%, -50%);
+    /* Apagado no se pone en el camino del cursor, asi los cuadros de
+       abajo se pueden seguir tocando. La pieza que esta a la vista si
+       recibe el puntero, para poder agarrar y girar la maqueta. */
+    pointer-events: none;
+}
+
+.mosaico__pieza {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    opacity: 0;
+    transform: scale(1.03) translateY(8px);
+    transition: opacity 0.45s ease, transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Dos clases y no una: "se-esta-mostrando" la pone en pantalla y
+   "esta-a-la-vista" la enciende. Hacen falta las dos porque desde
+   display:none no se puede animar nada, y porque con display:none el
+   visor 3D deja de dibujar: asi la maqueta que no se ve no gasta. */
+.mosaico__pieza.se-esta-mostrando {
+    display: block;
+}
+
+.mosaico__pieza.esta-a-la-vista {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+model-viewer.mosaico__pieza.esta-a-la-vista {
+    pointer-events: auto;
+}
+
+img.mosaico__pieza {
+    object-fit: cover;
+}
+
+model-viewer.mosaico__pieza {
+    background-color: transparent;
+    --poster-color: transparent;
+    --progress-bar-color: rgba(255, 255, 255, 0.45);
+    --progress-bar-height: 2px;
+    --progress-mask: transparent;
+    cursor: grab;
+}
+
+model-viewer.mosaico__pieza:active {
+    cursor: grabbing;
+}
+
+.mosaico__leyenda {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 10px);
+    margin: 0;
+    text-align: center;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.mosaico__leyenda.esta-a-la-vista {
+    opacity: 1;
+}
+
+/* Las fotos de cada cuadro: solo se usan en pantalla angosta, donde no
+   hay cursor que pasar por encima. */
+.mosaico__foto {
+    display: none;
+}
+
+/* ---------- Pantalla angosta ---------- */
+
+@media (max-width: 900px) {
+    /* Sin cursor no hay "pasar por encima": el medio no sirve y cada
+       cuadro muestra su propia foto, uno abajo del otro. */
+    .mosaico__centro {
+        display: none;
+    }
+
+    .mosaico__grilla {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-auto-rows: auto;
+        min-height: 0;
+    }
+
+    /* Uno abajo del otro: se deshacen los anchos y los rincones */
+    .mosaico__cuadro:nth-child(n) {
+        grid-column: auto;
+        justify-content: flex-start;
+    }
+
+    .mosaico__cuadro {
+        min-height: 0;
+        border-right: none;
+    }
+
+    .mosaico__cuadro:nth-child(even) {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .mosaico__foto {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        margin-bottom: 16px;
+    }
+
+    /* El visor 3D trae su propio alto fijo de 150px, que le gana a la
+       proporcion: hay que devolverselo a "auto" para que la calcule. */
+    model-viewer.mosaico__foto {
+        height: auto;
+        background-color: transparent;
+        --poster-color: transparent;
+        --progress-bar-color: rgba(255, 255, 255, 0.45);
+        --progress-bar-height: 2px;
+        --progress-mask: transparent;
+    }
+
+    .mosaico__pie {
+        opacity: 1;
+        transform: none;
+    }
+
+    .mosaico__nombre {
+        background-size: 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mosaico__cuadro,
+    .mosaico__nombre,
+    .mosaico__pie,
+    .mosaico__pieza,
+    .mosaico__leyenda {
+        transition-duration: 0.01s;
+    }
+
+    .mosaico__pieza {
+        transform: none;
+    }
+}
+
+
+/* ========================================
+   LA BARRA DE ARRIBA, EN OSCURO
+   Solo en esta pagina: la clase la pone el HTML. Se cambian las
+   variables de la hoja del nav y con eso viajan el fondo, los enlaces y
+   las rayitas del boton del celular, sin tocar las otras paginas.
+   ======================================== */
+
+nav.nav--oscuro {
+    --nav-bg: #121212;
+    --text-charcoal: rgba(255, 255, 255, 0.82);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+nav.nav--oscuro .nav__item:hover {
+    color: #ffffff;
+}
+
+/* El overlay del menu en el celular viene con un crema fijo */
+@media only screen and (max-width: 768px) {
+    nav.nav--oscuro .nav__menu {
+        background: rgba(14, 14, 14, 0.97);
+    }
+}
+
+
+/* ========================================
+   EL PIE, CHICO Y GRIS
+   Tambien solo en esta pagina. El pie normal mide 300px fijos y trae un
+   parrafo largo; aca queda una sola linea con lo que hace falta.
+   ======================================== */
+
+/* Los !important no son capricho: theme-light.css pinta el pie de crema
+   con !important en todas las paginas. Para oscurecerlo solo en esta hay
+   que contestarle con la misma moneda. */
+footer.prague-footer--compacto {
+    height: auto;
+    min-height: 0;
+    padding: 16px clamp(20px, 4vw, 56px);
+    background-color: #1E1E1E !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* display:contents hace que los hijos de estos bloques entren
+   directamente en la fila de abajo, sin las cajas de por medio. */
+footer.prague-footer--compacto .footer-content-outer,
+footer.prague-footer--compacto .footer-top-content,
+footer.prague-footer--compacto .footer-bottom-content,
+footer.prague-footer--compacto .prague-footer-info-block,
+footer.prague-footer--compacto .footer-info-block-content {
+    display: contents;
+}
+
+footer.prague-footer--compacto .footer-content-outer {
+    display: flex;
+    /* El pie viejo los apila en columna: aca van todos en una fila */
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px 26px;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    /* Traia 250px de alto fijo: eso era lo que agrandaba el pie */
+    height: auto;
+}
+
+/* El pie viejo reparte todo con floats y anchos del 50%: eso hacia que
+   cada dato cayera en su propio renglon. Aca se los saca y cada uno
+   ocupa lo que necesita, en una sola fila. */
+footer.prague-footer--compacto .footer-copyright,
+footer.prague-footer--compacto .prague-social-nav,
+footer.prague-footer--compacto .footer-info-block-content > * {
+    float: none !important;
+    width: auto !important;
+    flex: 0 0 auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+}
+
+/* El parrafo largo del estudio y el rotulo "CONTACTO" no entran en una
+   sola linea: en esta pagina no van. */
+footer.prague-footer--compacto .prague-footer-main-block,
+footer.prague-footer--compacto .footer-info-block-title {
+    display: none;
+}
+
+footer.prague-footer--compacto p {
+    margin: 0;
+    font-family: "Work Sans", sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+footer.prague-footer--compacto a {
+    color: rgba(255, 255, 255, 0.72) !important;
+    transition: color 0.25s ease;
+}
+
+footer.prague-footer--compacto a:hover {
+    color: #ffffff !important;
+}
+
+footer.prague-footer--compacto .fa {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+footer.prague-footer--compacto a:hover .fa {
+    color: #ffffff !important;
+}
+
+footer.prague-footer--compacto .social-content {
+    display: flex;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+footer.prague-footer--compacto .social-content i {
+    font-size: 1rem;
+}
