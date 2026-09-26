@@ -115,11 +115,18 @@
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 0% 1px;
-    font-family: "Work Sans", sans-serif;
-    font-size: calc(clamp(1.4rem, 3.2vw, 2.7rem) * var(--escala, 1));
-    font-weight: 300;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
+    /* Una romana para los lugares. El resto de la pagina sigue en Work
+       Sans: el contraste entre las dos es lo que hace que el nombre se
+       lea como titulo y no como una etiqueta mas. */
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    /* Va mas grande que la sans que habia: las romanas tienen la letra
+       de caja baja mas chica y al mismo cuerpo se ven mas pequenas. */
+    font-size: calc(clamp(1.7rem, 4vw, 3.5rem) * var(--escala, 1));
+    /* 400 y no 300: sobre el fondo negro los trazos finos de esta letra
+       se adelgazan todavia mas y se empiezan a cortar. */
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0;
     transition: background-size 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -357,6 +364,62 @@ nav.nav--oscuro .nav__item:hover {
 @media only screen and (max-width: 768px) {
     nav.nav--oscuro .nav__menu {
         background: rgba(14, 14, 14, 0.97);
+    }
+}
+
+
+/* ========================================
+   LA FLECHA DE VOLVER
+   El nav de esta pagina no tiene menu: es el logo a la izquierda y una
+   flecha a la derecha, nada mas. Por eso no hay boton de hamburguesa ni
+   en el celular; la flecha esta siempre a la vista.
+   ======================================== */
+
+nav.nav--volver .nav__volver {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Cuadrado de 44px: es el minimo que se toca comodo con el dedo,
+       aunque la flecha dibujada adentro sea mas chica. */
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;   /* la flecha queda opticamente en el borde */
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+nav.nav--volver .nav__volver svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Al apoyar el mouse la flecha se corre hacia donde lleva */
+nav.nav--volver .nav__volver:hover,
+nav.nav--volver .nav__volver:focus-visible {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+nav.nav--volver .nav__volver:hover svg,
+nav.nav--volver .nav__volver:focus-visible svg {
+    transform: translateX(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    nav.nav--volver .nav__volver svg {
+        transition: none;
+    }
+
+    nav.nav--volver .nav__volver:hover svg {
+        transform: none;
     }
 }
 

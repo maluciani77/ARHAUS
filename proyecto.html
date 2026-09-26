@@ -13,11 +13,16 @@
 	<link rel="stylesheet" href="css/nav-vertical.css?v=20260925">
 	<!-- Link con CSS principal --> 
 	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<!-- Cormorant Garamond: la usan SOLO los nombres de los lugares del
+	     mosaico. Es una romana de trazo fino, de la misma familia visual
+	     que el logo de ARHAUS; al lado de la Work Sans del resto de la
+	     pagina se nota que es otra cosa, que es lo que se buscaba. -->
+	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/footer.css?v=20260925"> 
     <link rel="stylesheet" href="css/theme-light.css?v=20260925">
 	<!-- OJO: esta va al final, despues de footer.css y del tema: le pisa
 	     el alto fijo del pie y los colores claros. -->
-	<link rel="stylesheet" href="css/proyectos-indice.css?v=20260925">
+	<link rel="stylesheet" href="css/proyectos-indice.css?v=20260926">
 	<link rel="stylesheet" type="text/css" href="css/fontello.css?v=20260925"> <!-- Link con CSS de icono Up -->
 	<script src="js/jquery-3.3.1.min.js?v=20260925"></script> <!-- Link con JQuery -->
 	<script src="js/main.js?v=20260925" defer></script> <!-- Link con JavaScript principal -->
@@ -31,14 +36,18 @@
 	</header>  
 
 	<!-- NAV -->
-    <nav class="nav--oscuro">
+    <nav class="nav--oscuro nav--volver">
         <div class="nav__container">
-            <a href="index.html"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Logo"></a>
-            <label for="menu" class="nav__label"></label>
-            <input type="checkbox" id="menu" class="nav__input">
-            <div class="nav__menu">
-                <a href="index.html" class="nav__item">← Volver al inicio</a>
-            </div>
+            <a href="index.html" class="nav__logo"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Developers"></a>
+            <!-- Una sola flecha, sin texto. Lleva title y aria-label: el
+                 title es el cartelito al apoyar el mouse, y el aria-label
+                 es lo que dice un lector de pantalla, que de una flecha
+                 dibujada no puede leer nada. -->
+            <a href="index.html" class="nav__volver" title="Volver al inicio" aria-label="Volver al inicio">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M19 12 H5.5 M11.5 6 L5.5 12 L11.5 18"/>
+                </svg>
+            </a>
         </div>
     </nav>
 
