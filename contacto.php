@@ -11,7 +11,7 @@
 declare(strict_types=1);
 
 /** A dónde llega el mensaje. Se cambia acá y en ningún otro lado. */
-const CONTACTO_DESTINO = 'info@arhaus.com.ar';
+const CONTACTO_DESTINO = 'augusto.montero.arq@hotmail.com';
 
 /**
  * Quién figura como remitente. OJO: tiene que ser una casilla del propio

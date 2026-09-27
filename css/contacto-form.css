@@ -1,8 +1,9 @@
 /* ========================================
    CONTACTO
-   Los datos del estudio de un lado y el formulario del otro. Se carga
-   al final, después de master_contacto.css, para poder desarmar el
-   posicionamiento absoluto que traía la página vieja.
+   El formulario a la izquierda, que es a lo que se viene, y los datos
+   del estudio al costado. Se carga al final, después de
+   master_contacto.css, para poder desarmar el posicionamiento absoluto
+   que traía la página vieja.
    ======================================== */
 
 .contacto {
@@ -23,7 +24,9 @@
 
 .contacto__grilla {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    /* El formulario se lleva la parte ancha; los datos son dos líneas y
+       no necesitan más. */
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
     gap: clamp(28px, 5vw, 72px);
     align-items: start;
 }
@@ -67,6 +70,12 @@
 .contacto .contenedor p {
     line-height: 1.9;
     font-size: 0.82rem;
+}
+
+/* La columna de al lado. Arranca un poco más abajo que el formulario:
+   alineada al milímetro con el primer campo quedaba pegada al título. */
+.contacto__datos {
+    padding-top: 6px;
 }
 
 .contacto__dato {
@@ -210,15 +219,6 @@
     color: #880723;
 }
 
-/* ---------- El reloj ---------- */
-
-/* Venía fijo abajo a la derecha de la pantalla; acá acompaña a los datos. */
-.contacto .clock {
-    position: static;
-    margin: 36px 0 0;
-    transform: none;
-}
-
 /* ---------- Pantalla angosta ---------- */
 
 @media (max-width: 860px) {
@@ -235,7 +235,9 @@
         text-align: center;
     }
 
-    .contacto .clock {
-        margin-top: 28px;
+    /* Apilados: los datos van debajo del formulario, con aire de por medio */
+    .contacto__datos {
+        padding-top: 0;
+        margin-top: 12px;
     }
 }
