@@ -20,7 +20,23 @@ $asistenteDisponible = asistente_disponible();
 ?>
 <a class="cliente-asistente-flotante" href="<?= e(url_seccion('asistente')) ?>"
    data-asistente-abrir aria-expanded="false" aria-controls="asistente-cajon">
-    <?= icono('asistente') ?>
+    <!-- El obrerito. Va dibujado acá y no en icono(), porque esa función
+         arma íconos de un solo trazo y este lleva relleno y dos colores.
+         Cada parte tiene su clase: el casco se levanta solo cada tanto y
+         la cabeza pega el saltito, y eso se maneja desde el CSS. -->
+    <svg class="obrerito" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <g class="obrerito__cuerpo">
+            <circle class="obrerito__cabeza" cx="16" cy="20" r="7"/>
+            <circle class="obrerito__ojo" cx="13.2" cy="19.4" r="1.05"/>
+            <circle class="obrerito__ojo" cx="18.8" cy="19.4" r="1.05"/>
+            <path class="obrerito__sonrisa" d="M13.1 22.4c1.7 1.7 4.1 1.7 5.8 0"/>
+            <g class="obrerito__casco">
+                <path class="obrerito__casco-copa" d="M7.6 15.1a8.4 8.4 0 0 1 16.8 0z"/>
+                <rect class="obrerito__casco-ala" x="4.4" y="14.2" width="23.2" height="2.9" rx="1.45"/>
+                <path class="obrerito__casco-cresta" d="M16 7.1v7.1"/>
+            </g>
+        </g>
+    </svg>
     <span>Asistente</span>
 </a>
 
