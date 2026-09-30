@@ -115,49 +115,50 @@
         <h1 class="mosaico__titulo-oculto">Proyectos</h1>
 
         <div class="mosaico__grilla">
-                <a class="mosaico__cuadro" href="pr_1.html" data-pieza="p1" data-categoria="terminados" data-leyenda="Tortuguitas · Alvear Chico" style="--escala: 1">
-                    <img class="mosaico__foto" data-src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Tortuguitas, Alvear Chico" loading="lazy">
-                    <span class="mosaico__nombre">Tortuguitas</span>
+                <!-- Los cinco proyectos unifamiliares. Cada uno abre su ficha
+                     (proyecto-*.html); las fotos estan en
+                     images/proyectos/unifamiliar/<proyecto>/. -->
+                <a class="mosaico__cuadro" href="proyecto-villa-urquiza.html" data-pieza="p1" data-categoria="proyectos" data-leyenda="Villa Urquiza · Casa La Pampa 4510" style="--escala: 1">
+                    <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Villa Urquiza, Casa La Pampa 4510" loading="lazy">
+                    <span class="mosaico__nombre">Villa Urquiza</span>
                     <span class="mosaico__pie">
-                        <span>Alvear Chico</span>
+                        <span>Casa La Pampa 4510</span>
+                        <span class="mosaico__estado">En obra</span>
+                    </span>
+                </a>
+                <a class="mosaico__cuadro" href="proyecto-san-isidro.html" data-pieza="p2" data-categoria="terminados" data-leyenda="San Isidro · Azcuénaga, Casa I" style="--escala: 0.72">
+                    <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/san-isidro/01.jpg" alt="San Isidro, Azcuénaga · Casa I" loading="lazy">
+                    <span class="mosaico__nombre">San Isidro</span>
+                    <span class="mosaico__pie">
+                        <span>Azcuénaga · Casa I</span>
                         <span class="mosaico__estado">Obra finalizada</span>
                     </span>
                 </a>
-                <a class="mosaico__cuadro" href="pr_2.html" data-pieza="p2" data-categoria="proyectos" data-leyenda="Martínez · maqueta 3D — agarrala con el mouse para girarla" style="--escala: 0.72">
-                    <img class="mosaico__foto" data-src="images/proyectos/martinez - azcuenaga - casa I/renders/Exteriores/02-Render-11NOV2021.png" alt="Martínez, Azcuénaga · Casa I" loading="lazy">
-                    <span class="mosaico__nombre">Martínez</span>
-                    <span class="mosaico__pie">
-                        <span>Azcuénaga · Casa I</span>
-                        <span class="mosaico__estado">Proyecto</span>
-                    </span>
-                </a>
-                <a class="mosaico__cuadro" href="pr_3.html" data-pieza="p3" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casa 424" style="--escala: 0.6">
-                    <img class="mosaico__foto" data-src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="Pilar del Este, San Ramiro · Casa 424" loading="lazy">
-                    <span class="mosaico__nombre">Pilar del Este</span>
-                    <span class="mosaico__pie">
-                        <span>San Ramiro · Casa 424</span>
-                        <span class="mosaico__estado">Proyecto</span>
-                    </span>
-                </a>
-                <a class="mosaico__cuadro" href="pr_4.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casa 425" style="--escala: 0.86">
-                    <img class="mosaico__foto" data-src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="Pilar del Este, San Ramiro · Casa 425" loading="lazy">
-                    <span class="mosaico__nombre">Pilar del Este</span>
-                    <span class="mosaico__pie">
-                        <span>San Ramiro · Casa 425</span>
-                        <span class="mosaico__estado">Proyecto</span>
-                    </span>
-                </a>
-                <div class="mosaico__cuadro" data-pieza="p5" data-categoria="ejemplo" data-leyenda="San Martín de los Andes · maqueta 3D de ejemplo — agarrala con el mouse" style="--escala: 0.68">
-                    <model-viewer class="mosaico__foto" src="models/villa.glb" alt="Maqueta 3D de ejemplo de una casa"
-                        auto-rotate rotation-per-second="18deg" auto-rotate-delay="0" interaction-prompt="none"
-                        camera-orbit="35deg 74deg 92%" shadow-intensity="0.6" exposure="1.15"
-                        environment-image="neutral" loading="lazy" reveal="auto"></model-viewer>
+                <a class="mosaico__cuadro" href="proyecto-neuquen.html" data-pieza="p3" data-categoria="proyectos" data-leyenda="San Martín de los Andes · Casa Huepil, maqueta 3D — agarrala con el mouse para girarla" style="--escala: 0.6">
+                    <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/neuquen/07.jpg" alt="San Martín de los Andes, Casa Huepil" loading="lazy">
                     <span class="mosaico__nombre">San Martín de los Andes</span>
                     <span class="mosaico__pie">
-                        <span>Lote del bosque</span>
-                        <span class="mosaico__estado mosaico__estado--ejemplo">Ejemplo</span>
+                        <span>Casa Huepil</span>
+                        <span class="mosaico__estado">Proyecto</span>
                     </span>
-                </div>
+                </a>
+                <a class="mosaico__cuadro" href="proyecto-pilar.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casas 424 y 425" style="--escala: 0.86">
+                    <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/pilar/02.jpg" alt="Pilar del Este, San Ramiro · Casas 424 y 425" loading="lazy">
+                    <span class="mosaico__nombre">Pilar del Este</span>
+                    <span class="mosaico__pie">
+                        <span>San Ramiro · Casas 424 y 425</span>
+                        <span class="mosaico__estado">Proyecto</span>
+                    </span>
+                </a>
+                <a class="mosaico__cuadro" href="proyecto-escobar.html" data-pieza="p5" data-categoria="proyectos" data-leyenda="Escobar · San Benito, interiorismo" style="--escala: 0.68">
+                    <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/escobar/04.jpg" alt="Escobar, San Benito · Interiorismo" loading="lazy">
+                    <span class="mosaico__nombre">Escobar</span>
+                    <span class="mosaico__pie">
+                        <span>San Benito · Interiorismo</span>
+                        <span class="mosaico__estado">Proyecto</span>
+                    </span>
+                </a>
+                <!-- El de ejemplo va siempre ultimo -->
                 <div class="mosaico__cuadro" data-pieza="p6" data-categoria="ejemplo" data-leyenda="Nordelta · El Golf — imagen de ejemplo" style="--escala: 0.8">
                     <img class="mosaico__foto" data-src="images/Casa.jpg" alt="Nordelta, El Golf" loading="lazy">
                     <span class="mosaico__nombre">Nordelta</span>
@@ -172,43 +173,31 @@
                  damero de los cuadros no se corra. -->
             <div class="mosaico__centro" aria-hidden="true">
                     <img class="mosaico__pieza" data-pieza="p1"
-                         data-src="images/proyectos/Tortuguitas/BarrioAlvear1/view/frente.jpg" alt="Render de Tortuguitas" decoding="async">
+                         data-src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Render de Casa La Pampa 4510" decoding="async">
+                    <img class="mosaico__pieza" data-pieza="p2"
+                         data-src="images/proyectos/unifamiliar/san-isidro/01.jpg" alt="Render de Azcuénaga, Casa I" decoding="async">
+                    <!-- martin.glb es la maqueta de Casa Huepil (cliente Martín) -->
                     <model-viewer
                         class="mosaico__pieza"
-                        data-pieza="p2"
+                        data-pieza="p3"
                         data-src="models/martin.glb"
-                        alt="Maqueta 3D del proyecto de Martínez"
+                        alt="Maqueta 3D de Casa Huepil"
                         auto-rotate
                         rotation-per-second="18deg"
                         auto-rotate-delay="0"
                         interaction-prompt="none"
-                        camera-orbit="40deg 58deg 74%"
-                        min-camera-orbit="auto 25deg 60%"
-                        max-camera-orbit="auto 85deg 130%"
+                        camera-target="99.1m 5.7m -11.8m"
+                        camera-orbit="40deg 45deg 38%"
+                        min-camera-orbit="auto 15deg 12%"
+                        max-camera-orbit="auto 85deg 120%"
                         shadow-intensity="0.6"
                         exposure="1.15"
                         environment-image="neutral"
                         reveal="auto"></model-viewer>
-                    <img class="mosaico__pieza" data-pieza="p3"
-                         data-src="images/proyectos/PilarDelEste/SanRamiro/house-424/view/frente.jpg" alt="Render de San Ramiro, Casa 424" decoding="async">
                     <img class="mosaico__pieza" data-pieza="p4"
-                         data-src="images/proyectos/PilarDelEste/SanRamiro/house-425/view/frente.jpg" alt="Render de San Ramiro, Casa 425" decoding="async">
-                    <model-viewer
-                        class="mosaico__pieza"
-                        data-pieza="p5"
-                        data-src="models/villa.glb"
-                        alt="Maqueta 3D de ejemplo de una casa"
-                        auto-rotate
-                        rotation-per-second="18deg"
-                        auto-rotate-delay="0"
-                        interaction-prompt="none"
-                        camera-orbit="35deg 74deg 70%"
-                        min-camera-orbit="auto 30deg 60%"
-                        max-camera-orbit="auto 88deg 130%"
-                        shadow-intensity="0.6"
-                        exposure="1.15"
-                        environment-image="neutral"
-                        reveal="auto"></model-viewer>
+                         data-src="images/proyectos/unifamiliar/pilar/02.jpg" alt="Render de San Ramiro, Casa 424" decoding="async">
+                    <img class="mosaico__pieza" data-pieza="p5"
+                         data-src="images/proyectos/unifamiliar/escobar/04.jpg" alt="Render de San Benito, escalera con cava" decoding="async">
                     <img class="mosaico__pieza" data-pieza="p6"
                          data-src="images/Casa.jpg" alt="Render de ejemplo" decoding="async">
                 <p class="mosaico__leyenda"></p>
