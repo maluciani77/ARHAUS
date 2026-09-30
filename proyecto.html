@@ -118,7 +118,7 @@
                 <!-- Los cinco proyectos unifamiliares. Cada uno abre su ficha
                      (proyecto-*.html); las fotos estan en
                      images/proyectos/unifamiliar/<proyecto>/. -->
-                <a class="mosaico__cuadro" href="proyecto-villa-urquiza.html" data-pieza="p1" data-categoria="proyectos" data-leyenda="Villa Urquiza · Casa La Pampa 4510" style="--escala: 1">
+                <a class="mosaico__cuadro" href="proyecto-villa-urquiza.html" data-pieza="p1" data-categoria="proyectos" data-leyenda="MUESTRA 2 — OP3 (14,5 MB, con texturas) · agarrala con el mouse para girarla" style="--escala: 1">
                     <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Villa Urquiza, Casa La Pampa 4510" loading="lazy">
                     <span class="mosaico__nombre">Villa Urquiza</span>
                     <span class="mosaico__pie">
@@ -126,7 +126,7 @@
                         <span class="mosaico__estado">En obra</span>
                     </span>
                 </a>
-                <a class="mosaico__cuadro" href="proyecto-san-isidro.html" data-pieza="p2" data-categoria="terminados" data-leyenda="San Isidro · Azcuénaga, Casa I" style="--escala: 0.72">
+                <a class="mosaico__cuadro" href="proyecto-san-isidro.html" data-pieza="p2" data-categoria="terminados" data-leyenda="MUESTRA 3 — OPC2 (14,5 MB, con texturas) · agarrala con el mouse para girarla" style="--escala: 0.72">
                     <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/san-isidro/01.jpg" alt="San Isidro, Azcuénaga · Casa I" loading="lazy">
                     <span class="mosaico__nombre">San Isidro</span>
                     <span class="mosaico__pie">
@@ -142,7 +142,7 @@
                         <span class="mosaico__estado">Proyecto</span>
                     </span>
                 </a>
-                <a class="mosaico__cuadro" href="proyecto-pilar.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="Pilar del Este · San Ramiro, Casas 424 y 425" style="--escala: 0.86">
+                <a class="mosaico__cuadro" href="proyecto-pilar.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="MUESTRA 1 — archivo ORIGINAL (14,5 MB, con texturas) · agarrala con el mouse para girarla" style="--escala: 0.86">
                     <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/pilar/02.jpg" alt="Pilar del Este, San Ramiro · Casas 424 y 425" loading="lazy">
                     <span class="mosaico__nombre">Pilar del Este</span>
                     <span class="mosaico__pie">
@@ -159,7 +159,7 @@
                     </span>
                 </a>
                 <!-- El de ejemplo va siempre ultimo -->
-                <div class="mosaico__cuadro" data-pieza="p6" data-categoria="ejemplo" data-leyenda="Nordelta · El Golf — imagen de ejemplo" style="--escala: 0.8">
+                <div class="mosaico__cuadro" data-pieza="p6" data-categoria="ejemplo" data-leyenda="MUESTRA 4 — OP4 (10,6 MB, SIN texturas: sale toda blanca) · agarrala con el mouse" style="--escala: 0.8">
                     <img class="mosaico__foto" data-src="images/Casa.jpg" alt="Nordelta, El Golf" loading="lazy">
                     <span class="mosaico__nombre">Nordelta</span>
                     <span class="mosaico__pie">
@@ -172,10 +172,38 @@
                  Va al final a proposito, para que la cuenta de los tonos en
                  damero de los cuadros no se corra. -->
             <div class="mosaico__centro" aria-hidden="true">
-                    <img class="mosaico__pieza" data-pieza="p1"
-                         data-src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Render de Casa La Pampa 4510" decoding="async">
-                    <img class="mosaico__pieza" data-pieza="p2"
-                         data-src="images/proyectos/unifamiliar/san-isidro/01.jpg" alt="Render de Azcuénaga, Casa I" decoding="async">
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p1"
+                        data-src="models/prueba-424-op3.glb"
+                        alt="Maqueta de prueba, variante OP3"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 62deg 80%"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 140%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p2"
+                        data-src="models/prueba-424-opc2.glb"
+                        alt="Maqueta de prueba, variante OPC2"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 62deg 80%"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 140%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
                     <!-- martin.glb es la maqueta de Casa Huepil (cliente Martín) -->
                     <model-viewer
                         class="mosaico__pieza"
@@ -194,12 +222,40 @@
                         exposure="1.15"
                         environment-image="neutral"
                         reveal="auto"></model-viewer>
-                    <img class="mosaico__pieza" data-pieza="p4"
-                         data-src="images/proyectos/unifamiliar/pilar/02.jpg" alt="Render de San Ramiro, Casa 424" decoding="async">
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p4"
+                        data-src="models/prueba-424-original.glb"
+                        alt="Maqueta de prueba, archivo original"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 62deg 80%"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 140%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
                     <img class="mosaico__pieza" data-pieza="p5"
                          data-src="images/proyectos/unifamiliar/escobar/04.jpg" alt="Render de San Benito, escalera con cava" decoding="async">
-                    <img class="mosaico__pieza" data-pieza="p6"
-                         data-src="images/Casa.jpg" alt="Render de ejemplo" decoding="async">
+                    <model-viewer
+                        class="mosaico__pieza"
+                        data-pieza="p6"
+                        data-src="models/prueba-424-op4.glb"
+                        alt="Maqueta de prueba, variante OP4"
+                        auto-rotate
+                        rotation-per-second="18deg"
+                        auto-rotate-delay="0"
+                        interaction-prompt="none"
+                        camera-orbit="40deg 62deg 80%"
+                        min-camera-orbit="auto 25deg 60%"
+                        max-camera-orbit="auto 85deg 140%"
+                        shadow-intensity="0.6"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        reveal="auto"></model-viewer>
                 <p class="mosaico__leyenda"></p>
             </div>
         </div>
