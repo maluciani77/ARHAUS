@@ -1699,7 +1699,7 @@ body.visor-abierto {
   }
 }
 
-/* ---- Bienvenida al entrar: 3,5 s en total ----
+/* ---- Bienvenida al entrar: 4,5 s en total ----
    0,0 s  la foto del proyecto se abre desde una franja en el medio
    0,9 s  aparece el logo
    1,0 s  suben "Hola," y el nombre, y abajo el nombre de la obra
@@ -1716,7 +1716,7 @@ body.visor-abierto {
   background: var(--bg);
   color: var(--texto);
   cursor: pointer;
-  animation: bienvenida-cortina 3.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  animation: bienvenida-cortina 4.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
 
 .cliente-bienvenida--imagen {
@@ -1740,7 +1740,7 @@ body.visor-abierto {
   height: 100%;
   object-fit: cover;
   transform: scale(1.22);
-  animation: bienvenida-acercar 3.5s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+  animation: bienvenida-acercar 4.5s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
 }
 
 /* Oscurece abajo para que el texto se lea sobre cualquier foto */
@@ -1833,7 +1833,10 @@ body.visor-abierto {
 
 /* Quieto hasta los 2,9 s; después sube y se va por arriba */
 @keyframes bienvenida-cortina {
-  0%, 83% { clip-path: inset(0 0 0 0); visibility: visible; }
+  /* 87% de 4,5 s = 3,9 s quieto y recien ahi sube la cortina. El numero
+     cambio junto con la duracion: lo que se alarga es el rato que el
+     cartel se queda, no el movimiento de salida. */
+  0%, 87% { clip-path: inset(0 0 0 0); visibility: visible; }
   100% { clip-path: inset(0 0 100% 0); visibility: hidden; pointer-events: none; }
 }
 
@@ -1844,7 +1847,7 @@ body.visor-abierto {
 @media (prefers-reduced-motion: reduce) {
   .cliente-bienvenida,
   .cliente-bienvenida.is-saliendo {
-    animation: bienvenida-desvanecer 3.5s linear forwards;
+    animation: bienvenida-desvanecer 4.5s linear forwards;
   }
 
   .cliente-bienvenida__imagen,
