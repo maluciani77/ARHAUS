@@ -51,7 +51,7 @@ const MENU_CLIENTE = [
             'arq_varios' => 'Varios',
         ]],
         'visuales' => ['Visuales', ['brochure' => 'Brochure', 'render' => 'Renders', 'videos' => 'Videos']],
-        'obra' => ['Obra', ['computo' => 'Cómputo', 'presupuesto_proy' => 'Presupuesto', 'planificacion_gantt' => 'Planificación (Gantt)', 'obra_otros' => 'Otros']],
+        'obra' => ['Presupuestos', ['computo' => 'Cómputo', 'presupuesto_proy' => 'Presupuesto', 'planificacion_gantt' => 'Planificación (Gantt)', 'obra_otros' => 'Otros']],
         'gestion' => ['Gestión', ['gestion_gestor' => 'Gestor', 'gestion_ingeniero' => 'Ingeniero', 'gestion_proveedores' => 'Proveedores', 'gestion_administracion' => 'Administración']],
     ]],
     'ejecucion' => ['Ejecución de obra', [

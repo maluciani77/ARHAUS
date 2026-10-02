@@ -33,7 +33,7 @@ $introArchivos = [
     'brochure' => 'El brochure del proyecto, para ver o compartir.',
     'render' => 'Los renders del proyecto: cómo va a quedar la obra terminada.',
     'videos' => 'Los videos del proyecto: recorridos y animaciones.',
-    // Proyecto > Obra
+    // Proyecto > Presupuestos
     'computo' => 'El cómputo de materiales del proyecto, por rubro.',
     'presupuesto_proy' => 'Los presupuestos del proyecto.',
     'planificacion_gantt' => 'La planificación del proyecto (Gantt): cuándo va cada etapa.',

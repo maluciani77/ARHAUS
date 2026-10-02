@@ -35,7 +35,7 @@ const CATEGORIAS_DOCUMENTO = [
     'brochure' => 'Brochure',
     'render' => 'Renders',
     'videos' => 'Videos',
-    // Proyecto > Obra
+    // Proyecto > Presupuestos
     'computo' => 'Cómputo',
     'presupuesto_proy' => 'Presupuesto',
     'planificacion_gantt' => 'Planificación (Gantt)',
@@ -51,7 +51,7 @@ const GRUPOS_DOCUMENTO = [
     'Propietarios' => ['prop_archivos', 'contrato', 'referentes', 'info_varios'],
     'Proyecto · Planos' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
     'Proyecto · Visuales' => ['brochure', 'render', 'videos'],
-    'Proyecto · Obra' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
+    'Proyecto · Presupuestos' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
     'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos'],
 ];
 
