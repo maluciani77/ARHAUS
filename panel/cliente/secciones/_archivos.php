@@ -115,9 +115,9 @@ $botonBorrar = static function (array $documento) use ($esDelCliente, $usuario):
             </label>
             <label class="cliente-campo">
                 <span class="cliente-etiqueta">Archivo</span>
-                <input type="file" name="documento" required accept=".pdf,.jpg,.jpeg,.png,.webp<?= $categoriaDocumento === 'prop_archivos' ? ',.xls,.xlsx,.csv' : '' ?>">
+                <input type="file" name="documento" required accept=".pdf,.jpg,.jpeg,.png,.webp,.mp4<?= $categoriaDocumento === 'prop_archivos' ? ',.xls,.xlsx,.csv' : '' ?>">
             </label>
-            <p class="cliente-ayuda cliente-campo--ancho">PDF o imagen (JPG, PNG, WEBP), hasta <?= (int)(DOCUMENTO_TAMANO_MAXIMO / 1048576) ?> MB.</p>
+            <p class="cliente-ayuda cliente-campo--ancho">PDF, imagen (JPG, PNG, WEBP) o video MP4, hasta <?= (int)(DOCUMENTO_TAMANO_MAXIMO / 1048576) ?> MB.</p>
             <div class="cliente-form__acciones">
                 <button type="submit" class="cliente-boton">Subir</button>
             </div>

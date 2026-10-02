@@ -139,6 +139,11 @@ const DOCUMENTO_FORMATOS = [
     'jpeg' => ['Imagen', []],
     'png' => ['Imagen', []],
     'webp' => ['Imagen', []],
+    // Los videos del proyecto. La seccion "Videos" existia en el menu
+    // desde el principio, pero el formato no estaba permitido, asi que
+    // no habia forma de cargar uno. Un mp4 arranca con un bloque "ftyp"
+    // que empieza en el byte 4, por eso la firma se busca corrida.
+    'mp4' => ['Video', ["....ftyp"]],
 ];
 
 function es_categoria_documento(string $categoria): bool
@@ -200,6 +205,24 @@ function conteo_documentos(int $obraId): array
 }
 
 /**
+ * Compara el principio de un archivo contra una firma. Un punto en la
+ * firma significa "este byte no importa": el mp4 guarda el largo del
+ * bloque en los primeros cuatro bytes y recién después dice "ftyp".
+ */
+function cabecera_coincide(string $cabecera, string $firma): bool
+{
+    if (strlen($cabecera) < strlen($firma)) {
+        return false;
+    }
+    for ($i = 0, $n = strlen($firma); $i < $n; $i++) {
+        if ($firma[$i] !== '.' && $cabecera[$i] !== $firma[$i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Valida el archivo subido de verdad: extensión permitida y, cuando el
  * formato lo permite, que el contenido sea lo que dice ser. Devuelve la
  * extensión en minúsculas o lanza RuntimeException.
@@ -228,7 +251,7 @@ function validar_documento_subido(array $archivo): string
 
     $extension = strtolower(pathinfo((string)$archivo['name'], PATHINFO_EXTENSION));
     if (!isset(DOCUMENTO_FORMATOS[$extension])) {
-        throw new RuntimeException('Formato no permitido. Se aceptan PDF, Excel, CSV y imágenes (JPG, PNG, WEBP).');
+        throw new RuntimeException('Formato no permitido. Se aceptan PDF, Excel, CSV, imágenes (JPG, PNG, WEBP) y video MP4.');
     }
 
     [, $firmas] = DOCUMENTO_FORMATOS[$extension];
@@ -245,11 +268,11 @@ function validar_documento_subido(array $archivo): string
         if ($manejador === false) {
             throw new RuntimeException('No se pudo leer el archivo subido.');
         }
-        $cabecera = (string)fread($manejador, 8);
+        $cabecera = (string)fread($manejador, 12);
         fclose($manejador);
 
         foreach ($firmas as $firma) {
-            if (str_starts_with($cabecera, $firma)) {
+            if (cabecera_coincide($cabecera, $firma)) {
                 return $extension;
             }
         }

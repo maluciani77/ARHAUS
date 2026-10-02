@@ -37,3 +37,4 @@
 # Fotos de perfil que suben los clientes durante las pruebas locales.
 /uploads/perfiles/*
 !/uploads/perfiles/.gitkeep
+/importar_martin.php
