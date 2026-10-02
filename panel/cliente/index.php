@@ -119,8 +119,82 @@ function secciones_cliente(): array
 }
 
 /** La primera sección de un botón: adonde lleva al tocarlo. */
-function primera_seccion(array $solapas): string
+/**
+ * Las solapas vacias no se muestran.
+ *
+ * Al cliente no le sirve entrar a "Electricos" y encontrar la nada: si
+ * el estudio todavia no subio los planos electricos, esa solapa no
+ * tiene por que existir. Aparece sola el dia que suban el primer
+ * archivo.
+ *
+ * Devuelve el conjunto de hojas que SI tienen algo: ['planos_arq' => true, ...].
+ */
+function hojas_con_algo(array $documentos, array $contactos): array
 {
+    $hay = [];
+    foreach ($documentos as $documento) {
+        $hay[(string)$documento['categoria']] = true;
+    }
+    // Las hojas de contactos (Gestor, Proveedores, Telefonos utiles...)
+    // se llenan con fichas, no con archivos.
+    $porTipo = [];
+    foreach ($contactos as $contacto) {
+        $porTipo[(string)$contacto['tipo']] = true;
+    }
+    foreach (SECCIONES_CONTACTOS as $seccion => $tipo) {
+        if (isset($porTipo[$tipo])) {
+            $hay[$seccion] = true;
+        }
+    }
+    return $hay;
+}
+
+/**
+ * Si esta hoja se muestra o no. Se esconden solo las carpetas vacias;
+ * todo lo demas (Calendario, Pagos, Fotos, Datos personales...) no es
+ * una carpeta y va siempre.
+ */
+function hoja_visible(string $clave, array $conAlgo, string $seccionActual): bool
+{
+    if ($clave === $seccionActual) {
+        return true;   // la que se esta mirando, aunque este vacia
+    }
+    // IMPORTANTISIMO: las carpetas que llena el PROPIO cliente van
+    // siempre. Si se escondieran por estar vacias, no tendria donde
+    // subir su primer archivo y no habria forma de que dejaran de
+    // estarlo.
+    if (in_array($clave, CATEGORIAS_DEL_CLIENTE, true)) {
+        return true;
+    }
+    if (es_categoria_documento($clave) || isset(SECCIONES_CONTACTOS[$clave])) {
+        return isset($conAlgo[$clave]);
+    }
+    return true;
+}
+
+/** Las hojas visibles de una solapa, respetando el orden del menu. */
+function hojas_visibles(array $hojas, array $conAlgo, string $seccionActual): array
+{
+    $visibles = [];
+    foreach ($hojas as $clave => $nombre) {
+        if (hoja_visible((string)$clave, $conAlgo, $seccionActual)) {
+            $visibles[$clave] = $nombre;
+        }
+    }
+    return $visibles;
+}
+
+/** A donde lleva un boton del menu: a la primera hoja que tenga algo. */
+function primera_seccion(array $solapas, array $conAlgo = [], string $seccionActual = ''): string
+{
+    foreach ($solapas as [$nombre, $hojas]) {
+        $visibles = hojas_visibles($hojas, $conAlgo, $seccionActual);
+        if ($visibles) {
+            return (string)array_key_first($visibles);
+        }
+    }
+    // Todo vacio: se entra igual a la primera, que va a mostrar su
+    // cartel de "todavia no hay nada".
     $primera = reset($solapas);
     return (string)array_key_first($primera[1]);
 }
@@ -261,6 +335,7 @@ $contactos = [];
 $archivosContactos = [];
 $presupuestos = [];
 $eventos = [];
+$conAlgo = [];
 $hoy = hoy_argentina();
 
 if ($obra) {
@@ -285,6 +360,7 @@ if ($obra) {
     $archivosContactos = archivos_de_contactos((int)$obra['id']);
     $presupuestos = presupuestos_de_obra((int)$obra['id']);
     $eventos = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
+    $conAlgo = hojas_con_algo($documentos, $contactos);
 }
 
 function url_foto(string $raiz, array $obra, array $foto): string
@@ -422,7 +498,7 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
             <nav class="cliente-nav" aria-label="Secciones">
                 <?php foreach (MENU_CLIENTE as $grupo => [$nombreGrupo, $solapas]): ?>
                     <?php $activo = $grupo === $grupoActual; ?>
-                    <a class="cliente-nav__item<?= $activo ? ' is-activa' : '' ?>" href="<?= e(url_seccion(primera_seccion($solapas))) ?>"<?= $activo ? ' aria-current="page"' : '' ?>>
+                    <a class="cliente-nav__item<?= $activo ? ' is-activa' : '' ?>" href="<?= e(url_seccion(primera_seccion($solapas, $conAlgo, $seccion))) ?>"<?= $activo ? ' aria-current="page"' : '' ?>>
                         <?= icono($grupo) ?>
                         <?php if (isset(NOMBRES_CORTOS_GRUPOS[$grupo])): ?>
                             <span class="cliente-nav__largo"><?= e($nombreGrupo) ?></span>
@@ -465,18 +541,34 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
                 <p>Cuando el estudio vincule tu cuenta a un proyecto, lo vas a ver acá.</p>
             </div>
         <?php else: ?>
-            <?php if ($grupoActual && count(MENU_CLIENTE[$grupoActual][1]) > 1): ?>
+            <?php
+            /* Las solapas y hojas vacias no se dibujan. La que se esta
+               mirando se dibuja igual, aunque este vacia: si no, al
+               entrar a una carpeta recien vaciada se perderia la barra
+               entera y no habria por donde volver. */
+            $solapasVisibles = [];
+            if ($grupoActual) {
+                foreach (MENU_CLIENTE[$grupoActual][1] as $claveSolapa => [$nombreSolapa, $hojasSolapa]) {
+                    $visibles = hojas_visibles($hojasSolapa, $conAlgo, $seccion);
+                    if ($visibles || $claveSolapa === $solapaActual) {
+                        $solapasVisibles[$claveSolapa] = [$nombreSolapa, $visibles ?: $hojasSolapa];
+                    }
+                }
+            }
+            ?>
+            <?php if (count($solapasVisibles) > 1): ?>
                 <nav class="cliente-subnav" aria-label="<?= e(MENU_CLIENTE[$grupoActual][0]) ?>">
-                    <?php foreach (MENU_CLIENTE[$grupoActual][1] as $clave => [$nombre, $hojas]): ?>
+                    <?php foreach ($solapasVisibles as $clave => [$nombre, $hojas]): ?>
                         <?php $activa = $clave === $solapaActual; ?>
                         <a class="cliente-subnav__item<?= $activa ? ' is-activa' : '' ?>" href="<?= e(url_seccion(array_key_first($hojas))) ?>"<?= $activa ? ' aria-current="page"' : '' ?>><?= e($nombre) ?></a>
                     <?php endforeach; ?>
                 </nav>
             <?php endif; ?>
 
-            <?php if ($solapaActual && count(MENU_CLIENTE[$grupoActual][1][$solapaActual][1]) > 1): ?>
+            <?php $hojasVisibles = $solapaActual ? hojas_visibles(MENU_CLIENTE[$grupoActual][1][$solapaActual][1], $conAlgo, $seccion) : []; ?>
+            <?php if (count($hojasVisibles) > 1): ?>
                 <nav class="cliente-subnav cliente-subnav--tercer-nivel" aria-label="<?= e(MENU_CLIENTE[$grupoActual][1][$solapaActual][0]) ?>">
-                    <?php foreach (MENU_CLIENTE[$grupoActual][1][$solapaActual][1] as $clave => $nombre): ?>
+                    <?php foreach ($hojasVisibles as $clave => $nombre): ?>
                         <a class="cliente-subnav__item<?= $clave === $seccion ? ' is-activa' : '' ?>" href="<?= e(url_seccion($clave)) ?>"<?= $clave === $seccion ? ' aria-current="page"' : '' ?>><?= e($nombre) ?></a>
                     <?php endforeach; ?>
                 </nav>
