@@ -61,7 +61,41 @@ $nombresEtapa = [];
 foreach ($etapas as $etapa) {
     $nombresEtapa[(int)$etapa['id']] = $etapa['nombre'];
 }
+
+$maqueta = maqueta_de_obra((int)$obra['id']);
 ?>
+<?php if ($maqueta): ?>
+    <?php /* Arriba de todo: la maqueta de la casa, para girarla. Debajo
+             sigue estando la portada con la foto y los datos de siempre. */ ?>
+    <section class="cliente-maqueta">
+        <model-viewer
+            class="cliente-maqueta__visor"
+            src="<?= e(recurso($raiz, $maqueta)) ?>"
+            alt="Maqueta 3D de <?= e($obra['nombre']) ?>"
+            camera-controls
+            auto-rotate
+            rotation-per-second="12deg"
+            auto-rotate-delay="2500"
+            interaction-prompt="none"
+            <?php /* Un poco mas cerca que el encuadre automatico, y mirando
+                     desde abajo del techo para que se vea la casa. */ ?>
+            camera-orbit="auto 72deg 68%"
+            field-of-view="30deg"
+            shadow-intensity="1.4"
+            shadow-softness="0.3"
+            exposure="0.9"
+            tone-mapping="aces"
+            <?php /* OJO: sin recurso(). El visor elige como leer el archivo
+                     mirando la terminacion, y con el ?v=fecha que agrega
+                     recurso() deja de ver el .hdr, lo toma por un jpg y
+                     falla: el modelo no llega a mostrarse nunca. */ ?>
+            environment-image="<?= e($raiz . 'models/estudio.hdr') ?>"
+            loading="eager"
+            reveal="auto"></model-viewer>
+        <p class="cliente-maqueta__pie">Tu casa en 3D &middot; aga&#769;rrala con el mouse para girarla</p>
+    </section>
+<?php endif; ?>
+
 <section class="cliente-portada<?= $portada ? ' cliente-portada--foto' : '' ?>">
     <?php if ($portada): ?>
         <img class="cliente-portada__img" src="<?= e(url_foto($raiz, $obra, $portada)) ?>" alt="">

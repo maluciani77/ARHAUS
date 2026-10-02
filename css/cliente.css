@@ -281,6 +281,57 @@ body.cliente {
 /* =========================================
    Inicio
    ========================================= */
+/* ========================================
+   LA MAQUETA 3D, ARRIBA DE TODO
+   Lo primero que ve el cliente al entrar: su casa, para girarla. Debajo
+   sigue la portada con la foto y los datos de siempre.
+   ======================================== */
+
+.cliente-maqueta {
+  position: relative;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  overflow: hidden;
+  /* Un fondo con algo de profundidad: sobre un gris plano la maqueta
+     flota y se ve recortada. */
+  background: radial-gradient(ellipse at 50% 38%, #26262a 0%, #121214 72%);
+}
+
+.cliente-maqueta__visor {
+  display: block;
+  width: 100%;
+  /* Alto generoso pero no una pantalla entera: la idea es que se vea la
+     maqueta Y que se note que abajo sigue habiendo cosas. */
+  height: clamp(260px, 46vh, 440px);
+  background: transparent;
+  --progress-bar-color: var(--acento, #880723);
+  --progress-bar-height: 2px;
+}
+
+.cliente-maqueta__visor:not([camera-controls]) {
+  pointer-events: none;
+}
+
+.cliente-maqueta__pie {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  margin: 0;
+  padding: 0 16px;
+  text-align: center;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .cliente-maqueta__visor {
+    height: clamp(220px, 38vh, 320px);
+  }
+}
+
 .cliente-portada {
   position: relative;
   display: flex;

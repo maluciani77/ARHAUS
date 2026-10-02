@@ -292,6 +292,17 @@ function url_foto(string $raiz, array $obra, array $foto): string
     return $raiz . ruta_publica_foto((int)$obra['id'], $foto['archivo']);
 }
 
+/**
+ * La maqueta 3D de la obra, si la hay: models/obras/{id}.glb. Se decide
+ * por la existencia del archivo y no por una columna en la base, asi el
+ * estudio la activa subiendo el archivo y listo.
+ */
+function maqueta_de_obra(int $obraId): ?string
+{
+    $relativo = 'models/obras/' . $obraId . '.glb';
+    return is_file(__DIR__ . '/../../' . $relativo) ? $relativo : null;
+}
+
 function url_seccion(string $seccion, array $extra = [], ?string $ancla = null): string
 {
     $query = $seccion === 'inicio' && !$extra ? '' : '?' . http_build_query(['seccion' => $seccion] + $extra);
@@ -488,6 +499,11 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 
 <?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion', 'fotos_dia', 'info_obra'], true) || es_categoria_documento($seccion))): ?>
     <script src="<?= e(recurso($raiz, 'js/book-visor.js')) ?>"></script>
+<?php endif; ?>
+<?php if ($obra && $seccion === 'inicio' && maqueta_de_obra((int)$obra['id'])): ?>
+    <?php /* El visor 3D pesa, asi que se trae solo en Inicio y solo si
+             esta obra tiene maqueta. */ ?>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
 <?php endif; ?>
 <?php if ($obra): ?>
     <?php /* El chat va en todas las páginas: en el cajón flotante, y en la
