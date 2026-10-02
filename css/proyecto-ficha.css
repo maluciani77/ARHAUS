@@ -1,0 +1,281 @@
+/* ========================================
+   FICHA DE PROYECTO
+   La usan las paginas proyecto-*.html. Misma paleta que el resto del
+   sitio (fondo hueso, Work Sans) y la Cormorant del mosaico para el
+   nombre del lugar, asi la ficha se lee como continuacion del indice.
+   ======================================== */
+
+:root {
+	--ficha-fondo: #F5F4F0;
+	--ficha-banda: #EBE8E1;
+	--ficha-texto: #333333;
+	--ficha-suave: #767676;
+	--ficha-linea: #D9D5CC;
+}
+
+.ficha {
+	margin: 0;
+	background: var(--ficha-fondo);
+	color: var(--ficha-texto);
+	font-family: "Work Sans", sans-serif;
+}
+
+/* ---------- Portada ---------- */
+
+.ficha__portada {
+	position: relative;
+	height: 88vh;
+	min-height: 420px;
+	overflow: hidden;
+	background: #1a1a1a;
+}
+
+.ficha__portada img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Un velo abajo para que el titulo se lea sobre cualquier render */
+.ficha__portada::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 45%);
+	pointer-events: none;
+}
+
+.ficha__titulo {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+	padding: 0 5vw 6vh;
+	color: #fff;
+}
+
+.ficha__lugar {
+	font-family: "Cormorant Garamond", serif;
+	font-weight: 300;
+	font-size: clamp(44px, 7vw, 96px);
+	line-height: 1;
+	margin: 0;
+}
+
+.ficha__nombre {
+	margin: 12px 0 0;
+	font-size: 13px;
+	font-weight: 400;
+	letter-spacing: 0.3em;
+	text-transform: uppercase;
+}
+
+/* Portada con maqueta 3D: fondo claro para que la maqueta se lea, y el
+   titulo en oscuro. El titulo y la ayuda no reciben el mouse, asi se
+   puede agarrar la maqueta desde cualquier punto de la portada. */
+.ficha__portada--3d {
+	background: radial-gradient(ellipse at 50% 40%, #FBFAF7 0%, var(--ficha-banda) 75%);
+}
+
+.ficha__portada--3d::after {
+	display: none;
+}
+
+.ficha__portada--3d model-viewer {
+	width: 100%;
+	height: 100%;
+	display: block;
+	--poster-color: transparent;
+	cursor: grab;
+}
+
+.ficha__portada--3d model-viewer:active {
+	cursor: grabbing;
+}
+
+.ficha__portada--3d .ficha__titulo {
+	color: var(--ficha-texto);
+	pointer-events: none;
+}
+
+.ficha__ayuda-3d {
+	position: absolute;
+	top: 90px;
+	right: 5vw;
+	margin: 0;
+	font-size: 10px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--ficha-suave);
+	pointer-events: none;
+}
+
+/* ---------- Datos ---------- */
+
+.ficha__datos {
+	background: var(--ficha-banda);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 28px 40px;
+	padding: 48px 5vw;
+	margin: 0;
+}
+
+.ficha__dato dt {
+	font-size: 10px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--ficha-suave);
+	margin-bottom: 6px;
+}
+
+.ficha__dato dd {
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.ficha__texto {
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 64px 5vw 24px;
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 1.8;
+	text-align: center;
+}
+
+/* ---------- Galeria ---------- */
+
+.ficha__galeria {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+	padding: 40px 5vw 80px;
+}
+
+.ficha__foto {
+	display: block;
+	padding: 0;
+	border: 0;
+	background: var(--ficha-banda);
+	cursor: zoom-in;
+	overflow: hidden;
+	aspect-ratio: 3 / 2;
+}
+
+/* Cada tanto una foto ocupa todo el ancho, para que la grilla respire */
+.ficha__foto--ancha {
+	grid-column: 1 / -1;
+	aspect-ratio: 21 / 9;
+}
+
+.ficha__foto img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.8s ease;
+}
+
+.ficha__foto:hover img,
+.ficha__foto:focus-visible img {
+	transform: scale(1.03);
+}
+
+.ficha__foto:focus-visible {
+	outline: 2px solid var(--ficha-texto);
+	outline-offset: 3px;
+}
+
+/* ---------- Siguiente proyecto ---------- */
+
+.ficha__siguiente {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	border-top: 1px solid var(--ficha-linea);
+	margin: 0 5vw;
+	padding: 36px 0 60px;
+	font-size: 12px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+
+.ficha__siguiente a {
+	color: var(--ficha-texto);
+}
+
+.ficha__siguiente a:hover {
+	color: var(--ficha-suave);
+}
+
+/* ---------- Visor a pantalla completa ---------- */
+
+.visor {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	background: rgba(12, 12, 12, 0.96);
+	display: none;
+	align-items: center;
+	justify-content: center;
+}
+
+.visor.esta-abierto {
+	display: flex;
+}
+
+.visor img {
+	max-width: 92vw;
+	max-height: 86vh;
+	object-fit: contain;
+}
+
+.visor button {
+	position: absolute;
+	background: none;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	font-family: "Work Sans", sans-serif;
+	font-size: 34px;
+	font-weight: 200;
+	line-height: 1;
+	padding: 16px;
+	opacity: 0.8;
+}
+
+.visor button:hover,
+.visor button:focus-visible {
+	opacity: 1;
+}
+
+.visor__cerrar { top: 10px; right: 14px; }
+.visor__anterior { left: 10px; top: 50%; transform: translateY(-50%); }
+.visor__siguiente { right: 10px; top: 50%; transform: translateY(-50%); }
+
+.visor__cuenta {
+	position: absolute;
+	bottom: 18px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 12px;
+	letter-spacing: 0.2em;
+}
+
+/* ---------- Pantalla angosta ---------- */
+
+@media (max-width: 700px) {
+	.ficha__portada { height: 70vh; }
+	.ficha__galeria { grid-template-columns: 1fr; gap: 6px; padding: 24px 16px 56px; }
+	.ficha__foto--ancha { aspect-ratio: 3 / 2; }
+	.ficha__datos { padding: 36px 16px; }
+	.ficha__texto { padding: 44px 16px 8px; font-size: 15px; }
+	.ficha__siguiente { margin: 0 16px; flex-direction: column; align-items: flex-start; }
+}

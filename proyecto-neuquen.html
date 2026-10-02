@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Martín de los Andes · Casa Huepil - Arhaus Developers</title>
+    <meta name="description" content="Vivienda unifamiliar en San Martín de los Andes, Neuquén. Proyecto de Arhaus Developers.">
+    <link rel="icon" href="images/Logo2.png" sizes="192x192">
+    <!-- OJO: igual que en proyecto.html, el ?v= hace que se vea la version
+         nueva de los css y js. Si se cambia alguno, subirle el numero. -->
+    <link rel="stylesheet" href="css/nav-vertical.css?v=20260927b">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/footer.css?v=20260927b">
+    <link rel="stylesheet" href="css/theme-light.css?v=20260927b">
+    <link rel="stylesheet" href="css/proyectos-indice.css?v=20260927b">
+    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20260927c">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="js/jquery-3.3.1.min.js?v=20260927b"></script>
+    <script src="js/main.js?v=20260927b" defer></script>
+    <script src="js/proyecto-ficha.js?v=20260927b" defer></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+</head>
+
+<body class="ficha">
+    <nav class="nav--oscuro nav--volver">
+        <div class="nav__container">
+            <a href="index.html" class="nav__logo"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Developers"></a>
+            <a href="proyecto.html" class="nav__volver" title="Volver a proyectos" aria-label="Volver a proyectos">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M19 12 H5.5 M11.5 6 L5.5 12 L11.5 18"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Esta ficha arranca con la maqueta 3D; los renders van despues,
+             en la galeria. Mientras baja la maqueta (unos 6 MB) se ve el
+             render de noche como poster. -->
+        <header class="ficha__portada ficha__portada--3d">
+            <model-viewer
+                src="models/martin.glb"
+                poster="images/proyectos/unifamiliar/neuquen/07.jpg"
+                alt="Maqueta 3D de Casa Huepil"
+                camera-controls
+                disable-pan
+                disable-zoom
+                touch-action="pan-y"
+                auto-rotate
+                rotation-per-second="14deg"
+                auto-rotate-delay="2500"
+                interaction-prompt="none"
+                camera-target="99.1m 5.7m -11.8m"
+                camera-orbit="40deg 45deg 38%"
+                min-camera-orbit="auto 15deg 12%"
+                max-camera-orbit="auto 85deg 120%"
+                shadow-intensity="0.7"
+                exposure="1.1"
+                environment-image="neutral"></model-viewer>
+            <p class="ficha__ayuda-3d" aria-hidden="true">Arrastrá para girar la maqueta</p>
+            <div class="ficha__titulo">
+                <h1 class="ficha__lugar">San Martín de los Andes</h1>
+                <p class="ficha__nombre">Casa Huepil</p>
+            </div>
+        </header>
+
+        <dl class="ficha__datos">
+            <div class="ficha__dato"><dt>Tipología</dt><dd>Vivienda unifamiliar</dd></div>
+            <div class="ficha__dato"><dt>Ubicación</dt><dd>San Martín de los Andes, Neuquén</dd></div>
+            <div class="ficha__dato"><dt>Estado</dt><dd>Proyecto</dd></div>
+        </dl>
+
+        <section class="ficha__galeria" aria-label="Imágenes del proyecto">
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/neuquen/01.jpg" aria-label="Ver en grande: Fachada vidriada con nieve">
+                <img src="images/proyectos/unifamiliar/neuquen/01.jpg" alt="Casa Huepil, Fachada vidriada con nieve" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/02.jpg" aria-label="Ver en grande: Vista general con nieve">
+                <img src="images/proyectos/unifamiliar/neuquen/02.jpg" alt="Casa Huepil, Vista general con nieve" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/03.jpg" aria-label="Ver en grande: Vista lateral">
+                <img src="images/proyectos/unifamiliar/neuquen/03.jpg" alt="Casa Huepil, Vista lateral" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/04.jpg" aria-label="Ver en grande: Acceso con escalones iluminados">
+                <img src="images/proyectos/unifamiliar/neuquen/04.jpg" alt="Casa Huepil, Acceso con escalones iluminados" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/05.jpg" aria-label="Ver en grande: Galería cubierta">
+                <img src="images/proyectos/unifamiliar/neuquen/05.jpg" alt="Casa Huepil, Galería cubierta" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/neuquen/06.jpg" aria-label="Ver en grande: Detalle de fachada">
+                <img src="images/proyectos/unifamiliar/neuquen/06.jpg" alt="Casa Huepil, Detalle de fachada" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/07.jpg" aria-label="Ver en grande: Fachada iluminada de noche">
+                <img src="images/proyectos/unifamiliar/neuquen/07.jpg" alt="Casa Huepil, Fachada iluminada de noche" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/08.jpg" aria-label="Ver en grande: Fachada con jardín iluminado">
+                <img src="images/proyectos/unifamiliar/neuquen/08.jpg" alt="Casa Huepil, Fachada con jardín iluminado" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/neuquen/09.jpg" aria-label="Ver en grande: Camino de acceso iluminado">
+                <img src="images/proyectos/unifamiliar/neuquen/09.jpg" alt="Casa Huepil, Camino de acceso iluminado" loading="lazy" decoding="async">
+            </button>
+        </section>
+
+        <p class="ficha__siguiente">
+            <a href="proyecto.html">← Todos los proyectos</a>
+            <a href="proyecto-pilar.html">Siguiente: Pilar del Este →</a>
+        </p>
+    </main>
+
+    <div class="visor" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+        <img alt="">
+        <button type="button" class="visor__cerrar" aria-label="Cerrar">×</button>
+        <button type="button" class="visor__anterior" aria-label="Imagen anterior">‹</button>
+        <button type="button" class="visor__siguiente" aria-label="Imagen siguiente">›</button>
+        <p class="visor__cuenta"></p>
+    </div>
+
+    <footer class="prague-footer default prague-footer--compacto">
+        <div class="footer-content-outer">
+            <div class="footer-top-content">
+                <div class="prague-footer-main-block">
+                    <div class="footer-main-content">
+                        <p>El principio de el Estudio de Arquitectura y Construcción es la concepción colectiva. Desde el principio, la práctica ha creído en las virtudes del intercambio, el cruce de ideas, el esfuerzo común, el conocimiento compartido y el entusiasmo.</p>
+                    </div>
+                </div>
+                <div class="prague-footer-info-block">
+                    <h6 class="footer-info-block-title">CONTACTO</h6>
+                    <div class="footer-info-block-content">
+                        <p><a href="mailto:info@arhaus.com.ar">info@arhaus.com.ar</a></p>
+                        <p>Buenos Aires - Argentina</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-content">
+                <div class="footer-copyright">
+                    <p>2020 - Todos los derechos reservados</p>
+                </div>
+                <div class="prague-social-nav">
+                    <ul class="social-content">
+                        <li><a target="_blank" rel="noopener" href="https://www.instagram.com/arhausdevelopers/" aria-label="Instagram"><i aria-hidden="true" class="fa fa-instagram"></i></a></li>
+                        <li><a href="https://youtu.be/mgiUE3NlW64" target="_blank" rel="noopener" aria-label="YouTube"><i aria-hidden="true" class="fa fa-youtube-square"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

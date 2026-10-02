@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilar del Este · San Ramiro · Casas 424 y 425 - Arhaus Developers</title>
+    <meta name="description" content="Viviendas unifamiliares en Barrio San Ramiro, Pilar del Este, Buenos Aires. Proyecto de Arhaus Developers.">
+    <link rel="icon" href="images/Logo2.png" sizes="192x192">
+    <!-- OJO: igual que en proyecto.html, el ?v= hace que se vea la version
+         nueva de los css y js. Si se cambia alguno, subirle el numero. -->
+    <link rel="stylesheet" href="css/nav-vertical.css?v=20260927b">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/footer.css?v=20260927b">
+    <link rel="stylesheet" href="css/theme-light.css?v=20260927b">
+    <link rel="stylesheet" href="css/proyectos-indice.css?v=20260927b">
+    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20260927c">
+    <link rel="stylesheet" href="css/maqueta-proyecto.css?v=20260930">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="js/jquery-3.3.1.min.js?v=20260927b"></script>
+    <script src="js/main.js?v=20260927b" defer></script>
+    <script src="js/proyecto-ficha.js?v=20260927b" defer></script>
+</head>
+
+<body class="ficha">
+    <nav class="nav--oscuro nav--volver">
+        <div class="nav__container">
+            <a href="index.html" class="nav__logo"><img src="images/logo.svg" class="Logo logo_hov" alt="ARHAUS Developers"></a>
+            <a href="proyecto.html" class="nav__volver" title="Volver a proyectos" aria-label="Volver a proyectos">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M19 12 H5.5 M11.5 6 L5.5 12 L11.5 18"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <header class="ficha__portada">
+            <img src="images/proyectos/unifamiliar/pilar/02.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, frente" fetchpriority="high">
+            <div class="ficha__titulo">
+                <h1 class="ficha__lugar">Pilar del Este</h1>
+                <p class="ficha__nombre">San Ramiro · Casas 424 y 425</p>
+            </div>
+        </header>
+
+        <dl class="ficha__datos">
+            <div class="ficha__dato"><dt>Tipología</dt><dd>Viviendas unifamiliares</dd></div>
+            <div class="ficha__dato"><dt>Ubicación</dt><dd>Barrio San Ramiro, Pilar del Este, Buenos Aires</dd></div>
+            <div class="ficha__dato"><dt>Estado</dt><dd>Proyecto</dd></div>
+        </dl>
+
+        <section class="ficha__galeria" aria-label="Imágenes del proyecto">
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/pilar/01.jpg" aria-label="Ver en grande: Casa 424, contrafrente">
+                <img src="images/proyectos/unifamiliar/pilar/01.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, contrafrente" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/02.jpg" aria-label="Ver en grande: Casa 424, frente">
+                <img src="images/proyectos/unifamiliar/pilar/02.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, frente" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/03.jpg" aria-label="Ver en grande: Vista aérea de las dos casas">
+                <img src="images/proyectos/unifamiliar/pilar/03.jpg" alt="San Ramiro · Casas 424 y 425, Vista aérea de las dos casas" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/04.jpg" aria-label="Ver en grande: Casa 424, galería">
+                <img src="images/proyectos/unifamiliar/pilar/04.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, galería" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/05.jpg" aria-label="Ver en grande: Casa 424, galería">
+                <img src="images/proyectos/unifamiliar/pilar/05.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, galería" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/pilar/06.jpg" aria-label="Ver en grande: Casa 424, interior">
+                <img src="images/proyectos/unifamiliar/pilar/06.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/07.jpg" aria-label="Ver en grande: Casa 424, interior">
+                <img src="images/proyectos/unifamiliar/pilar/07.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/08.jpg" aria-label="Ver en grande: Casa 424, interior">
+                <img src="images/proyectos/unifamiliar/pilar/08.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/09.jpg" aria-label="Ver en grande: Casa 425, frente">
+                <img src="images/proyectos/unifamiliar/pilar/09.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, frente" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/10.jpg" aria-label="Ver en grande: Casa 425, frente">
+                <img src="images/proyectos/unifamiliar/pilar/10.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, frente" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/pilar/11.jpg" aria-label="Ver en grande: Casa 425, frente">
+                <img src="images/proyectos/unifamiliar/pilar/11.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, frente" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/12.jpg" aria-label="Ver en grande: Casa 425, interior">
+                <img src="images/proyectos/unifamiliar/pilar/12.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/13.jpg" aria-label="Ver en grande: Casa 425, interior">
+                <img src="images/proyectos/unifamiliar/pilar/13.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/14.jpg" aria-label="Ver en grande: Casa 425, galería">
+                <img src="images/proyectos/unifamiliar/pilar/14.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, galería" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto" data-grande="images/proyectos/unifamiliar/pilar/15.jpg" aria-label="Ver en grande: Casa 425, interior">
+                <img src="images/proyectos/unifamiliar/pilar/15.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, interior" loading="lazy" decoding="async">
+            </button>
+            <button type="button" class="ficha__foto ficha__foto--ancha" data-grande="images/proyectos/unifamiliar/pilar/16.jpg" aria-label="Ver en grande: Casa 425, interior">
+                <img src="images/proyectos/unifamiliar/pilar/16.jpg" alt="San Ramiro · Casas 424 y 425, Casa 425, interior" loading="lazy" decoding="async">
+            </button>
+        </section>
+
+        <section class="maqueta3d" id="maqueta" aria-label="Maqueta 3D">
+            <div class="maqueta3d__interior">
+                <p class="maqueta3d__etiqueta">Casa 424</p>
+                <h2 class="maqueta3d__titulo">Maqueta 3D</h2>
+                <p class="maqueta3d__intro">Recorré la casa desde cualquier ángulo. Arrastrá para girar, usá la rueda para acercar y dos dedos para mover.</p>
+
+                <div class="maqueta3d__marco">
+                    <model-viewer
+                        id="maqueta3d-visor"
+                        alt="Maqueta 3D de la Casa 424, San Ramiro, Pilar del Este"
+                        camera-controls
+                        touch-action="pan-y"
+                        interaction-prompt="none"
+                        environment-image="neutral"
+                        tone-mapping="neutral"
+                        shadow-intensity="1"
+                        shadow-softness="0.85"
+                        exposure="1"
+                        min-field-of-view="15deg"
+                        max-field-of-view="45deg"></model-viewer>
+
+                    <button type="button" class="maqueta3d__portada" id="maqueta3d-portada">
+                        <img src="maquetas/lote-424/portada.jpg" alt="Vista de la maqueta 3D de la Casa 424" loading="lazy" decoding="async">
+                        <span>Ver la maqueta en 3D</span>
+                    </button>
+                </div>
+
+                <div class="maqueta3d__pie">
+                    <span>Casa 424 · Barrio San Ramiro, Pilar del Este</span>
+                    <span>El modelo pesa unos 15 MB: con datos móviles puede tardar.</span>
+                </div>
+            </div>
+        </section>
+
+        <p class="ficha__siguiente">
+            <a href="proyecto.html">← Todos los proyectos</a>
+            <a href="proyecto-san-isidro.html">Siguiente: San Isidro →</a>
+        </p>
+    </main>
+
+    <div class="visor" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+        <img alt="">
+        <button type="button" class="visor__cerrar" aria-label="Cerrar">×</button>
+        <button type="button" class="visor__anterior" aria-label="Imagen anterior">‹</button>
+        <button type="button" class="visor__siguiente" aria-label="Imagen siguiente">›</button>
+        <p class="visor__cuenta"></p>
+    </div>
+
+    <footer class="prague-footer default prague-footer--compacto">
+        <div class="footer-content-outer">
+            <div class="footer-top-content">
+                <div class="prague-footer-main-block">
+                    <div class="footer-main-content">
+                        <p>El principio de el Estudio de Arquitectura y Construcción es la concepción colectiva. Desde el principio, la práctica ha creído en las virtudes del intercambio, el cruce de ideas, el esfuerzo común, el conocimiento compartido y el entusiasmo.</p>
+                    </div>
+                </div>
+                <div class="prague-footer-info-block">
+                    <h6 class="footer-info-block-title">CONTACTO</h6>
+                    <div class="footer-info-block-content">
+                        <p><a href="mailto:info@arhaus.com.ar">info@arhaus.com.ar</a></p>
+                        <p>Buenos Aires - Argentina</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-content">
+                <div class="footer-copyright">
+                    <p>2020 - Todos los derechos reservados</p>
+                </div>
+                <div class="prague-social-nav">
+                    <ul class="social-content">
+                        <li><a target="_blank" rel="noopener" href="https://www.instagram.com/arhausdevelopers/" aria-label="Instagram"><i aria-hidden="true" class="fa fa-instagram"></i></a></li>
+                        <li><a href="https://youtu.be/mgiUE3NlW64" target="_blank" rel="noopener" aria-label="YouTube"><i aria-hidden="true" class="fa fa-youtube-square"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+    <script src="js/maqueta-opciones.js?v=20260930"></script>
+    <script src="js/maqueta-proyecto.js?v=20260930"></script>
+</body>
+</html>

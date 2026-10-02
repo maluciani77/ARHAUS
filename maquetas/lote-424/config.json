@@ -1,0 +1,17 @@
+{
+    "paleta": {
+        "revoque": "#f2ece2",
+        "techo": "#bdb9b1",
+        "carpinteria": "#2c2c2c",
+        "madera": "#d9b98f",
+        "vidrio": "#dde5e6"
+    },
+    "luz": "suave",
+    "brillo": 0.7,
+    "camara": {
+        "orbita": "22deg 72deg 52%",
+        "fov": "28deg"
+    },
+    "actualizado": "2026-10-01 14:12",
+    "por": "Maximo Luciani"
+}

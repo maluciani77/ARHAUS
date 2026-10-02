@@ -38,3 +38,12 @@
 /uploads/perfiles/*
 !/uploads/perfiles/.gitkeep
 /importar_martin.php
+
+# Maquetas en prueba mientras se elige cual queda (son cientos de MB y
+# no son parte del sitio). Cuando se elija una, se le saca el ignore.
+/models/alvear-chico-*.glb
+/models/huepil-*.glb
+/models/la-pampa-*.glb
+# Paginas sueltas para comparar maquetas, no van al sitio
+/_maqueta*.html
+/_maquetas.html
