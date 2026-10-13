@@ -24,8 +24,8 @@ body {
     overflow-x: hidden;
 }
 
-/* El div que envuelve la tarjeta: es el que la centra */
-body > div {
+/* Lo que envuelve la tarjeta: es lo que la centra */
+body > main {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -254,4 +254,75 @@ body > div {
     color: #ff6b6b;
     font-size: 14px;
     line-height: 1.5;
+}
+
+/* ========================================
+   VOLVER AL INICIO
+   Botón sobre la foto, arriba a la izquierda. En el celular queda solo
+   la flecha, redonda: con el texto se le encimaba al logo de la tarjeta.
+   ======================================== */
+
+.volver-inicio {
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 44px;
+    padding: 0 18px 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(8, 8, 8, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.volver-inicio svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.volver-inicio:hover,
+.volver-inicio:focus-visible {
+    background: #b80f22;
+    border-color: transparent;
+    color: #fff;
+}
+
+.volver-inicio:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .volver-inicio {
+        top: 14px;
+        left: 14px;
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .volver-inicio span {
+        /* Se esconde a la vista, pero el lector de pantalla lo sigue leyendo. */
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
 }

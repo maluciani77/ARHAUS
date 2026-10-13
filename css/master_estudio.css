@@ -230,7 +230,7 @@ body {
   width: fit-content;
 }
 
-.contain-text .titular h2 {
+.contain-text .titular h1 {
   color: #333333;
   font-family: "Work Sans", sans-serif;
   font-size: 65px;
@@ -446,7 +446,7 @@ body {
   z-index: 100;
 }
 
-.card .card_landing h6 {
+.card .card_landing h2 {
  position: absolute;
  bottom: 10px;
  left: 10px;
@@ -655,7 +655,7 @@ body {
     justify-content: center;
   }
   
-  .contain-text .titular h2 {
+  .contain-text .titular h1 {
     /* border: 1px solid pink; */
     width: fit-content;
     color: #fff;

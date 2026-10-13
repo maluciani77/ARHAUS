@@ -442,6 +442,23 @@ footer.prague-footer--compacto {
     border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+/* Los parrafos del pie se quedaron con el gris oscuro del tema claro, que
+   es el que corresponde cuando el pie es crema. Aca el pie es casi negro,
+   asi que ese gris daba 2,2:1 contra el fondo: el texto estaba, pero no
+   se leia. Van en blanco con transparencia, que sobre #1E1E1E da 7:1. */
+footer.prague-footer--compacto .footer-main-content p,
+footer.prague-footer--compacto .footer-info-block-content p,
+footer.prague-footer--compacto .footer-info-block-title {
+    color: rgba(255, 255, 255, 0.62) !important;
+}
+
+/* El aviso de derechos venia en 10px, por debajo de lo que se lee comodo */
+footer.prague-footer--compacto .footer-copyright p {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 12px !important;
+    letter-spacing: 0.08em;
+}
+
 /* display:contents hace que los hijos de estos bloques entren
    directamente en la fila de abajo, sin las cajas de por medio. */
 footer.prague-footer--compacto .footer-content-outer,

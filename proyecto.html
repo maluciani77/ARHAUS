@@ -19,10 +19,10 @@
 	     pagina se nota que es otra cosa, que es lo que se buscaba. -->
 	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/footer.css?v=20260925"> 
-    <link rel="stylesheet" href="css/theme-light.css?v=20260925">
+    <link rel="stylesheet" href="css/theme-light.css?v=20261013">
 	<!-- OJO: esta va al final, despues de footer.css y del tema: le pisa
 	     el alto fijo del pie y los colores claros. -->
-	<link rel="stylesheet" href="css/proyectos-indice.css?v=20260926">
+	<link rel="stylesheet" href="css/proyectos-indice.css?v=20261013">
 	<link rel="stylesheet" type="text/css" href="css/fontello.css?v=20260925"> <!-- Link con CSS de icono Up -->
 	<script src="js/jquery-3.3.1.min.js?v=20260925"></script> <!-- Link con JQuery -->
 	<script src="js/main.js?v=20260925" defer></script> <!-- Link con JavaScript principal -->
@@ -111,6 +111,7 @@
         </div>
     </section>--> 
     <!-- MOSAICO DE PROYECTOS -->
+    <main>
     <section class="mosaico">
         <h1 class="mosaico__titulo-oculto">Proyectos</h1>
 
@@ -260,6 +261,7 @@
             </div>
         </div>
     </section>
+    </main>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
     <script src="js/proyectos-indice.js?v=20260925" defer></script>
 <!--
@@ -325,9 +327,9 @@
                 </div>
             </div>
             <div class="prague-footer-info-block">
-                <h6 class="footer-info-block-title">CONTACTO</h6>
+                <h2 class="footer-info-block-title">CONTACTO</h2>
                 <div class="footer-info-block-content">
-                    <p><a href="mailto:info@misto.com.ar">info@arhaus.com.ar</a></p>
+                    <p><a href="mailto:info@arhaus.com.ar">info@arhaus.com.ar</a></p>
                     <p>Buenos Aires - Argentina</p>
                 </div>
             </div>
@@ -340,22 +342,9 @@
             <!-- End footer copyright -->
             <div class="prague-social-nav">
                 <ul class="social-content">
-                    <li>
-                        <a target="_blank" href="https://www.instagram.com/arhausdevelopers/">
-                            <i aria-hidden="true" class="fa fa-instagram"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a  href="#">
-                            <i aria-hidden="true" class="fa fa-pinterest-p"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a  href="https://youtu.be/mgiUE3NlW64" target="_blank">
-                            <i aria-hidden="true" class="fa fa-youtube-square"></i>
-                        </a>
-                    </li>
-                </ul>
+                        <li><a target="_blank" rel="noopener" href="https://www.instagram.com/arhausdevelopers/" aria-label="ARHAUS en Instagram"><i aria-hidden="true" class="fa fa-instagram"></i></a></li>
+                        <li><a target="_blank" rel="noopener" href="https://youtu.be/mgiUE3NlW64" aria-label="ARHAUS en YouTube"><i aria-hidden="true" class="fa fa-youtube-square"></i></a></li>
+                    </ul>
             </div>
         </div>
 </div>

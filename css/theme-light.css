@@ -28,8 +28,23 @@ footer.prague-footer {
   color: #333333 !important;
 }
 
+/* 10px es ilegible y #767676 sobre el crema da 4,1:1, apenas por debajo
+   del minimo. Con 12px y este gris llega a 4,7:1. */
 .prague-footer .footer-copyright p {
-  color: #767676 !important;
+  color: #6F6D69 !important;
+  font-size: 12px !important;
+}
+
+/* El circulo de los iconos sociales venia con un borde casi blanco, que
+   sobre el pie crema no se ve: quedaban tres iconos flotando. */
+.prague-footer .prague-social-nav .social-content li a {
+  border-color: rgba(51, 51, 51, 0.28) !important;
+}
+
+.prague-footer .prague-social-nav .social-content li a:hover,
+.prague-footer .prague-social-nav .social-content li a:focus-visible {
+  border-color: #880723 !important;
+  background-color: transparent !important;
 }
 
 .prague-social-nav .fa {
