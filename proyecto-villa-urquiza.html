@@ -47,7 +47,8 @@
                 rotation-per-second="12deg"
                 auto-rotate-delay="3000"
                 interaction-prompt="none"
-                field-of-view="32deg"
+                camera-orbit="215deg 84deg 47m"
+                field-of-view="30deg"
                 shadow-intensity="0"
                 exposure="1"
                 tone-mapping="neutral"
@@ -165,6 +166,17 @@
             v.addEventListener('load', function () {
                 var c = v.querySelector('.ficha__cargando');
                 if (c) c.remove();
+
+                // El encuadre esta pensado para una pantalla ancha. En el
+                // celular la portada queda alta y angosta y la casa no
+                // entra: hay que alejarse y abrir un poco el angulo.
+                if (window.innerWidth < 700) {
+                    requestAnimationFrame(function () {
+                        v.cameraOrbit = '215deg 84deg 78m';
+                        v.fieldOfView = '34deg';
+                        v.jumpCameraToGoal();
+                    });
+                }
             }, { once: true });
         })();
     </script>
