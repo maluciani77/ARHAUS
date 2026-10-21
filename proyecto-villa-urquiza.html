@@ -8,13 +8,14 @@
     <link rel="icon" href="images/Logo2.png" sizes="192x192">
     <!-- OJO: igual que en proyecto.html, el ?v= hace que se vea la version
          nueva de los css y js. Si se cambia alguno, subirle el numero. -->
-    <link rel="stylesheet" href="css/nav-vertical.css?v=20260927b">
+    <link rel="stylesheet" href="css/nav-vertical.css?v=20261013b">
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/footer.css?v=20260927b">
-    <link rel="stylesheet" href="css/theme-light.css?v=20261013">
-    <link rel="stylesheet" href="css/proyectos-indice.css?v=20261013">
-    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20260927c">
+    <link rel="stylesheet" href="css/theme-light.css?v=20261013b">
+    <link rel="stylesheet" href="css/proyectos-indice.css?v=20261013b">
+    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20261013b">
+    <link rel="stylesheet" href="css/maqueta-proyecto.css?v=20261023">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/jquery-3.3.1.min.js?v=20260927b"></script>
     <script src="js/main.js?v=20260927b" defer></script>
@@ -34,8 +35,28 @@
     </nav>
 
     <main>
-        <header class="ficha__portada">
-            <img src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Casa La Pampa 4510, Exterior de día" fetchpriority="high">
+        <header class="ficha__portada ficha__portada--3d" id="maqueta">
+            <model-viewer
+                id="maqueta3d-visor"
+                src="models/villa-la-pampa.glb"
+                alt="Maqueta 3D de la Casa La Pampa 4510, Villa Urquiza"
+                camera-controls
+                disable-pan
+                touch-action="pan-y"
+                auto-rotate
+                rotation-per-second="12deg"
+                auto-rotate-delay="3000"
+                interaction-prompt="none"
+                field-of-view="32deg"
+                shadow-intensity="0"
+                exposure="1"
+                tone-mapping="neutral"
+                environment-image="models/estudio.hdr"
+                loading="eager"
+                reveal="auto">
+                <p class="ficha__cargando" slot="progress-bar">Cargando la maqueta&hellip;</p>
+            </model-viewer>
+            <p class="ficha__ayuda-3d" aria-hidden="true">Arrastr&aacute; para girar la maqueta</p>
             <div class="ficha__titulo">
                 <h1 class="ficha__lugar">Villa Urquiza</h1>
                 <p class="ficha__nombre">Casa La Pampa 4510</p>
@@ -90,6 +111,7 @@
             </button>
         </section>
 
+
         <p class="ficha__siguiente">
             <a href="proyecto.html">← Todos los proyectos</a>
             <a href="proyecto-neuquen.html">Siguiente: San Martín de los Andes →</a>
@@ -133,5 +155,18 @@
             </div>
         </div>
     </footer>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+    <script>
+        // El cartel de "cargando" vive en el slot de la barra de progreso y
+        // no se va solo cuando el contenido es propio: lo saca el evento.
+        (function () {
+            var v = document.getElementById('maqueta3d-visor');
+            if (!v) return;
+            v.addEventListener('load', function () {
+                var c = v.querySelector('.ficha__cargando');
+                if (c) c.remove();
+            }, { once: true });
+        })();
+    </script>
 </body>
 </html>
