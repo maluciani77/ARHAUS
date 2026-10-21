@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/theme-light.css?v=20261013">
     <link rel="stylesheet" href="css/proyectos-indice.css?v=20261013">
     <link rel="stylesheet" href="css/proyecto-ficha.css?v=20260927c">
-    <link rel="stylesheet" href="css/maqueta-proyecto.css?v=20260930">
+    <link rel="stylesheet" href="css/maqueta-proyecto.css?v=20261023">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/jquery-3.3.1.min.js?v=20260927b"></script>
     <script src="js/main.js?v=20260927b" defer></script>
@@ -35,8 +35,34 @@
     </nav>
 
     <main>
-        <header class="ficha__portada">
-            <img src="images/proyectos/unifamiliar/pilar/02.jpg" alt="San Ramiro · Casas 424 y 425, Casa 424, frente" fetchpriority="high">
+        <header class="ficha__portada ficha__portada--3d ficha__portada--noche" id="maqueta">
+            <model-viewer
+                id="maqueta3d-visor"
+                src="maquetas/lote-424/maqueta-bn.glb"
+                alt="Maqueta 3D de la Casa 424, San Ramiro, Pilar del Este"
+                camera-controls
+                disable-pan
+                disable-zoom
+                touch-action="pan-y"
+                auto-rotate
+                rotation-per-second="12deg"
+                auto-rotate-delay="3000"
+                interaction-prompt="none"
+                camera-orbit="22deg 78deg 35m"
+                camera-target="1141.45m 2.77m -156.24m"
+                field-of-view="32deg"
+                min-camera-orbit="auto 20deg 35m"
+                max-camera-orbit="auto 88deg 140m"
+                shadow-intensity="0.7"
+                shadow-softness="0.6"
+                exposure="1.3"
+                tone-mapping="aces"
+                environment-image="models/estudio.hdr"
+                loading="eager"
+                reveal="auto">
+                <p class="ficha__cargando" slot="progress-bar">Cargando la maqueta…</p>
+            </model-viewer>
+            <p class="ficha__ayuda-3d" aria-hidden="true">Arrastrá para girar la maqueta</p>
             <div class="ficha__titulo">
                 <h1 class="ficha__lugar">Pilar del Este</h1>
                 <p class="ficha__nombre">San Ramiro · Casas 424 y 425</p>
@@ -100,39 +126,6 @@
             </button>
         </section>
 
-        <section class="maqueta3d" id="maqueta" aria-label="Maqueta 3D">
-            <div class="maqueta3d__interior">
-                <p class="maqueta3d__etiqueta">Casa 424</p>
-                <h2 class="maqueta3d__titulo">Maqueta 3D</h2>
-                <p class="maqueta3d__intro">Recorré la casa desde cualquier ángulo. Arrastrá para girar, usá la rueda para acercar y dos dedos para mover.</p>
-
-                <div class="maqueta3d__marco">
-                    <model-viewer
-                        id="maqueta3d-visor"
-                        alt="Maqueta 3D de la Casa 424, San Ramiro, Pilar del Este"
-                        camera-controls
-                        touch-action="pan-y"
-                        interaction-prompt="none"
-                        environment-image="neutral"
-                        tone-mapping="neutral"
-                        shadow-intensity="1"
-                        shadow-softness="0.85"
-                        exposure="1"
-                        min-field-of-view="15deg"
-                        max-field-of-view="45deg"></model-viewer>
-
-                    <button type="button" class="maqueta3d__portada" id="maqueta3d-portada">
-                        <img src="maquetas/lote-424/portada.jpg" alt="Vista de la maqueta 3D de la Casa 424" loading="lazy" decoding="async">
-                        <span>Ver la maqueta en 3D</span>
-                    </button>
-                </div>
-
-                <div class="maqueta3d__pie">
-                    <span>Casa 424 · Barrio San Ramiro, Pilar del Este</span>
-                    <span>El modelo pesa unos 15 MB: con datos móviles puede tardar.</span>
-                </div>
-            </div>
-        </section>
 
         <p class="ficha__siguiente">
             <a href="proyecto.html">← Todos los proyectos</a>
@@ -178,7 +171,8 @@
         </div>
     </footer>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
-    <script src="js/maqueta-opciones.js?v=20260930"></script>
-    <script src="js/maqueta-proyecto.js?v=20260930"></script>
+    <script src="js/maqueta-opciones.js?v=20261019"></script>
+    <script src="js/maqueta-luz.js?v=20261019"></script>
+    <script src="js/maqueta-proyecto.js?v=20261023"></script>
 </body>
 </html>

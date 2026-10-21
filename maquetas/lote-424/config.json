@@ -6,12 +6,11 @@
         "madera": "#d9b98f",
         "vidrio": "#dde5e6"
     },
-    "luz": "suave",
-    "brillo": 0.7,
+    "luz": "maqueta",
+    "brillo": 1,
     "camara": {
-        "orbita": "22deg 72deg 52%",
-        "fov": "28deg"
+        "orbita": "22deg 78deg 35m",
+        "fov": "32deg"
     },
-    "actualizado": "2026-10-01 14:12",
-    "por": "Maximo Luciani"
+    "actualizado": "2026-10-19 21:10"
 }

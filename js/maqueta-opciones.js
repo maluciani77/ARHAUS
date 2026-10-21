@@ -10,6 +10,20 @@
 (function (global) {
 	'use strict';
 
+	// La raiz del sitio sale del src de este mismo script, asi la luz de
+	// estudio (un archivo .hdr) se encuentra igual desde la pagina del
+	// proyecto que desde el panel, que cuelga de /panel/admin/.
+	var RAIZ = (function () {
+		var s = document.currentScript;
+		if (!s) {
+			var todos = document.getElementsByTagName('script');
+			s = todos[todos.length - 1];
+		}
+		var src = (s && s.src) || '';
+		var corte = src.indexOf('/js/maqueta-opciones.js');
+		return corte === -1 ? '' : src.slice(0, corte + 1);
+	})();
+
 	var GRUPOS = [
 		['vidrio',      /glass|translucent|<slategray>|<yellow>/i],
 		['agua',        /aquamarine|water|pileta|pool/i],
@@ -34,7 +48,8 @@
 	var LUCES = {
 		suave:   { nombre: 'Día suave',   entorno: 'neutral', tono: 'neutral',  sombra: 0.9, suavidad: 1.0, exposicion: 1.00 },
 		marcada: { nombre: 'Sol marcado', entorno: 'neutral', tono: 'commerce', sombra: 1.6, suavidad: 0.3, exposicion: 0.95 },
-		estudio: { nombre: 'Estudio',     entorno: 'legacy',  tono: 'neutral',  sombra: 1.0, suavidad: 0.8, exposicion: 1.05 }
+		estudio: { nombre: 'Estudio',     entorno: 'legacy',  tono: 'neutral',  sombra: 1.0, suavidad: 0.8, exposicion: 1.05 },
+		maqueta: { nombre: 'Maqueta',     entorno: RAIZ + 'models/estudio.hdr', tono: 'aces', sombra: 1.25, suavidad: 0.4, exposicion: 1.2 }
 	};
 
 	var PALETAS = [
@@ -47,9 +62,9 @@
 
 	var POR_DEFECTO = {
 		paleta: { revoque: '#f2ece2', techo: '#bdb9b1', carpinteria: '#2c2c2c', madera: '#d9b98f', vidrio: '#dde5e6' },
-		luz: 'suave',
+		luz: 'maqueta',
 		brillo: 1,
-		camara: { orbita: '22deg 72deg 52%', fov: '28deg' }
+		camara: { orbita: '22deg 80deg 45%', fov: '30deg' }
 	};
 
 	/** Los colores del glTF van en lineal; los hex de CSS son sRGB. */
@@ -95,7 +110,7 @@
 	/** Aplica la paleta y la luz guardadas al visor. */
 	function aplicar(visor, materiales, config) {
 		var paleta = Object.assign({}, POR_DEFECTO.paleta, (config && config.paleta) || {});
-		var luz = LUCES[(config && config.luz)] || LUCES.suave;
+		var luz = LUCES[(config && config.luz)] || LUCES[POR_DEFECTO.luz];
 		var brillo = (config && config.brillo) || 1;
 
 		materiales.forEach(function (m) {
@@ -149,7 +164,7 @@
 				if (!c) return JSON.parse(JSON.stringify(POR_DEFECTO));
 				return {
 					paleta: Object.assign({}, POR_DEFECTO.paleta, c.paleta || {}),
-					luz: LUCES[c.luz] ? c.luz : 'suave',
+					luz: LUCES[c.luz] ? c.luz : POR_DEFECTO.luz,
 					brillo: typeof c.brillo === 'number' ? c.brillo : 1,
 					camara: Object.assign({}, POR_DEFECTO.camara, c.camara || {}),
 					actualizado: c.actualizado || null

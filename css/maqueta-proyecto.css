@@ -46,7 +46,9 @@
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 4px;
-  background: #e7e4dc;
+  /* Oscuro: la maqueta va en blanco y negro con la luz de adentro, y
+     sobre fondo claro las ventanas iluminadas no se notarian. */
+  background: #121211;
 }
 
 @media (max-width: 720px) {
@@ -58,7 +60,7 @@
 .maqueta3d__marco model-viewer {
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #eceae4 0%, #d9d6ce 100%);
+  background: linear-gradient(to bottom, #171715 0%, #0d0d0c 100%);
   --progress-bar-color: #880723;
   --progress-bar-height: 3px;
 }
@@ -117,4 +119,94 @@
   margin-top: 12px;
   font-size: 0.82rem;
   color: #6f6d69;
+}
+
+/* Botón para prender y apagar la luz de adentro de la maqueta. */
+.maqueta3d__luz {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 8px 18px;
+  border: 1px solid #d6d2cc;
+  border-radius: 999px;
+  background: transparent;
+  color: #3a3733;
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.maqueta3d__luz:hover {
+  border-color: #b4aea6;
+}
+
+.maqueta3d__luz[aria-pressed="true"] {
+  background: #23211f;
+  border-color: #23211f;
+  color: #f4f1ec;
+}
+
+/* ---------- La maqueta como portada de la ficha ----------
+   La Casa 424 entra directo en 3D, sin foto. Como la maqueta va en
+   blanco y negro con la luz de adentro, la portada tiene que ser
+   oscura: sobre fondo claro las ventanas iluminadas no se verian. */
+
+.ficha__portada--noche {
+  background: radial-gradient(ellipse at 50% 45%, #1b1b19 0%, #0b0b0a 80%);
+}
+
+.ficha__portada--noche .ficha__titulo {
+  color: #f4f1ec;
+}
+
+.ficha__portada--noche .ficha__ayuda-3d {
+  color: rgba(244, 241, 236, 0.5);
+}
+
+.ficha__portada--noche .maqueta3d__luz {
+  position: absolute;
+  right: 5vw;
+  bottom: 6vh;
+  z-index: 2;
+  margin: 0;
+  border-color: rgba(244, 241, 236, 0.35);
+  color: #f4f1ec;
+}
+
+.ficha__portada--noche .maqueta3d__luz:hover {
+  border-color: rgba(244, 241, 236, 0.7);
+}
+
+.ficha__portada--noche .maqueta3d__luz[aria-pressed="true"] {
+  background: rgba(244, 241, 236, 0.92);
+  border-color: transparent;
+  color: #1b1b19;
+}
+
+/* Mientras bajan los 12 MB del modelo */
+.ficha__cargando {
+  position: absolute;
+  inset: auto 0 50% 0;
+  text-align: center;
+  color: rgba(244, 241, 236, 0.55);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .ficha__portada--noche .maqueta3d__luz {
+    right: 5vw;
+    bottom: auto;
+    top: 76px;
+    padding: 6px 14px;
+    font-size: 0.74rem;
+  }
+
+  /* El cartelito de "arrastrá para girar" chocaba con el botón, y en el
+     celular girar con el dedo se descubre solo. */
+  .ficha__portada--noche .ficha__ayuda-3d {
+    display: none;
+  }
 }

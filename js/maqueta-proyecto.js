@@ -1,36 +1,65 @@
 // ========================================
-// MAQUETA 3D EN LA PÁGINA DEL PROYECTO
-// Carga el modelo recién cuando el visitante lo pide (pesa unos 15 MB) y
-// le aplica los colores que el admin guardó desde el panel.
+// MAQUETA 3D COMO PORTADA DE LA FICHA DEL PROYECTO
+//
+// Al entrar a Pilar del Este lo primero que se ve es la maqueta, no una
+// foto. Va en blanco y negro con la luz de adentro prendida, y el
+// encuadre inicial sale de lo que el admin guardó en el panel.
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function () {
 	var visor = document.getElementById('maqueta3d-visor');
-	var portada = document.getElementById('maqueta3d-portada');
-	if (!visor || !portada) return;
+	if (!visor) return;
 
-	var MODELO = 'maquetas/lote-424/maqueta.glb';
 	var CONFIG = 'maquetas/lote-424/config.json';
-	var cargando = false;
+	var boton = document.getElementById('maqueta3d-luz');
+	var piezas = null;
+	var prendida = true;
+	var brillo = 1;
+	var vista = null;
 
 	visor.addEventListener('load', function () {
-		var materiales = Maqueta3D.leerMateriales(visor);
+		var cargando = visor.querySelector('.ficha__cargando');
+		if (cargando) cargando.remove();
+
+		piezas = MaquetaLuz.preparar(visor);
 		Maqueta3D.cargarConfig(CONFIG).then(function (config) {
-			Maqueta3D.aplicar(visor, materiales, config);
-			Maqueta3D.ubicarCamara(visor, config);
-			portada.remove();
+			brillo = config.brillo || 1;
+			vista = config.camara || {};
+			MaquetaLuz.prender(visor, piezas, prendida, brillo);
+			encuadrar();
+			if (boton) boton.hidden = false;
 		});
 	});
 
-	portada.addEventListener('click', function () {
-		if (cargando) return;
-		cargando = true;
-		portada.querySelector('span').textContent = 'Cargando la maqueta…';
-		visor.src = MODELO;
-	});
+	/**
+	 * La vista guardada está pensada para una pantalla ancha. En el
+	 * celular la portada queda alta y angosta, así que hay que alejarse.
+	 */
+	function encuadrar() {
+		var orbita = (vista && vista.orbita) || '22deg 78deg 35m';
+		var fov = (vista && vista.fov) || '32deg';
 
-	visor.addEventListener('error', function () {
-		cargando = false;
-		portada.querySelector('span').textContent = 'No se pudo cargar la maqueta. Probá de nuevo.';
-	});
+		if (window.innerWidth < 700) {
+			orbita = orbita.replace(/([\d.]+)(m|%)/, function (todo, n, unidad) {
+				return Math.round(parseFloat(n) * 1.7) + unidad;
+			});
+			fov = '36deg';
+		}
+
+		requestAnimationFrame(function () {
+			visor.cameraOrbit = orbita;
+			visor.fieldOfView = fov;
+			visor.jumpCameraToGoal();
+		});
+	}
+
+	if (boton) {
+		boton.addEventListener('click', function () {
+			if (!piezas) return;
+			prendida = !prendida;
+			MaquetaLuz.prender(visor, piezas, prendida, brillo);
+			boton.setAttribute('aria-pressed', prendida ? 'true' : 'false');
+			boton.textContent = prendida ? 'Luz de adentro' : 'Luz apagada';
+		});
+	}
 });
