@@ -119,7 +119,7 @@
                 <!-- Los cinco proyectos unifamiliares. Cada uno abre su ficha
                      (proyecto-*.html); las fotos estan en
                      images/proyectos/unifamiliar/<proyecto>/. -->
-                <a class="mosaico__cuadro" href="proyecto-villa-urquiza.html" data-pieza="p1" data-categoria="proyectos" data-leyenda="MUESTRA 2 — OP3 (14,5 MB, con texturas) · agarrala con el mouse para girarla" style="--escala: 1">
+                <a class="mosaico__cuadro" href="proyecto-villa-urquiza.html" data-pieza="p1" data-categoria="proyectos" data-leyenda="Villa Urquiza · Casa La Pampa 4510, maqueta 3D — agarrala con el mouse para girarla" style="--escala: 1">
                     <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/villa-urquiza/01.jpg" alt="Villa Urquiza, Casa La Pampa 4510" loading="lazy">
                     <span class="mosaico__nombre">Villa Urquiza</span>
                     <span class="mosaico__pie">
@@ -143,7 +143,7 @@
                         <span class="mosaico__estado">Proyecto</span>
                     </span>
                 </a>
-                <a class="mosaico__cuadro" href="proyecto-pilar.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="MUESTRA 1 — archivo ORIGINAL (14,5 MB, con texturas) · agarrala con el mouse para girarla" style="--escala: 0.86">
+                <a class="mosaico__cuadro" href="proyecto-pilar.html" data-pieza="p4" data-categoria="proyectos" data-leyenda="Pilar del Este · Casa 424, maqueta 3D con la luz de adentro — agarrala con el mouse para girarla" style="--escala: 0.86">
                     <img class="mosaico__foto" data-src="images/proyectos/unifamiliar/pilar/02.jpg" alt="Pilar del Este, San Ramiro · Casas 424 y 425" loading="lazy">
                     <span class="mosaico__nombre">Pilar del Este</span>
                     <span class="mosaico__pie">
@@ -176,18 +176,20 @@
                     <model-viewer
                         class="mosaico__pieza"
                         data-pieza="p1"
-                        data-src="models/prueba-424-op3.glb"
-                        alt="Maqueta de prueba, variante OP3"
+                        data-src="models/villa-la-pampa.glb"
+                        alt="Maqueta 3D de la Casa La Pampa 4510, Villa Urquiza"
                         auto-rotate
-                        rotation-per-second="18deg"
+                        rotation-per-second="12deg"
                         auto-rotate-delay="0"
                         interaction-prompt="none"
-                        camera-orbit="40deg 62deg 80%"
-                        min-camera-orbit="auto 25deg 60%"
-                        max-camera-orbit="auto 85deg 140%"
-                        shadow-intensity="0.6"
-                        exposure="1.15"
-                        environment-image="neutral"
+                        camera-orbit="215deg 84deg 72%"
+                        field-of-view="30deg"
+                        min-camera-orbit="auto 25deg 45%"
+                        max-camera-orbit="auto 88deg 150%"
+                        shadow-intensity="0"
+                        exposure="1"
+                        tone-mapping="neutral"
+                        environment-image="models/estudio.hdr"
                         reveal="auto"></model-viewer>
                     <model-viewer
                         class="mosaico__pieza"
@@ -205,39 +207,44 @@
                         exposure="1.15"
                         environment-image="neutral"
                         reveal="auto"></model-viewer>
-                    <!-- martin.glb es la maqueta de Casa Huepil (cliente Martín) -->
+                    <!-- La maqueta de Casa Huepil: el mismo archivo que ve el cliente en su panel -->
                     <model-viewer
                         class="mosaico__pieza"
                         data-pieza="p3"
-                        data-src="models/martin.glb"
+                        data-src="models/obras/2.glb"
                         alt="Maqueta 3D de Casa Huepil"
                         auto-rotate
                         rotation-per-second="18deg"
                         auto-rotate-delay="0"
                         interaction-prompt="none"
-                        camera-target="99.1m 5.7m -11.8m"
-                        camera-orbit="40deg 45deg 38%"
-                        min-camera-orbit="auto 15deg 12%"
+                        camera-orbit="40deg 65deg 55%"
+                        min-camera-orbit="auto 15deg 25%"
                         max-camera-orbit="auto 85deg 120%"
-                        shadow-intensity="0.6"
-                        exposure="1.15"
-                        environment-image="neutral"
+                        shadow-intensity="1.4"
+                        shadow-softness="0.3"
+                        exposure="0.9"
+                        tone-mapping="aces"
+                        environment-image="models/estudio.hdr"
                         reveal="auto"></model-viewer>
                     <model-viewer
                         class="mosaico__pieza"
                         data-pieza="p4"
-                        data-src="models/prueba-424-original.glb"
-                        alt="Maqueta de prueba, archivo original"
+                        data-src="maquetas/lote-424/maqueta-bn.glb"
+                        data-luz-adentro
+                        alt="Maqueta 3D de la Casa 424, San Ramiro, Pilar del Este"
                         auto-rotate
-                        rotation-per-second="18deg"
+                        rotation-per-second="14deg"
                         auto-rotate-delay="0"
                         interaction-prompt="none"
-                        camera-orbit="40deg 62deg 80%"
-                        min-camera-orbit="auto 25deg 60%"
-                        max-camera-orbit="auto 85deg 140%"
-                        shadow-intensity="0.6"
-                        exposure="1.15"
-                        environment-image="neutral"
+                        camera-orbit="22deg 76deg 85%"
+                        min-camera-orbit="auto 25deg 55%"
+                        max-camera-orbit="auto 88deg 140%"
+                        field-of-view="34deg"
+                        shadow-intensity="0.7"
+                        shadow-softness="0.6"
+                        exposure="1.3"
+                        tone-mapping="aces"
+                        environment-image="models/estudio.hdr"
                         reveal="auto"></model-viewer>
                     <img class="mosaico__pieza" data-pieza="p5"
                          data-src="images/proyectos/unifamiliar/escobar/04.jpg" alt="Render de San Benito, escalera con cava" decoding="async">
@@ -263,6 +270,7 @@
     </section>
     </main>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+    <script src="js/maqueta-luz.js?v=20261019"></script>
     <script src="js/proyectos-indice.js?v=20260925" defer></script>
 <!--
 <div class="container">
