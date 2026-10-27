@@ -14,7 +14,7 @@
     --qr-tinta: rgba(255, 255, 255, 0.95);
     --qr-suave: rgba(255, 255, 255, 0.72);
     --qr-linea: rgba(255, 255, 255, 0.3);
-    --qr-caja: rgba(14, 14, 14, 0.7);
+    --qr-caja: rgba(14, 14, 14, 0.28);
     --qr-bordo: #C2183C;
     --qr-verde: #1A7D45;
 }
@@ -132,12 +132,12 @@ body {
     display: flex;
     align-items: center;
     gap: 14px;
-    /* 58px: se toca con el pulgar sin apuntar. El mínimo que pide la
-       norma es 24, pero esto se usa caminando. */
-    min-height: 58px;
+    /* 46px: más fino que antes pero por encima de los 44 que se tocan
+       cómodos con el pulgar. El mínimo de la norma son 24. */
+    min-height: 46px;
     padding: 0 22px;
     border: 1px solid var(--qr-linea);
-    border-radius: 14px;
+    border-radius: 12px;
     background: var(--qr-caja);
     /* El desenfoque no es adorno: sin él, el renglón se apoya en lo que
        el video esté mostrando en ese segundo y la etiqueta titila. */
@@ -163,7 +163,7 @@ body {
 .qr__boton:hover,
 .qr__boton:focus-visible {
     border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(14, 14, 14, 0.82);
+    background: rgba(14, 14, 14, 0.46);
 }
 
 .qr__boton:focus-visible {
@@ -174,16 +174,17 @@ body {
 /* Guardar el contacto es lo que esta página vino a hacer: va lleno, y en
    blanco, que sobre el video es lo único que no depende de nada. */
 .qr__boton--principal {
-    border-color: #FFFFFF;
-    background: #FFFFFF;
-    color: #141414;
+    border-color: #880723;
+    background: #880723;
+    color: #FFFFFF;
     font-weight: 400;
 }
 
 .qr__boton--principal:hover,
 .qr__boton--principal:focus-visible {
-    background: rgba(255, 255, 255, 0.86);
-    color: #141414;
+    background: #6D0519;
+    border-color: #6D0519;
+    color: #FFFFFF;
 }
 
 /* El verde no es decoración: es lo que hace que se reconozca qué abre. */
@@ -289,13 +290,13 @@ body {
 
 /* En pantalla ancha no hay dedo: los botones no necesitan tanto alto. */
 @media (hover: hover) and (pointer: fine) and (min-width: 500px) {
-    .qr__boton { min-height: 52px; }
+    .qr__boton { min-height: 44px; }
 }
 
 /* Donde el desenfoque no existe, el renglón se apoya en un gris sólido:
    sin eso quedaría casi transparente sobre el video. */
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
-    .qr__boton { background: rgba(14, 14, 14, 0.82); }
+    .qr__boton { background: rgba(14, 14, 14, 0.52); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -4,13 +4,15 @@ N:;AR HAUS Developers;;;
 FN:AR HAUS Developers
 ORG:AR HAUS Developers
 TITLE:Estudio de arquitectura y construcción
-TEL;TYPE=CELL,VOICE:+5491134564660
-TEL;TYPE=WORK,VOICE:+5491157632088
+item1.TEL;TYPE=CELL,VOICE:+5491134564660
+item1.X-ABLabel:Arquitecto 1
+item2.TEL;TYPE=CELL,VOICE:+5491157632088
+item2.X-ABLabel:Arquitecto 2
 EMAIL;TYPE=INTERNET,WORK:info@arhaus.com.ar
 URL:https://arhaus.com.ar
 X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/arhausdevelopers/
 ADR;TYPE=WORK:;;;Buenos Aires;;;Argentina
-NOTE:Arquitectura\, obra y desarrollo. Horario de contacto: 08:00 a 16:00.
+NOTE:Arquitectura\, Obras & Desarrollo. Horario de contacto: 08:00 a 16:00.
 PHOTO;ENCODING=b;TYPE=JPEG:/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQF
  BQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2w
  BDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e
