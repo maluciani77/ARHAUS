@@ -47,11 +47,15 @@
                 rotation-per-second="12deg"
                 auto-rotate-delay="3000"
                 interaction-prompt="none"
+                disable-zoom
                 camera-orbit="215deg 84deg 47m"
-                field-of-view="30deg"
-                shadow-intensity="0"
-                exposure="1"
-                tone-mapping="neutral"
+                field-of-view="28deg"
+                min-camera-orbit="auto 20deg 20m"
+                max-camera-orbit="auto 92deg 95m"
+                shadow-intensity="1.4"
+                shadow-softness="0.3"
+                exposure="0.9"
+                tone-mapping="aces"
                 environment-image="models/estudio.hdr"
                 loading="eager"
                 reveal="auto">
@@ -173,7 +177,7 @@
                 if (window.innerWidth < 700) {
                     requestAnimationFrame(function () {
                         v.cameraOrbit = '215deg 84deg 78m';
-                        v.fieldOfView = '34deg';
+                        v.fieldOfView = '32deg';
                         v.jumpCameraToGoal();
                     });
                 }
