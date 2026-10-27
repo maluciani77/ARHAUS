@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="css/footer.css?v=20260927b">
     <link rel="stylesheet" href="css/theme-light.css?v=20261013">
     <link rel="stylesheet" href="css/proyectos-indice.css?v=20261013">
-    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20260927c">
+    <link rel="stylesheet" href="css/proyecto-ficha.css?v=20261027">
+    <link rel="stylesheet" href="css/maqueta-proyecto.css?v=20261023">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="js/jquery-3.3.1.min.js?v=20260927b"></script>
     <script src="js/main.js?v=20260927b" defer></script>
@@ -38,9 +39,9 @@
         <!-- Esta ficha arranca con la maqueta 3D; los renders van despues,
              en la galeria. Mientras baja la maqueta (unos 6 MB) se ve el
              render de noche como poster. -->
-        <header class="ficha__portada ficha__portada--3d">
+        <header class="ficha__portada ficha__portada--3d ficha__portada--noche ficha__portada--velo-abajo">
             <model-viewer
-                src="models/martin.glb"
+                src="models/obras/2.glb"
                 poster="images/proyectos/unifamiliar/neuquen/07.jpg"
                 alt="Maqueta 3D de Casa Huepil"
                 camera-controls
@@ -51,13 +52,15 @@
                 rotation-per-second="14deg"
                 auto-rotate-delay="2500"
                 interaction-prompt="none"
-                camera-target="99.1m 5.7m -11.8m"
-                camera-orbit="40deg 45deg 38%"
-                min-camera-orbit="auto 15deg 12%"
+                camera-orbit="auto 68deg 52%"
+                field-of-view="28deg"
+                min-camera-orbit="auto 15deg 25%"
                 max-camera-orbit="auto 85deg 120%"
-                shadow-intensity="0.7"
-                exposure="1.1"
-                environment-image="neutral"></model-viewer>
+                shadow-intensity="1.4"
+                shadow-softness="0.3"
+                exposure="0.9"
+                tone-mapping="aces"
+                environment-image="models/estudio.hdr"></model-viewer>
             <p class="ficha__ayuda-3d" aria-hidden="true">Arrastrá para girar la maqueta</p>
             <div class="ficha__titulo">
                 <h1 class="ficha__lugar">San Martín de los Andes</h1>

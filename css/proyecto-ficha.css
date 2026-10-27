@@ -9,7 +9,9 @@
 	--ficha-fondo: #F5F4F0;
 	--ficha-banda: #EBE8E1;
 	--ficha-texto: #333333;
-	--ficha-suave: #767676;
+	/* #686868 y no #767676: el gris de antes daba 3,71:1 sobre la banda
+	   de los datos. Ahora da 4,55:1. */
+	--ficha-suave: #686868;
 	--ficha-linea: #D9D5CC;
 }
 
@@ -124,7 +126,8 @@
 }
 
 .ficha__dato dt {
-	font-size: 10px;
+	/* 12px: en 10 no se leen en un telefono */
+	font-size: 12px;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
 	color: var(--ficha-suave);
@@ -207,6 +210,10 @@
 
 .ficha__siguiente a {
 	color: var(--ficha-texto);
+	/* Median 14px de alto: el relleno los lleva a 34, que es lo que se
+	   toca comodo. Van en una fila flex, asi que no corren nada. */
+	display: inline-block;
+	padding: 10px 0;
 }
 
 .ficha__siguiente a:hover {
@@ -278,4 +285,33 @@
 	.ficha__datos { padding: 36px 16px; }
 	.ficha__texto { padding: 44px 16px 8px; font-size: 15px; }
 	.ficha__siguiente { margin: 0 16px; flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ========================================
+   PORTADA CON MAQUETA BLANCA
+   Con la maqueta clara sobre fondo oscuro, el titulo -que en oscuro va en
+   claro- se queda sin apoyo justo donde cruza el terreno: medido ahi daba
+   1,00:1, o sea invisible. Este velo le devuelve el fondo abajo sin tapar
+   la maqueta, que es lo que se vino a ver.
+   Va por clase aparte para no tocar la portada de Pilar, cuya maqueta es
+   gris y no tiene este problema.
+   ======================================== */
+
+.ficha__portada--velo-abajo::after {
+	display: block;
+	content: '';
+	position: absolute;
+	inset: auto 0 0 0;
+	height: 46%;
+	background: linear-gradient(to top,
+		rgba(8, 8, 8, 0.94) 0%,
+		rgba(8, 8, 8, 0.72) 45%,
+		rgba(8, 8, 8, 0) 100%);
+	pointer-events: none;
+	z-index: 1;
+}
+
+.ficha__portada--velo-abajo .ficha__titulo {
+	z-index: 2;
 }
