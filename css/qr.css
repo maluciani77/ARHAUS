@@ -1,0 +1,247 @@
+/* ========================================
+   LA PÁGINA DEL QR
+   Se llega escaneando un código con el teléfono en la mano, muchas veces
+   parado en la calle o en una obra. De ahí salen casi todas las
+   decisiones: fondo claro porque al sol un fondo oscuro no se lee,
+   botones altos porque se tocan con el pulgar y sin nada que haya que
+   leer dos veces.
+   ======================================== */
+
+:root {
+    --qr-fondo: #F5F4F0;
+    --qr-tinta: #333333;
+    --qr-suave: #686868;
+    --qr-linea: rgba(51, 51, 51, 0.16);
+    --qr-bordo: #880723;
+    --qr-verde: #1A7D45;
+}
+
+* { box-sizing: border-box; }
+
+html {
+    /* Evita que el iPhone agrande la letra solo al girar el teléfono. */
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--qr-fondo);
+    color: var(--qr-tinta);
+    font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+}
+
+.qr {
+    /* Una sola columna angosta, centrada: a lo ancho de una tablet o de
+       una compu no tiene sentido estirar una lista de cinco accesos. */
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 56px 20px calc(40px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ---------- Arriba ---------- */
+
+.qr__cabecera {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+.qr__logo {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto 22px;
+}
+
+.qr__bajada {
+    margin: 0;
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    color: var(--qr-tinta);
+}
+
+.qr__lugar {
+    margin: 8px 0 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--qr-suave);
+}
+
+/* ---------- Los accesos ---------- */
+
+.qr__accesos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.qr__boton {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    /* 58px: se toca con el pulgar sin apuntar. El mínimo que pide la
+       norma es 24, pero esto se usa caminando. */
+    min-height: 58px;
+    padding: 0 22px;
+    border: 1px solid var(--qr-linea);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--qr-tinta);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.qr__boton svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.qr__boton:hover,
+.qr__boton:focus-visible {
+    border-color: var(--qr-tinta);
+}
+
+.qr__boton:focus-visible {
+    outline: 2px solid var(--qr-bordo);
+    outline-offset: 3px;
+}
+
+/* Guardar el contacto es lo que esta página vino a hacer: va lleno. */
+.qr__boton--principal {
+    border-color: var(--qr-tinta);
+    background: var(--qr-tinta);
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.qr__boton--principal:hover,
+.qr__boton--principal:focus-visible {
+    background: transparent;
+    color: var(--qr-tinta);
+}
+
+/* El verde no es decoración: es lo que hace que se reconozca qué abre. */
+.qr__boton--whatsapp {
+    border-color: var(--qr-verde);
+    background: var(--qr-verde);
+    color: #FFFFFF;
+}
+
+.qr__boton--whatsapp:hover,
+.qr__boton--whatsapp:focus-visible {
+    background: transparent;
+    color: #146B3A;
+    border-color: #146B3A;
+}
+
+/* ---------- Los proyectos, con foto ---------- */
+
+.qr__proyectos {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #FFFFFF;
+    /* El margen de más lo separa de los renglones: es de otra categoría. */
+    margin: 6px 0;
+}
+
+.qr__proyectos img {
+    display: block;
+    width: 100%;
+    height: 168px;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.qr__proyectos:hover img,
+.qr__proyectos:focus-visible img {
+    transform: scale(1.04);
+}
+
+/* La foto es clara arriba y oscura abajo según la foto que toque: el
+   degradado garantiza que el texto se lea sobre cualquiera. */
+.qr__proyectos::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 8, 8, 0.86) 0%, rgba(8, 8, 8, 0.42) 50%, rgba(8, 8, 8, 0.08) 100%);
+}
+
+.qr__proyectos__texto {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 16px;
+    z-index: 1;
+    display: block;
+}
+
+.qr__proyectos__titulo {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 400;
+}
+
+.qr__proyectos__pie {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+.qr__proyectos:focus-visible {
+    outline: 2px solid var(--qr-bordo);
+    outline-offset: 3px;
+}
+
+/* ---------- Abajo ---------- */
+
+.qr__pie {
+    margin-top: auto;
+    padding-top: 36px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.qr__pie a {
+    display: inline-block;
+    padding: 8px 4px;
+    color: var(--qr-suave);
+    text-decoration: none;
+    border-bottom: 1px solid var(--qr-linea);
+}
+
+.qr__pie a:hover,
+.qr__pie a:focus-visible {
+    color: var(--qr-tinta);
+    border-color: var(--qr-tinta);
+}
+
+/* En pantalla ancha no hay dedo: los botones no necesitan tanto alto. */
+@media (hover: hover) and (pointer: fine) and (min-width: 500px) {
+    .qr__boton { min-height: 52px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .qr__proyectos img { transition: none; }
+    .qr__proyectos:hover img { transform: none; }
+}

@@ -14,3 +14,8 @@ RedirectMatch 403 ^/vendor(/|$)
 <FilesMatch "^composer\.(json|lock)$">
     Require all denied
 </FilesMatch>
+
+# La ficha de contacto de qr.html. Sin esto el servidor la manda como
+# archivo generico y el iPhone la guarda en Archivos en vez de abrir la
+# agenda para agregarla.
+AddType text/vcard .vcf

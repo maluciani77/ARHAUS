@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AR HAUS Developers</title>
+    <meta name="description" content="Estudio de arquitectura y construcci&oacute;n. Agend&aacute; nuestro contacto, mir&aacute; los proyectos o escribinos.">
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <!-- OJO: el ?v= de abajo es lo que hace que el navegador y el CDN sirvan
+         la versi&oacute;n nueva. Si se toca el css, hay que subirle el n&uacute;mero. -->
+    <link rel="stylesheet" href="css/qr.css?v=20261027">
+</head>
+<body>
+    <main class="qr">
+        <header class="qr__cabecera">
+            <img class="qr__logo" src="images/logo-dark.svg" alt="AR HAUS Developers" width="150" height="46">
+            <p class="qr__bajada">Arquitectura, obra y desarrollo</p>
+            <p class="qr__lugar">Buenos Aires &middot; Argentina</p>
+        </header>
+
+        <nav class="qr__accesos" aria-label="Accesos">
+            <!-- Primero lo que solo se puede hacer con el tel&eacute;fono en la mano:
+                 guardar el contacto. Por eso va lleno y arriba de todo. -->
+            <a class="qr__boton qr__boton--principal" href="contacto.vcf" download="AR HAUS Developers.vcf">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/>
+                    <circle cx="10" cy="7" r="3.2"/>
+                    <path d="M18 7.5v5M15.5 10h5"/>
+                </svg>
+                <span>Agendar contacto</span>
+            </a>
+
+            <!-- Los proyectos van con una foto y no como un rengl&oacute;n m&aacute;s: es
+                 lo &uacute;nico de esta p&aacute;gina que se mira antes de decidir si tocarlo. -->
+            <a class="qr__proyectos" href="proyecto.html">
+                <img src="images/qr/proyectos.jpg" alt="Casa La Pampa 4510, Villa Urquiza" loading="lazy" decoding="async" width="1100" height="620">
+                <span class="qr__proyectos__texto">
+                    <span class="qr__proyectos__titulo">Conocer nuestros proyectos</span>
+                    <span class="qr__proyectos__pie">Obras y maquetas 3D</span>
+                </span>
+            </a>
+
+            <a class="qr__boton" href="index.html">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="8.5"/>
+                    <path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.4 3.3 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.3-5.4-3.3-8.5S9.8 5.9 12 3.5Z"/>
+                </svg>
+                <span>Sitio web</span>
+            </a>
+
+            <a class="qr__boton" href="https://www.instagram.com/arhausdevelopers/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5"/>
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M16.9 7.1h.01"/>
+                </svg>
+                <span>Instagram</span>
+            </a>
+
+            <a class="qr__boton qr__boton--whatsapp" href="https://wa.me/5491134564660?text=Hola%2C%20los%20contacto%20desde%20la%20web%20de%20ARHAUS.%20Me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto." target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 20l1.2-3.8A8 8 0 1 1 8.1 19z"/>
+                    <path d="M9.2 8.6c.2 2.6 3.4 5.9 6 6.1l1.2-1.4-2-1-.9.9c-1-.4-2.3-1.7-2.7-2.7l.9-.9-1-2z"/>
+                </svg>
+                <span>WhatsApp</span>
+            </a>
+        </nav>
+
+        <footer class="qr__pie">
+            <a href="mailto:info@arhaus.com.ar">info@arhaus.com.ar</a>
+        </footer>
+    </main>
+</body>
+</html>
