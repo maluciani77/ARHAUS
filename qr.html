@@ -5,16 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AR HAUS Developers</title>
     <meta name="description" content="Estudio de arquitectura y construcci&oacute;n. Agend&aacute; nuestro contacto, mir&aacute; los proyectos o escribinos.">
+    <meta name="theme-color" content="#0E0E0E">
     <link rel="shortcut icon" href="favicon.svg" type="image/svg">
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
     <!-- OJO: el ?v= de abajo es lo que hace que el navegador y el CDN sirvan
          la versi&oacute;n nueva. Si se toca el css, hay que subirle el n&uacute;mero. -->
-    <link rel="stylesheet" href="css/qr.css?v=20261027">
+    <link rel="stylesheet" href="css/qr.css?v=20261027b">
 </head>
 <body>
+    <!-- El mismo video que la portada. Debajo queda la foto: es lo que se
+         ve mientras el video baja, y lo que queda si el tel&eacute;fono no lo
+         reproduce (iOS en ahorro de energ&iacute;a, datos cortados). -->
+    <div class="qr__fondo">
+        <img class="qr__fondo__foto" src="images/qr/fondo.jpg" alt="" fetchpriority="high">
+        <video class="qr__fondo__video" src="images/proyectos/video/nordelta_el_golf.mp4"
+               autoplay muted loop playsinline preload="auto" tabindex="-1" aria-hidden="true"></video>
+        <div class="qr__fondo__velo"></div>
+    </div>
+
     <main class="qr">
         <header class="qr__cabecera">
-            <img class="qr__logo" src="images/logo-dark.svg" alt="AR HAUS Developers" width="150" height="46">
+            <img class="qr__logo" src="images/logo.svg" alt="AR HAUS Developers" width="150" height="46">
             <p class="qr__bajada">Arquitectura, obra y desarrollo</p>
             <p class="qr__lugar">Buenos Aires &middot; Argentina</p>
         </header>
@@ -71,5 +82,17 @@
             <a href="mailto:info@arhaus.com.ar">info@arhaus.com.ar</a>
         </footer>
     </main>
+
+    <script>
+        // El video entra con un fundido cuando ya tiene imagen que mostrar.
+        // Sin esto se ve un parpadeo negro entre la foto y el primer cuadro.
+        (function () {
+            var v = document.querySelector('.qr__fondo__video');
+            if (!v) return;
+            var listo = function () { v.classList.add('esta-listo'); };
+            if (v.readyState >= 2) listo();
+            else v.addEventListener('loadeddata', listo, { once: true });
+        })();
+    </script>
 </body>
 </html>

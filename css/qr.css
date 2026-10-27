@@ -2,17 +2,20 @@
    LA PÁGINA DEL QR
    Se llega escaneando un código con el teléfono en la mano, muchas veces
    parado en la calle o en una obra. De ahí salen casi todas las
-   decisiones: fondo claro porque al sol un fondo oscuro no se lee,
-   botones altos porque se tocan con el pulgar y sin nada que haya que
-   leer dos veces.
+   decisiones: botones altos porque se tocan con el pulgar, todo en una
+   pantalla sin desplazar, y nada que haya que leer dos veces.
+
+   Detrás va el mismo video que la portada. Eso obliga a que el texto sea
+   claro, y a que entre el video y el texto haya un velo: sobre un video
+   que se mueve, un gris medio deja de leerse en cuanto pasa una nube.
    ======================================== */
 
 :root {
-    --qr-fondo: #F5F4F0;
-    --qr-tinta: #333333;
-    --qr-suave: #686868;
-    --qr-linea: rgba(51, 51, 51, 0.16);
-    --qr-bordo: #880723;
+    --qr-tinta: rgba(255, 255, 255, 0.95);
+    --qr-suave: rgba(255, 255, 255, 0.72);
+    --qr-linea: rgba(255, 255, 255, 0.3);
+    --qr-caja: rgba(14, 14, 14, 0.7);
+    --qr-bordo: #C2183C;
     --qr-verde: #1A7D45;
 }
 
@@ -25,37 +28,80 @@ html {
 
 body {
     margin: 0;
-    background: var(--qr-fondo);
+    background: #0E0E0E;
     color: var(--qr-tinta);
     font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- El fondo ---------- */
+
+.qr__fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #0E0E0E;
+}
+
+.qr__fondo__foto,
+.qr__fondo__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.qr__fondo__video {
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    pointer-events: none;
+}
+
+.qr__fondo__video.esta-listo {
+    opacity: 1;
+}
+
+/* El velo es lo que hace legible todo lo de arriba. Va más cargado en los
+   extremos, que es donde caen el logo y el correo, y se afloja en el
+   medio para que el video se siga viendo. */
+.qr__fondo__velo {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to bottom,
+            rgba(8, 8, 8, 0.82) 0%,
+            rgba(8, 8, 8, 0.58) 38%,
+            rgba(8, 8, 8, 0.62) 70%,
+            rgba(8, 8, 8, 0.86) 100%);
+}
+
+/* ---------- La columna ---------- */
+
 .qr {
-    /* Una sola columna angosta, centrada: a lo ancho de una tablet o de
-       una compu no tiene sentido estirar una lista de cinco accesos. */
+    position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 440px;
     margin: 0 auto;
-    padding: 56px 20px calc(40px + env(safe-area-inset-bottom));
+    padding: 52px 20px calc(36px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* ---------- Arriba ---------- */
-
 .qr__cabecera {
     text-align: center;
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
 
 .qr__logo {
     width: 150px;
     height: auto;
     display: block;
-    margin: 0 auto 22px;
+    margin: 0 auto 20px;
 }
 
 .qr__bajada {
@@ -79,7 +125,7 @@ body {
 .qr__accesos {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 11px;
 }
 
 .qr__boton {
@@ -92,10 +138,13 @@ body {
     padding: 0 22px;
     border: 1px solid var(--qr-linea);
     border-radius: 14px;
-    background: transparent;
+    background: var(--qr-caja);
+    /* El desenfoque no es adorno: sin él, el renglón se apoya en lo que
+       el video esté mostrando en ese segundo y la etiqueta titila. */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     color: var(--qr-tinta);
     font-size: 1rem;
-    letter-spacing: 0.01em;
     text-decoration: none;
     transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
@@ -113,26 +162,28 @@ body {
 
 .qr__boton:hover,
 .qr__boton:focus-visible {
-    border-color: var(--qr-tinta);
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(14, 14, 14, 0.82);
 }
 
 .qr__boton:focus-visible {
-    outline: 2px solid var(--qr-bordo);
+    outline: 2px solid #FFFFFF;
     outline-offset: 3px;
 }
 
-/* Guardar el contacto es lo que esta página vino a hacer: va lleno. */
+/* Guardar el contacto es lo que esta página vino a hacer: va lleno, y en
+   blanco, que sobre el video es lo único que no depende de nada. */
 .qr__boton--principal {
-    border-color: var(--qr-tinta);
-    background: var(--qr-tinta);
-    color: #FFFFFF;
+    border-color: #FFFFFF;
+    background: #FFFFFF;
+    color: #141414;
     font-weight: 400;
 }
 
 .qr__boton--principal:hover,
 .qr__boton--principal:focus-visible {
-    background: transparent;
-    color: var(--qr-tinta);
+    background: rgba(255, 255, 255, 0.86);
+    color: #141414;
 }
 
 /* El verde no es decoración: es lo que hace que se reconozca qué abre. */
@@ -144,9 +195,9 @@ body {
 
 .qr__boton--whatsapp:hover,
 .qr__boton--whatsapp:focus-visible {
-    background: transparent;
-    color: #146B3A;
-    border-color: #146B3A;
+    background: #15693A;
+    border-color: #15693A;
+    color: #FFFFFF;
 }
 
 /* ---------- Los proyectos, con foto ---------- */
@@ -155,17 +206,17 @@ body {
     position: relative;
     display: block;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 14px;
     text-decoration: none;
     color: #FFFFFF;
-    /* El margen de más lo separa de los renglones: es de otra categoría. */
-    margin: 6px 0;
+    margin: 5px 0;
 }
 
 .qr__proyectos img {
     display: block;
     width: 100%;
-    height: 168px;
+    height: 158px;
     object-fit: cover;
     transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -175,8 +226,8 @@ body {
     transform: scale(1.04);
 }
 
-/* La foto es clara arriba y oscura abajo según la foto que toque: el
-   degradado garantiza que el texto se lea sobre cualquiera. */
+/* Medido contra los píxeles de la foto: sin esto el título daba 3,08
+   sobre el ladrillo claro. Con el degradado, 5,44. */
 .qr__proyectos::after {
     content: '';
     position: absolute;
@@ -188,7 +239,7 @@ body {
     position: absolute;
     left: 20px;
     right: 20px;
-    bottom: 16px;
+    bottom: 15px;
     z-index: 1;
     display: block;
 }
@@ -209,7 +260,7 @@ body {
 }
 
 .qr__proyectos:focus-visible {
-    outline: 2px solid var(--qr-bordo);
+    outline: 2px solid #FFFFFF;
     outline-offset: 3px;
 }
 
@@ -217,7 +268,7 @@ body {
 
 .qr__pie {
     margin-top: auto;
-    padding-top: 36px;
+    padding-top: 30px;
     text-align: center;
     font-size: 0.85rem;
 }
@@ -227,7 +278,7 @@ body {
     padding: 8px 4px;
     color: var(--qr-suave);
     text-decoration: none;
-    border-bottom: 1px solid var(--qr-linea);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
 }
 
 .qr__pie a:hover,
@@ -241,7 +292,16 @@ body {
     .qr__boton { min-height: 52px; }
 }
 
+/* Donde el desenfoque no existe, el renglón se apoya en un gris sólido:
+   sin eso quedaría casi transparente sobre el video. */
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+    .qr__boton { background: rgba(14, 14, 14, 0.82); }
+}
+
 @media (prefers-reduced-motion: reduce) {
+    /* Queda la foto quieta: un video de fondo es justo lo que molesta a
+       quien pidió que no se mueva nada. */
+    .qr__fondo__video { display: none; }
     .qr__proyectos img { transition: none; }
     .qr__proyectos:hover img { transform: none; }
 }
