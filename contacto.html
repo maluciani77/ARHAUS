@@ -4,7 +4,9 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<!-- devices setting -->
-	<meta name="viewport" content="initial-scale=1,user-scalable=no,width=device-width">
+	<!-- Sin "user-scalable=no": con eso puesto el telefono no dejaba agrandar
+	     la pagina con los dedos, y hay gente que lo necesita para leer. -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title> Contacto - ARHAUS </title>
 	<!-- SEO -->
@@ -25,7 +27,7 @@
 	<!--<link href='https://arhaus.com.ar/favicon.svg' rel='icon' type='image/x-icon'/>-->
 	<link rel="shortcut icon" href="favicon.svg" type="image/svg">
 	<!-- Va al final: desarma el posicionamiento absoluto de master_contacto.css -->
-	<link rel="stylesheet" href="css/contacto-form.css?v=20260926">
+	<link rel="stylesheet" href="css/contacto-form.css?v=20261027">
 </head>
 <body>
 	
@@ -91,6 +93,19 @@
 					<dt>Instagram</dt>
 					<dd><a href="https://www.instagram.com/arhausdevelopers/" target="_blank" rel="noopener">@arhausdevelopers</a></dd>
 				</dl>
+
+				<!-- El formulario deja un mensaje y espera respuesta; esto abre una
+				     conversación en el acto. El texto va escrito de antemano para
+				     que nadie se quede mirando un campo vacío, pero se puede
+				     cambiar antes de enviarlo. -->
+				<a class="contacto__whatsapp" href="https://wa.me/5491134564660?text=Hola%2C%20los%20contacto%20desde%20la%20web%20de%20ARHAUS.%20Me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto." target="_blank" rel="noopener">
+					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<path d="M4 20l1.2-3.8A8 8 0 1 1 8.1 19z"/>
+						<path d="M9.2 8.6c.2 2.6 3.4 5.9 6 6.1l1.2-1.4-2-1-.9.9c-1-.4-2.3-1.7-2.7-2.7l.9-.9-1-2z"/>
+					</svg>
+					<span>Hablar con el arquitecto</span>
+				</a>
+				<p class="contacto__whatsapp-nota">Se abre WhatsApp con el mensaje ya escrito.</p>
 			</aside>
 		</div>
 	</main>
