@@ -209,3 +209,23 @@ CREATE TABLE IF NOT EXISTS recordatorios (
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Accesos directos: el link que va grabado en una tarjeta NFC y entra a
+-- la cuenta sin pedir contraseña. Igual que recordatorios, en la base
+-- queda SOLO el hash del secreto: con la base en la mano no se puede
+-- fabricar un link que funcione.
+CREATE TABLE IF NOT EXISTS accesos_directos (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT UNSIGNED NOT NULL,
+  selector VARCHAR(32) NOT NULL UNIQUE,
+  validador_hash VARCHAR(255) NOT NULL,
+  nota VARCHAR(190) NOT NULL DEFAULT '',
+  expira DATETIME NULL,
+  revocado_el DATETIME NULL,
+  usos INT UNSIGNED NOT NULL DEFAULT 0,
+  ultimo_uso DATETIME NULL,
+  creado_por INT UNSIGNED NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  FOREIGN KEY (creado_por) REFERENCES usuarios(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

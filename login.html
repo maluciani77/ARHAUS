@@ -87,6 +87,13 @@
             aviso.style.display = 'block';
         }
 
+        // La tarjeta NFC trajo un acceso que ya no sirve: puede estar
+        // dada de baja, vencida, o ser de otro sitio.
+        if (parametros.get('error') === 'nfc') {
+            aviso.textContent = 'Esa tarjeta ya no tiene acceso. Entrá con tu email y contraseña, o pedile una nueva al estudio.';
+            aviso.style.display = 'block';
+        }
+
         // Lo que puede salir mal al entrar con Google. El servidor manda
         // un motivo corto y acá se traduce a algo que se entienda.
         var motivosGoogle = {

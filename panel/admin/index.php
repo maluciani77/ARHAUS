@@ -35,6 +35,7 @@ $totales = db()->query("
 <?php $navLinks = [
     ['href' => 'usuarios.php', 'texto' => 'Usuarios'],
     ['href' => 'obras.php', 'texto' => 'Obras'],
+    ['href' => 'accesos.php', 'texto' => 'Tarjetas NFC'],
 ]; include __DIR__ . '/../_topbar.php'; ?>
 
 <main class="panel-main">
@@ -46,6 +47,7 @@ $totales = db()->query("
     <div class="panel-actions">
         <a class="panel-btn" href="obras.php">+ Nueva obra</a>
         <a class="panel-btn panel-btn--secundario" href="usuarios.php">+ Nuevo usuario</a>
+        <a class="panel-btn panel-btn--secundario" href="accesos.php">Tarjetas NFC</a>
     </div>
 
     <h2>Obras</h2>

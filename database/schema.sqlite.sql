@@ -178,3 +178,21 @@ CREATE TABLE IF NOT EXISTS recordatorios (
   expira TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Accesos directos: el link que va grabado en una tarjeta NFC y entra a
+-- la cuenta sin pedir contraseña. Igual que recordatorios, en la base
+-- queda SOLO el hash del secreto: con la base en la mano no se puede
+-- fabricar un link que funcione.
+CREATE TABLE IF NOT EXISTS accesos_directos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  selector TEXT NOT NULL UNIQUE,
+  validador_hash TEXT NOT NULL,
+  nota TEXT NOT NULL DEFAULT '',
+  expira TEXT NULL,
+  revocado_el TEXT NULL,
+  usos INTEGER NOT NULL DEFAULT 0,
+  ultimo_uso TEXT NULL,
+  creado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

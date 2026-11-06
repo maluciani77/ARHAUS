@@ -71,6 +71,7 @@ $usuarios = db()->query('SELECT * FROM usuarios ORDER BY rol, nombre')->fetchAll
 <?php $navLinks = [
     ['href' => 'index.php', 'texto' => '← Panel'],
     ['href' => 'obras.php', 'texto' => 'Obras'],
+    ['href' => 'accesos.php', 'texto' => 'Tarjetas NFC'],
 ]; include __DIR__ . '/../_topbar.php'; ?>
 
 <main class="panel-main">

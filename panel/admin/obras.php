@@ -78,6 +78,7 @@ $arquitectos = db()->query(
 <?php $navLinks = [
     ['href' => 'index.php', 'texto' => '← Panel'],
     ['href' => 'usuarios.php', 'texto' => 'Usuarios'],
+    ['href' => 'accesos.php', 'texto' => 'Tarjetas NFC'],
 ]; include __DIR__ . '/../_topbar.php'; ?>
 
 <main class="panel-main">
