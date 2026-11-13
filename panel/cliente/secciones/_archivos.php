@@ -41,6 +41,7 @@ $introArchivos = [
     'informes' => 'Los informes de avance de la obra.',
     'planificacion' => 'El cronograma de la obra (Gantt): cuándo empieza y termina cada tarea.',
     'ejec_archivos' => 'Documentación de la obra que el estudio comparte con vos.',
+    'relevamiento' => 'El relevamiento de lo que había antes de empezar: fotos y videos de la obra tal como estaba.',
 ][$categoriaDocumento] ?? '';
 
 $esDelCliente = in_array($categoriaDocumento, CATEGORIAS_DEL_CLIENTE, true);

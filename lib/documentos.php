@@ -44,6 +44,7 @@ const CATEGORIAS_DOCUMENTO = [
     'informes' => 'Informes',
     'planificacion' => 'Gantt',
     'ejec_archivos' => 'Archivos de obra',
+    'relevamiento' => 'Relevamiento',
 ];
 
 /** En qué botón del panel del cliente cae cada categoría (así se ordenan en el panel del estudio). */
@@ -52,7 +53,7 @@ const GRUPOS_DOCUMENTO = [
     'Proyecto · Planos' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
     'Proyecto · Visuales' => ['brochure', 'render', 'videos'],
     'Proyecto · Presupuestos' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
-    'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos'],
+    'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos', 'relevamiento'],
 ];
 
 /**
