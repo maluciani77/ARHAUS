@@ -55,7 +55,7 @@ const MENU_CLIENTE = [
         'gestion' => ['Gestión', ['gestion_gestor' => 'Gestor', 'gestion_ingeniero' => 'Ingeniero', 'gestion_proveedores' => 'Proveedores', 'gestion_administracion' => 'Administración']],
     ]],
     'ejecucion' => ['Ejecución de obra', [
-        'direccion' => ['Dirección de obra', ['direccion' => 'Seguimiento', 'fotos_dia' => 'Fotos día por día', 'relevamiento' => 'Relevamiento']],
+        'direccion' => ['Dirección de obra', ['direccion' => 'Seguimiento', 'fotos_dia' => 'Fotos día por día', 'relevamiento' => 'Relevamiento', 'desmalezamiento' => 'Desmalezamiento']],
         'profesionales' => ['Profesionales', ['higiene' => 'Higiene y seguridad', 'gestor' => 'Gestor', 'agrimensor' => 'Agrimensor']],
         'contratados' => ['Contratados', ['proveedores' => 'Proveedores']],
         'fotos' => ['Fotos', ['fotos' => 'Fotos']],
