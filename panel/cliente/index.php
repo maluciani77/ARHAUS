@@ -129,9 +129,11 @@ function secciones_cliente(): array
  *
  * Devuelve el conjunto de hojas que SI tienen algo: ['planos_arq' => true, ...].
  */
-function hojas_con_algo(array $documentos, array $contactos): array
+function hojas_con_algo(array $documentos, array $contactos, array $propias = []): array
 {
-    $hay = [];
+    // Lo de Ejecucion que no son archivos: llega ya resuelto desde
+    // abajo, que es donde estan cargadas esas tablas.
+    $hay = $propias;
     foreach ($documentos as $documento) {
         $hay[(string)$documento['categoria']] = true;
     }
@@ -150,9 +152,19 @@ function hojas_con_algo(array $documentos, array $contactos): array
 }
 
 /**
- * Si esta hoja se muestra o no. Se esconden solo las carpetas vacias;
- * todo lo demas (Calendario, Pagos, Fotos, Datos personales...) no es
- * una carpeta y va siempre.
+ * Hojas de Ejecucion de obra que no son carpetas de archivos pero igual
+ * pueden estar vacias: cada una sale de su propia tabla. Si no hay
+ * novedades cargadas, "Seguimiento" no tiene por que ocupar lugar.
+ *
+ * Fuera de Ejecucion no se tocan: Calendario, Pagos o Datos personales
+ * son parte del panel aunque esten vacios.
+ */
+const HOJAS_PROPIAS_EJECUCION = ['direccion', 'fotos_dia', 'fotos', 'presupuestos', 'etapas'];
+
+/**
+ * Si esta hoja se muestra o no. Se esconden las carpetas vacias y, en
+ * Ejecucion de obra, tambien las secciones sin nada cargado; todo lo
+ * demas (Calendario, Pagos, Datos personales...) va siempre.
  */
 function hoja_visible(string $clave, array $conAlgo, string $seccionActual): bool
 {
@@ -166,7 +178,9 @@ function hoja_visible(string $clave, array $conAlgo, string $seccionActual): boo
     if (in_array($clave, CATEGORIAS_DEL_CLIENTE, true)) {
         return true;
     }
-    if (es_categoria_documento($clave) || isset(SECCIONES_CONTACTOS[$clave])) {
+    if (es_categoria_documento($clave)
+        || isset(SECCIONES_CONTACTOS[$clave])
+        || in_array($clave, HOJAS_PROPIAS_EJECUCION, true)) {
         return isset($conAlgo[$clave]);
     }
     return true;
@@ -360,7 +374,13 @@ if ($obra) {
     $archivosContactos = archivos_de_contactos((int)$obra['id']);
     $presupuestos = presupuestos_de_obra((int)$obra['id']);
     $eventos = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
-    $conAlgo = hojas_con_algo($documentos, $contactos);
+    $conAlgo = hojas_con_algo($documentos, $contactos, array_filter([
+        'direccion' => (bool)$novedades,
+        'fotos_dia' => (bool)$fotos,
+        'fotos' => (bool)$fotos,
+        'presupuestos' => (bool)$presupuestos,
+        'etapas' => (bool)$etapas,
+    ]));
 }
 
 function url_foto(string $raiz, array $obra, array $foto): string
