@@ -51,6 +51,7 @@ const MENU_CLIENTE = [
             'arq_varios' => 'Varios',
         ]],
         'visuales' => ['Visuales', ['brochure' => 'Brochure', 'render' => 'Renders', 'videos' => 'Videos']],
+        'maqueta3d' => ['3D', ['maqueta3d' => '3D']],
         'obra' => ['Presupuestos', ['computo' => 'Cómputo', 'presupuesto_proy' => 'Presupuesto', 'planificacion_gantt' => 'Planificación (Gantt)', 'obra_otros' => 'Otros']],
         'gestion' => ['Gestión', ['gestion_gestor' => 'Gestor', 'gestion_ingeniero' => 'Ingeniero', 'gestion_proveedores' => 'Proveedores', 'gestion_administracion' => 'Administración']],
     ]],
@@ -152,14 +153,15 @@ function hojas_con_algo(array $documentos, array $contactos, array $propias = []
 }
 
 /**
- * Hojas de Ejecucion de obra que no son carpetas de archivos pero igual
- * pueden estar vacias: cada una sale de su propia tabla. Si no hay
- * novedades cargadas, "Seguimiento" no tiene por que ocupar lugar.
+ * Hojas que no son carpetas de archivos pero igual pueden estar vacias:
+ * cada una sale de su propia tabla, o de un archivo. Si no hay novedades
+ * cargadas, "Seguimiento" no tiene por que ocupar lugar; si la obra no
+ * tiene maqueta, tampoco "3D".
  *
- * Fuera de Ejecucion no se tocan: Calendario, Pagos o Datos personales
- * son parte del panel aunque esten vacios.
+ * Lo que no esta en esta lista se muestra siempre: Calendario, Pagos o
+ * Datos personales son parte del panel aunque esten vacios.
  */
-const HOJAS_PROPIAS_EJECUCION = ['direccion', 'fotos_dia', 'fotos', 'presupuestos', 'etapas'];
+const HOJAS_CON_DATOS_PROPIOS = ['direccion', 'fotos_dia', 'fotos', 'presupuestos', 'etapas', 'maqueta3d'];
 
 /**
  * Si esta hoja se muestra o no. Se esconden las carpetas vacias y, en
@@ -180,7 +182,7 @@ function hoja_visible(string $clave, array $conAlgo, string $seccionActual): boo
     }
     if (es_categoria_documento($clave)
         || isset(SECCIONES_CONTACTOS[$clave])
-        || in_array($clave, HOJAS_PROPIAS_EJECUCION, true)) {
+        || in_array($clave, HOJAS_CON_DATOS_PROPIOS, true)) {
         return isset($conAlgo[$clave]);
     }
     return true;
@@ -380,6 +382,7 @@ if ($obra) {
         'fotos' => (bool)$fotos,
         'presupuestos' => (bool)$presupuestos,
         'etapas' => (bool)$etapas,
+        'maqueta3d' => (bool)maqueta_de_obra((int)$obra['id']),
     ]));
 }
 
@@ -612,7 +615,7 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 <?php if ($obra && (in_array($seccion, ['inicio', 'fotos', 'direccion', 'fotos_dia', 'info_obra'], true) || es_categoria_documento($seccion))): ?>
     <script src="<?= e(recurso($raiz, 'js/book-visor.js')) ?>"></script>
 <?php endif; ?>
-<?php if ($obra && $seccion === 'inicio' && maqueta_de_obra((int)$obra['id'])): ?>
+<?php if ($obra && in_array($seccion, ['inicio', 'maqueta3d'], true) && maqueta_de_obra((int)$obra['id'])): ?>
     <?php /* El visor 3D pesa, asi que se trae solo en Inicio y solo si
              esta obra tiene maqueta. */ ?>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
