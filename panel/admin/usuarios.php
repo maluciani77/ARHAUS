@@ -59,24 +59,17 @@ if (isset($_GET['ok'])) {
 
 $usuarios = db()->query('SELECT * FROM usuarios ORDER BY rol, nombre')->fetchAll();
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Usuarios - Panel admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/panel.css')) ?>">
-</head>
-<body class="panel-body">
-<?php $navLinks = [
-    ['href' => 'index.php', 'texto' => '← Panel'],
-    ['href' => 'obras.php', 'texto' => 'Obras'],
-    ['href' => 'accesos.php', 'texto' => 'Tarjetas NFC'],
-]; include __DIR__ . '/../_topbar.php'; ?>
+<?php
+$navActiva = 'usuarios';
+$tituloPagina = 'Usuarios';
+include __DIR__ . '/_cabecera.php';
+?>
 
-<main class="panel-main">
+<header class="adm-cabecera">
+    <p class="adm-etiqueta">Panel del estudio</p>
     <h1>Usuarios</h1>
-    <p class="panel-subtitle">Clientes, arquitectos y directores de obra con acceso a los paneles. Las cuentas se crean acá — nadie se registra solo.</p>
+    <p class="adm-cabecera__intro">Clientes, arquitectos y directores de obra con acceso a los paneles. Las cuentas se crean acá — nadie se registra solo.</p>
+</header>
 
     <?php if ($exito): ?><p class="panel-alert panel-alert--ok"><?= e($exito) ?></p><?php endif; ?>
     <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
@@ -135,6 +128,4 @@ $usuarios = db()->query('SELECT * FROM usuarios ORDER BY rol, nombre')->fetchAll
             <button type="submit">Crear usuario</button>
         </form>
     </div>
-</main>
-</body>
-</html>
+<?php include __DIR__ . '/_pie.php'; ?>

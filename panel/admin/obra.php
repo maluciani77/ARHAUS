@@ -16,6 +16,22 @@ require_once __DIR__ . '/../../lib/pagos.php';
 require_once __DIR__ . '/../../lib/contactos.php';
 
 $raiz = '../../';
+
+/**
+ * A donde se vuelve despues de guardar. Antes todo caia en obra.php?id=N,
+ * que ahora es la pantalla de Datos: si guardabas un pago terminabas en
+ * otra seccion. Esto conserva la que estabas mirando.
+ *
+ * $_GET funciona aunque el pedido sea POST: PHP lo arma igual con lo que
+ * viene en la direccion, y los formularios postean a la misma.
+ */
+function volver_a(array $obra, string $ancla = ''): string
+{
+    $seccion = (string)($_GET['seccion'] ?? '');
+    return 'obra.php?id=' . (int)$obra['id']
+        . ($seccion !== '' ? '&seccion=' . urlencode($seccion) : '')
+        . ($ancla !== '' ? '#' . $ancla : '');
+}
 $usuario = requerir_rol($raiz, 'admin');
 asegurar_rol_director();
 
@@ -61,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'UPDATE obras SET nombre = ?, ubicacion = ?, cliente_id = ?, arquitecto_id = ?, director_id = ?, estado = ? WHERE id = ?'
             );
             $upd->execute([$nombre, $ubicacion, $clienteId, $arquitectoId, $directorId, $estado, $obra['id']]);
-            redirigir('obra.php?id=' . $obra['id']);
+            redirigir(volver_a($obra));
         }
     } elseif ($accion === 'agregar_etapa') {
         $nombre = trim((string)($_POST['nombre'] ?? ''));
@@ -74,38 +90,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $orden = (int)db()->query('SELECT COALESCE(MAX(orden), 0) AS m FROM etapas WHERE obra_id = ' . (int)$obra['id'])->fetch()['m'] + 1;
             $ins = db()->prepare('INSERT INTO etapas (obra_id, nombre, orden, fecha, descripcion) VALUES (?, ?, ?, ?, ?)');
             $ins->execute([$obra['id'], $nombre, $orden, $fecha, $descripcion]);
-            redirigir('obra.php?id=' . $obra['id']);
+            redirigir(volver_a($obra));
         }
     } elseif ($accion === 'eliminar_etapa') {
         $etapaId = (int)($_POST['etapa_id'] ?? 0);
         $del = db()->prepare('DELETE FROM etapas WHERE id = ? AND obra_id = ?');
         $del->execute([$etapaId, $obra['id']]);
-        redirigir('obra.php?id=' . $obra['id']);
+        redirigir(volver_a($obra));
     } elseif ($accion === 'editar_etapa') {
         $etapaId = (int)($_POST['etapa_id'] ?? 0);
         $errorEtapa = actualizar_etapa($etapaId, (int)$obra['id'], $_POST);
         if ($errorEtapa === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#etapa-' . $etapaId);
+            redirigir(volver_a($obra, 'etapa-' . $etapaId));
         }
     } elseif ($accion === 'agregar_evento') {
         $errorEvento = agregar_evento((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorEvento === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#calendario');
+            redirigir(volver_a($obra, 'calendario'));
         }
     } elseif ($accion === 'eliminar_evento') {
         eliminar_evento((int)($_POST['evento_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#calendario');
+        redirigir(volver_a($obra, 'calendario'));
     } elseif ($accion === 'agregar_presupuesto') {
         $errorPresupuesto = agregar_presupuesto((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorPresupuesto === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
+            redirigir(volver_a($obra, 'presupuestos'));
         }
     } elseif ($accion === 'alternar_monto_oculto') {
         alternar_monto_oculto((int)($_POST['presupuesto_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
+        redirigir(volver_a($obra, 'presupuestos'));
     } elseif ($accion === 'eliminar_presupuesto') {
         eliminar_presupuesto((int)($_POST['presupuesto_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#presupuestos');
+        redirigir(volver_a($obra, 'presupuestos'));
     } elseif ($accion === 'subir_foto') {
         $resultado = subir_fotos_obra(
             (int)$obra['id'],
@@ -121,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$resultado['errores']) {
-            redirigir('obra.php?id=' . $obra['id']);
+            redirigir(volver_a($obra));
         }
         $error = ($resultado['subidas'] > 0
                 ? 'Se subieron ' . $resultado['subidas'] . ' fotos, pero otras fallaron: '
@@ -140,15 +156,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $del = db()->prepare('DELETE FROM fotos WHERE id = ?');
             $del->execute([$fotoId]);
         }
-        redirigir('obra.php?id=' . $obra['id']);
+        redirigir(volver_a($obra));
     } elseif ($accion === 'agregar_novedad') {
         $errorNovedad = agregar_novedad((int)$obra['id'], $_POST, $_FILES['foto'] ?? [], (int)$usuario['id']);
         if ($errorNovedad === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#direccion');
+            redirigir(volver_a($obra, 'direccion'));
         }
     } elseif ($accion === 'eliminar_novedad') {
         eliminar_novedad((int)($_POST['novedad_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#direccion');
+        redirigir(volver_a($obra, 'direccion'));
     } elseif ($accion === 'agregar_documento') {
         $errorDocumento = agregar_documento(
             (int)$obra['id'],
@@ -158,56 +174,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (int)$usuario['id']
         );
         if ($errorDocumento === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#archivos');
+            redirigir(volver_a($obra, 'archivos'));
         }
     } elseif ($accion === 'eliminar_documento') {
         eliminar_documento((int)($_POST['documento_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#archivos');
+        redirigir(volver_a($obra, 'archivos'));
     } elseif ($accion === 'agregar_mensaje') {
         $errorMensaje = agregar_mensaje((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorMensaje === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
+            redirigir(volver_a($obra, 'mensajes'));
         }
     } elseif ($accion === 'agregar_pago') {
         $errorPago = agregar_pago((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorPago === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+            redirigir(volver_a($obra, 'pagos'));
         }
     } elseif ($accion === 'eliminar_pago') {
         eliminar_pago((int)($_POST['pago_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+        redirigir(volver_a($obra, 'pagos'));
     } elseif ($accion === 'adjuntar_comprobante') {
         $errorPago = adjuntar_comprobante((int)($_POST['pago_id'] ?? 0), (int)$obra['id'], $_FILES['comprobante'] ?? [], (int)$usuario['id']);
         if ($errorPago === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+            redirigir(volver_a($obra, 'pagos'));
         }
     } elseif ($accion === 'quitar_comprobante') {
         quitar_comprobante((int)($_POST['pago_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#pagos');
+        redirigir(volver_a($obra, 'pagos'));
     } elseif ($accion === 'agregar_contacto') {
         $errorContacto = agregar_contacto((int)$obra['id'], $_POST, (int)$usuario['id']);
         if ($errorContacto === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+            redirigir(volver_a($obra, 'contactos'));
         }
     } elseif ($accion === 'eliminar_contacto') {
         eliminar_contacto((int)($_POST['contacto_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+        redirigir(volver_a($obra, 'contactos'));
     } elseif ($accion === 'adjuntar_archivo_contacto') {
         $errorContacto = adjuntar_archivo_contacto((int)($_POST['contacto_id'] ?? 0), (int)$obra['id'], $_POST, $_FILES['documento'] ?? [], (int)$usuario['id']);
         if ($errorContacto === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+            redirigir(volver_a($obra, 'contactos'));
         }
     } elseif ($accion === 'eliminar_archivo_contacto') {
         eliminar_archivo_contacto((int)($_POST['archivo_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#contactos');
+        redirigir(volver_a($obra, 'contactos'));
     } elseif ($accion === 'guardar_obra_info') {
         $errorObraInfo = guardar_obra_info((int)$obra['id'], $_POST);
         if ($errorObraInfo === null) {
-            redirigir('obra.php?id=' . $obra['id'] . '#obra-info');
+            redirigir(volver_a($obra, 'obra-info'));
         }
     } elseif ($accion === 'eliminar_mensaje') {
         eliminar_mensaje((int)($_POST['mensaje_id'] ?? 0), (int)$obra['id']);
-        redirigir('obra.php?id=' . $obra['id'] . '#mensajes');
+        redirigir(volver_a($obra, 'mensajes'));
     }
 
     // Releer la obra por si se actualizó.
@@ -246,46 +262,77 @@ $pagos = pagos_de_obra((int)$obra['id']);
 $contactos = contactos_de_obra((int)$obra['id']);
 $archivosContactos = archivos_de_contactos((int)$obra['id']);
 $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_de_obra((int)$obra['id']));
+
+/* ========================================
+   QUE SECCION SE ESTA MIRANDO
+   Antes esta pagina dibujaba las once secciones una abajo de la otra y
+   se navegaba con anclas. Ahora se abre de a una, con el mismo arbol que
+   ve el cliente.
+   ======================================== */
+require_once __DIR__ . '/_menu.php';
+
+$hojas = admin_hojas();
+$seccion = (string)($_GET['seccion'] ?? 'datos');
+if (!isset($hojas[$seccion])) {
+    $seccion = 'datos';
+}
+[$nombreSeccion, $grupoActivo, $bloques, $filtro] = $hojas[$seccion];
+
+/* Los numeritos de la barra lateral: cuantas cosas hay en cada hoja. Al
+   estudio le sirven para ver que le falta cargar sin entrar a mirar. */
+$porCategoria = [];
+foreach ($documentos as $doc) {
+    $porCategoria[(string)$doc['categoria']] = ($porCategoria[(string)$doc['categoria']] ?? 0) + 1;
+}
+$porTipoContacto = [];
+foreach ($contactos as $con) {
+    $porTipoContacto[(string)$con['tipo']] = ($porTipoContacto[(string)$con['tipo']] ?? 0) + 1;
+}
+$sueltas = [
+    'calendario' => count($calendario),
+    'propietarios' => count($propietarios),
+    'pagos' => count($pagos),
+    'direccion' => count($novedades),
+    'fotos' => count($fotos),
+    'etapas' => count($etapas),
+    'presupuestos' => count($presupuestos),
+    'mensajes' => count($mensajes),
+];
+$cuentas = [];
+foreach ($hojas as $clave => [, , $susBloques, $suFiltro]) {
+    if (isset($sueltas[$clave])) {
+        $cuentas[$clave] = $sueltas[$clave];
+    } elseif ($suFiltro && in_array('_documentos', $susBloques, true)) {
+        $cuentas[$clave] = array_sum(array_intersect_key($porCategoria, array_flip($suFiltro)));
+    } elseif ($suFiltro && in_array('_contactos', $susBloques, true)) {
+        $cuentas[$clave] = array_sum(array_intersect_key($porTipoContacto, array_flip($suFiltro)));
+    }
+}
+
+$tituloPagina = $obra['nombre'] . ' · ' . $nombreSeccion;
+include __DIR__ . '/_cabecera.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title><?= e($obra['nombre']) ?> - Panel admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/panel.css')) ?>">
-</head>
-<body class="panel-body">
-<?php $navLinks = [
-    ['href' => 'index.php', 'texto' => '← Panel'],
-    ['href' => 'obras.php', 'texto' => 'Obras'],
-    ['href' => 'usuarios.php', 'texto' => 'Usuarios'],
-]; include __DIR__ . '/../_topbar.php'; ?>
 
-<main class="panel-main">
-    <h1><?= e($obra['nombre']) ?></h1>
-    <p class="panel-subtitle">
-        <?= e($obra['ubicacion'] ?? '') ?>
-        · <span class="panel-tag panel-tag--rojo"><?= e(nombre_estado($obra['estado'])) ?></span>
-    </p>
-
-    <nav class="panel-secciones" aria-label="Secciones de la obra">
-        <a href="#obra-info">Obra info</a>
-        <a href="#propietarios">Propietarios</a>
-        <a href="#pagos">Pagos</a>
-        <a href="#contactos">Contactos</a>
-        <a href="#direccion">Dirección de obra</a>
-        <a href="#archivos">Archivos</a>
-        <a href="#mensajes">Mensajes</a>
-        <a href="#presupuestos">Presupuestos</a>
-        <a href="#calendario">Calendario</a>
-        <a href="#etapas">Etapas</a>
-        <a href="#fotos">Fotos</a>
+<?php /* Las solapas del grupo, cuando hay mas de una. */ ?>
+<?php [$nombreGrupo, , $hojasDelGrupo] = ADMIN_MENU_OBRA[$grupoActivo]; ?>
+<?php if (count($hojasDelGrupo) > 1): ?>
+    <nav class="adm-subnav" aria-label="<?= e($nombreGrupo) ?>">
+        <?php foreach ($hojasDelGrupo as $clave => [$nombreHoja]): ?>
+            <a class="adm-subnav__item<?= $clave === $seccion ? ' is-activa' : '' ?>"
+               href="obra.php?id=<?= (int)$obra['id'] ?>&amp;seccion=<?= e((string)$clave) ?>"
+               <?= $clave === $seccion ? 'aria-current="page"' : '' ?>><?= e($nombreHoja) ?></a>
+        <?php endforeach; ?>
     </nav>
+<?php endif; ?>
 
-    <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
+<header class="adm-cabecera">
+    <p class="adm-etiqueta"><?= e($nombreGrupo) ?></p>
+    <h1><?= e($nombreSeccion) ?></h1>
+</header>
 
-    <h2>Datos de la obra</h2>
+<?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
+
+<?php if ($seccion === 'datos'): ?>
     <div class="panel-card">
         <form method="post" class="panel-form">
             <?= campo_csrf() ?>
@@ -332,30 +379,40 @@ $calendario = eventos_de_obra($etapas, $fotos, $presupuestos, eventos_cargados_d
         </form>
     </div>
 
-    <?php include __DIR__ . '/../_presupuestos.php'; ?>
+    <?php /* La maqueta 3D se activa subiendo el archivo por FTP, asi que
+             aca solo se avisa si esta o no: es la pregunta que siempre
+             aparece cuando el cliente no la ve. */ ?>
+    <?php $hayMaqueta = is_file(__DIR__ . '/../../models/obras/' . (int)$obra['id'] . '.glb'); ?>
+    <h2>Maqueta 3D</h2>
+    <p class="panel-hint">
+        <?php if ($hayMaqueta): ?>
+            Cargada. El cliente la ve en Inicio y en Proyecto &rsaquo; 3D.
+        <?php else: ?>
+            Sin cargar. Subí el archivo como
+            <code>models/obras/<?= (int)$obra['id'] ?>.glb</code> y aparece sola.
+        <?php endif; ?>
+    </p>
 
-    <?php include __DIR__ . '/../_calendario_obra.php'; ?>
+<?php else: ?>
+    <?php
+    /* El filtro que espera cada bloque. Los bloques no se tocaron: ya
+       sabian recortarse solos. */
+    if ($filtro && in_array('_documentos', $bloques, true)) {
+        $categoriasPermitidas = $filtro;
+    }
+    if ($filtro && in_array('_contactos', $bloques, true)) {
+        $tiposPermitidos = $filtro;
+    }
+    ?>
+    <?php /* Cada bloque arranca con su propio <h2>, que ahora repite el
+             titulo de la pantalla. Se lo esconde por CSS en vez de tocar
+             los doce archivos, que los comparten el arquitecto y el
+             director de obra. */ ?>
+    <div class="adm-bloques">
+        <?php foreach ($bloques as $bloque) {
+            include __DIR__ . '/../' . $bloque . '.php';
+        } ?>
+    </div>
+<?php endif; ?>
 
-    <?php include __DIR__ . '/../_etapas.php'; ?>
-
-    <?php include __DIR__ . '/../_galeria_etapas.php'; ?>
-
-    <?php include __DIR__ . '/../_form_fotos.php'; ?>
-
-    <?php include __DIR__ . '/../_obra_info.php'; ?>
-
-    <?php include __DIR__ . '/../_propietarios.php'; ?>
-
-    <?php include __DIR__ . '/../_pagos.php'; ?>
-
-    <?php include __DIR__ . '/../_contactos.php'; ?>
-
-    <?php include __DIR__ . '/../_novedades.php'; ?>
-
-    <?php include __DIR__ . '/../_documentos.php'; ?>
-
-    <?php include __DIR__ . '/../_mensajes.php'; ?>
-
-</main>
-</body>
-</html>
+<?php include __DIR__ . '/_pie.php'; ?>

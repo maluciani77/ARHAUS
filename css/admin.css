@@ -1,0 +1,500 @@
+/* ===================================
+   ARHAUS - Panel del estudio
+
+   Va DESPUÉS de panel.css, no en lugar de. panel.css tiene los componentes
+   (tarjetas, tablas, formularios, la galería, el calendario...) y está
+   todo armado con seis variables de color, así que para pasarlo del fondo
+   negro al crema del panel del cliente alcanza con redefinirlas. Lo que
+   sigue a eso son los pocos colores que habían quedado escritos a mano.
+
+   Lo nuevo de verdad es la cáscara: barra lateral a la izquierda con las
+   secciones, como la ve el cliente. La idea es que el estudio y el
+   cliente miren el mismo mapa: cuando alguien escribe "no veo los
+   planos", el que atiende sabe exactamente dónde pararse.
+   =================================== */
+
+:root {
+  /* Los mismos tokens que css/cliente.css, para que sea literalmente el
+     mismo panel y no un primo parecido. */
+  --bg: #f5f4f0;
+  --superficie: #fbfaf7;
+  --hundido: #ebe8e1;
+  --texto: #2b2b2b;
+  --suave: #6f6d69;
+  --linea: #dcd8cf;
+  --acento: #880723;
+  --radio: 4px;
+
+  --ok: #1C6E3C;
+  --ok-fondo: rgba(28, 110, 60, 0.12);
+  --alerta-fondo: rgba(136, 7, 35, 0.08);
+
+  /* Un color por tipo de novedad, igual que en el panel del cliente. */
+  --c-etapa: #880723;
+  --c-etapa-fondo: #f3e3e6;
+  --c-evento: #2b2b2b;
+  --c-evento-fondo: #e3e0d8;
+  --c-presupuesto: #2c5a61;
+  --c-presupuesto-fondo: #e0ebec;
+  --c-fotos: #8a651c;
+  --c-fotos-fondo: #f2e9d5;
+
+  /* Acá es donde panel.css entero cambia de piel. */
+  --panel-red: var(--acento);
+  --panel-bg: var(--bg);
+  --panel-card: var(--superficie);
+  --panel-border: var(--linea);
+  --panel-text: var(--texto);
+  --panel-text-muted: var(--suave);
+}
+
+body.panel-body {
+  font-family: "Work Sans", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ---- Los colores que panel.css tenía escritos a mano ----
+   Estaban pensados para fondo negro: en crema quedan ilegibles. */
+
+.panel-alert {
+  background: var(--hundido);
+  border: 1px solid var(--linea);
+  color: var(--texto);
+}
+
+.panel-alert--error {
+  background: var(--alerta-fondo);
+  border-color: rgba(136, 7, 35, 0.3);
+  color: var(--acento);
+}
+
+.panel-alert--ok {
+  background: var(--ok-fondo);
+  border-color: rgba(28, 110, 60, 0.3);
+  color: var(--ok);
+}
+
+/* Los campos estaban en #0e0e0e, pensados para fondo negro. */
+.panel-form input,
+.panel-form select,
+.panel-form textarea,
+.panel-inline input[type="text"],
+.panel-copiar input {
+  background: #fff;
+  color: var(--texto);
+}
+
+.panel-form input::placeholder,
+.panel-form textarea::placeholder {
+  color: #9b9892;
+}
+
+.panel-form input:focus,
+.panel-form select:focus,
+.panel-form textarea:focus {
+  border-color: var(--acento);
+  box-shadow: 0 0 0 3px rgba(136, 7, 35, 0.12);
+}
+
+/* Las listas de archivos y el detalle de los presupuestos. */
+.panel-docs__grupo,
+.panel-subida__item,
+.panel-presupuestos__detalle,
+.panel-ficha__grupo {
+  background: var(--superficie);
+}
+
+.panel-tabla thead th {
+  color: var(--suave);
+}
+
+/* El chat: el estudio de un lado, el cliente del otro. */
+.panel-chat__mensaje--estudio {
+  background: var(--c-etapa-fondo);
+}
+
+.panel-chat__mensaje--cliente {
+  background: var(--hundido);
+}
+
+.panel-foto button {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+.panel-tabla tbody tr:hover {
+  background: rgba(43, 43, 43, 0.04);
+}
+
+.panel-foto,
+.panel-galeria__etapa {
+  background: var(--hundido);
+}
+
+.panel-subida__item.is-ok .panel-subida__estado { color: var(--ok); }
+.panel-subida__item.is-ok .panel-subida__barra span { background: var(--ok); }
+.panel-subida__item.is-error { border-color: rgba(136, 7, 35, 0.3); }
+.panel-subida__item.is-error .panel-subida__estado { color: var(--acento); }
+
+.panel-agenda__item--etapa { --tipo-color: var(--c-etapa); }
+.panel-agenda__item--evento { --tipo-color: var(--c-evento); }
+.panel-agenda__item--presupuesto { --tipo-color: var(--c-presupuesto); }
+.panel-agenda__item--fotos { --tipo-color: var(--c-fotos); }
+
+/* El primer titulo del bloque repite el de la pantalla. */
+.adm-bloques > h2:first-child {
+  display: none;
+}
+
+/* La barra de secciones con anclas ya no se usa: ahora cada sección es
+   su propia pantalla. Se esconde por si quedó en alguna página vieja. */
+.panel-secciones {
+  display: none;
+}
+
+/* ---- La cáscara ---- */
+
+.adm-app {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.adm-lateral {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;
+  padding: 28px 18px 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--linea);
+}
+
+.adm-lateral__logo {
+  display: block;
+  padding: 0 10px;
+}
+
+.adm-lateral__logo img {
+  display: block;
+  height: 34px;
+}
+
+/* De qué obra se está hablando. Es lo primero que hay que saber al
+   mirar la pantalla, por eso va arriba y en grande. */
+.adm-obra {
+  padding: 0 10px;
+}
+
+.adm-obra__nombre {
+  margin: 6px 0 10px;
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
+.adm-obra__volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--suave);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.adm-obra__volver:hover {
+  color: var(--acento);
+}
+
+.adm-estado {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid var(--acento);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--acento);
+}
+
+.adm-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adm-nav__titulo {
+  margin: 10px 10px 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.adm-nav__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 10px;
+  border-radius: var(--radio);
+  color: var(--suave);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.adm-nav__item:hover {
+  background: rgba(43, 43, 43, 0.05);
+  color: var(--texto);
+}
+
+.adm-nav__item.is-activa {
+  background: var(--hundido);
+  color: var(--texto);
+  font-weight: 500;
+}
+
+.adm-nav__item.is-activa .icono {
+  color: var(--acento);
+}
+
+/* Cuántas cosas hay en esa sección. Al estudio le sirve para saber de un
+   vistazo qué le falta cargar sin entrar a cada una. */
+.adm-nav__cuenta {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.icono {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.adm-lateral__pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: auto;
+  padding: 16px 10px 0;
+  border-top: 1px solid var(--linea);
+  font-size: 0.85rem;
+}
+
+.adm-lateral__usuario {
+  width: 100%;
+  margin: 0 0 4px;
+  color: var(--suave);
+}
+
+.adm-lateral__pie a {
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.adm-lateral__pie a:hover,
+.adm-lateral__salir {
+  color: var(--acento);
+}
+
+.adm-main {
+  width: 100%;
+  max-width: 1140px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 36px clamp(20px, 4vw, 56px) 96px;
+}
+
+/* Las solapas de adentro de un grupo, igual que en el panel del cliente. */
+.adm-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--linea);
+}
+
+.adm-subnav__item {
+  padding: 10px 2px 12px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--suave);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.adm-subnav__item:hover {
+  color: var(--texto);
+}
+
+.adm-subnav__item.is-activa {
+  border-bottom-color: var(--acento);
+  color: var(--texto);
+}
+
+.adm-cabecera {
+  margin-bottom: 26px;
+}
+
+.adm-cabecera h1 {
+  margin: 6px 0 0;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.adm-etiqueta {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.adm-cabecera__intro {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  color: var(--suave);
+}
+
+/* Las tarjetas de la portada: obras, usuarios, lo que haya. */
+.adm-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.adm-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Dentro de la tarjeta, que no se estire de lado a lado: la tarjeta es
+   flex en columna y los hijos crecen solos si no se les dice que no. */
+.adm-tarjeta .adm-estado {
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+
+a.adm-tarjeta:hover {
+  border-color: var(--acento);
+  transform: translateY(-2px);
+}
+
+.adm-tarjeta__nombre {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.adm-tarjeta__dato {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--suave);
+}
+
+.adm-tarjeta__pie {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--linea);
+  font-size: 0.82rem;
+  color: var(--suave);
+}
+
+/* Los números de arriba de todo en la portada. */
+.adm-cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.adm-cifra {
+  padding: 16px 18px;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.adm-cifra strong {
+  display: block;
+  font-size: 1.9rem;
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.adm-cifra span {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+/* ---- Celular ----
+   El admin se usa casi siempre en la compu, así que en el teléfono no
+   se arma una barra de íconos abajo como en el panel del cliente: la
+   lateral pasa arriba y la nav se desliza de costado. */
+@media (max-width: 900px) {
+  .adm-app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adm-lateral {
+    position: static;
+    height: auto;
+    gap: 16px;
+    padding: 16px 16px 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .adm-nav {
+    flex-direction: row;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .adm-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .adm-nav__titulo {
+    display: none;
+  }
+
+  .adm-nav__item {
+    flex: none;
+    padding: 8px 12px;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  .adm-nav__item .icono {
+    display: none;
+  }
+
+  .adm-lateral__pie {
+    margin-top: 0;
+  }
+
+  .adm-main {
+    padding: 24px 16px 72px;
+  }
+}

@@ -7,10 +7,14 @@
  *
  * Antes de incluirlo hay que tener definidos $obra, $contactos (de
  * contactos_de_obra()), $archivosContactos (de archivos_de_contactos()) y
- * opcionalmente $errorContacto.
+ * opcionalmente $errorContacto y $tiposPermitidos (lista de claves de
+ * TIPOS_CONTACTO; sirve para mostrar solo los de una seccion, igual que
+ * $categoriasPermitidas en _documentos.php). Si no se define, van todos.
  */
 
 $reenvioContacto = ($_POST['accion'] ?? '') === 'agregar_contacto' ? $_POST : [];
+$tiposPermitidos = $tiposPermitidos ?? array_keys(TIPOS_CONTACTO);
+$tiposVisibles = array_intersect_key(TIPOS_CONTACTO, array_flip($tiposPermitidos));
 $porTipo = array_fill_keys(array_keys(TIPOS_CONTACTO), []);
 foreach ($contactos as $contacto) {
     if (isset($porTipo[$contacto['tipo']])) {
@@ -30,7 +34,7 @@ foreach ($contactos as $contacto) {
         <input type="hidden" name="accion" value="agregar_contacto">
         <label>Tipo
             <select name="tipo" required>
-                <?php foreach (TIPOS_CONTACTO as $clave => $nombre): ?>
+                <?php foreach ($tiposVisibles as $clave => $nombre): ?>
                     <option value="<?= e($clave) ?>" <?= ($reenvioContacto['tipo'] ?? '') === $clave ? 'selected' : '' ?>><?= e($nombre) ?></option>
                 <?php endforeach; ?>
             </select>
@@ -57,7 +61,7 @@ foreach ($contactos as $contacto) {
     </form>
 </div>
 
-<?php foreach (TIPOS_CONTACTO as $tipo => $nombreTipo): ?>
+<?php foreach ($tiposVisibles as $tipo => $nombreTipo): ?>
     <h3 class="panel-docs__titulo"><?= e($nombreTipo) ?> <span class="panel-tag"><?= count($porTipo[$tipo]) ?></span></h3>
     <?php if (!$porTipo[$tipo]): ?>
         <p class="panel-vacio">Sin cargar.</p>

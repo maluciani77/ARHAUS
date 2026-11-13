@@ -62,13 +62,11 @@ unset($_SESSION['acceso_nuevo']);
 $accesos = listar_accesos_directos();
 $personas = db()->query('SELECT id, nombre, email, rol FROM usuarios ORDER BY rol, nombre')->fetchAll();
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Tarjetas NFC - Panel admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<?= e(recurso($raiz, 'css/panel.css')) ?>">
+<?php
+$navActiva = 'accesos';
+$tituloPagina = 'Tarjetas NFC';
+include __DIR__ . '/_cabecera.php';
+?>
 <style>
     /* El link recién creado: grande, monoespaciado y seleccionable de un
        toque. Es lo único que hay que copiar de esta página. */
@@ -93,20 +91,15 @@ $personas = db()->query('SELECT id, nombre, email, rol FROM usuarios ORDER BY ro
     .nfc-acciones { display: flex; gap: 8px; }
     .nfc-acciones button { padding: 4px 10px; font-size: 0.78rem; }
 </style>
-</head>
-<body class="panel-body">
-<?php $navLinks = [
-    ['href' => 'index.php', 'texto' => '← Panel'],
-    ['href' => 'usuarios.php', 'texto' => 'Usuarios'],
-    ['href' => 'obras.php', 'texto' => 'Obras'],
-]; include __DIR__ . '/../_topbar.php'; ?>
 
-<main class="panel-main">
+<header class="adm-cabecera">
+    <p class="adm-etiqueta">Panel del estudio</p>
     <h1>Tarjetas NFC</h1>
-    <p class="panel-subtitle">
+    <p class="adm-cabecera__intro">
         Cada tarjeta lleva grabado un link que entra directo a la cuenta, sin contraseña.
         El que tenga la tarjeta en la mano entra: es como una llave. Si se pierde, se da de baja acá y el link deja de servir en el acto.
     </p>
+</header>
 
     <?php if ($error): ?><p class="panel-alert panel-alert--error"><?= e($error) ?></p><?php endif; ?>
 
@@ -206,6 +199,4 @@ $personas = db()->query('SELECT id, nombre, email, rol FROM usuarios ORDER BY ro
             <button type="submit">Crear y mostrar el link</button>
         </form>
     </div>
-</main>
-</body>
-</html>
+<?php include __DIR__ . '/_pie.php'; ?>
