@@ -229,3 +229,16 @@ CREATE TABLE IF NOT EXISTS accesos_directos (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
   FOREIGN KEY (creado_por) REFERENCES usuarios(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Ver como: cada vez que un admin entra al panel de un cliente para ver
+-- lo que ve él. No guarda secretos: es un registro para poder mirar
+-- después quién entró a qué cuenta y cuando.
+CREATE TABLE IF NOT EXISTS suplantaciones (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT UNSIGNED NOT NULL,
+  usuario_id INT UNSIGNED NOT NULL,
+  termino DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (admin_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

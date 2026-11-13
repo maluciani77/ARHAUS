@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/helpers.php';
 require_once __DIR__ . '/../../lib/csrf.php';
+require_once __DIR__ . '/../../lib/suplantar.php';
 
 $raiz = '../../';
 $usuario = requerir_rol($raiz, 'admin');
@@ -86,6 +87,14 @@ include __DIR__ . '/_cabecera.php';
                         <td><?= e($u['email']) ?></td>
                         <td><span class="panel-tag"><?= e(nombre_rol($u['rol'])) ?></span></td>
                         <td>
+                            <div class="adm-acciones-fila">
+                            <?php if (in_array($u['rol'], SUPLANTAR_ROLES, true)): ?>
+                                <form method="post" action="<?= e($raiz) ?>panel/suplantar.php" style="display:inline">
+                                    <?= campo_csrf() ?>
+                                    <input type="hidden" name="usuario_id" value="<?= (int)$u['id'] ?>">
+                                    <button type="submit" class="panel-btn panel-btn--secundario" style="padding:4px 10px;font-size:0.78rem;">Ver como</button>
+                                </form>
+                            <?php endif; ?>
                             <?php if ((int)$u['id'] !== (int)$usuario['id']): ?>
                                 <form method="post" style="display:inline" onsubmit="return confirm('¿Eliminar a <?= e(addslashes($u['nombre'])) ?>? Esta acción no se puede deshacer.');">
                                     <?= campo_csrf() ?>
@@ -96,6 +105,7 @@ include __DIR__ . '/_cabecera.php';
                             <?php else: ?>
                                 <span class="panel-hint">(vos)</span>
                             <?php endif; ?>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

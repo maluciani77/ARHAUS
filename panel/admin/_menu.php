@@ -107,6 +107,7 @@ function icono_admin(string $nombre): string
         'telefonos' => '<path d="M6.6 3.5h3l1.5 4.2-2.1 1.4a11 11 0 0 0 5.9 5.9l1.4-2.1 4.2 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/>',
         'mensajes' => '<path d="M4 5h16v11H9l-5 4z"/><circle cx="9" cy="10.5" r="1"/><circle cx="12.5" cy="10.5" r="1"/><circle cx="16" cy="10.5" r="1"/>',
         'volver' => '<path d="M19 12H5.5M11.5 6 5.5 12l6 6"/>',
+        'ojo' => '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12"/><circle cx="12" cy="12" r="2.8"/>',
     ];
 
     return '<svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '

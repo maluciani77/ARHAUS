@@ -153,6 +153,22 @@ function recordar_si_corresponde(): ?array
 }
 
 /**
+ * Si el admin está viendo el panel de otro (ver lib/suplantar.php),
+ * devuelve ['admin' => [...], 'registro_id' => n, 'desde' => timestamp].
+ * Si no, null.
+ *
+ * Vive acá y no en suplantar.php porque solo lee la sesión -que es cosa
+ * de este archivo- y porque requerir_login() la necesita sin tener que
+ * cargar suplantar.php en cada página del sitio.
+ */
+function suplantacion_activa(): ?array
+{
+    iniciar_sesion_segura();
+    $datos = $_SESSION['suplantando'] ?? null;
+    return is_array($datos) && isset($datos['admin']['id']) ? $datos : null;
+}
+
+/**
  * Corta la ejecución y manda al login si no hay sesión activa.
  * $raiz es la ruta relativa hasta la raíz del sitio desde donde se llama
  * (por ejemplo '../../' desde /panel/admin/index.php, o '' desde /login.php).
@@ -164,6 +180,28 @@ function requerir_login(string $raiz = ''): array
         header('Location: ' . $raiz . 'login.html');
         exit;
     }
+
+    // Mientras el admin mira el panel de otro, el sitio es de solo
+    // lectura: si no, un formulario enviado sin pensar quedaría en la
+    // base como si lo hubiera escrito el cliente. Las dos páginas que
+    // manejan la suplantación en sí se declaran aparte, porque tienen que
+    // poder recibir su propio POST para cerrarla.
+    $mira = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    if ($mira !== 'GET' && $mira !== 'HEAD'
+        && !defined('SUPLANTAR_ESCRITURA_PERMITIDA')
+        && suplantacion_activa()) {
+        http_response_code(403);
+        header('Content-Type: text/html; charset=UTF-8');
+        echo '<!DOCTYPE html><html lang="es"><meta charset="UTF-8">'
+            . '<body style="font-family:system-ui,sans-serif;max-width:34rem;margin:15vh auto;padding:0 1.5rem;color:#2b2b2b">'
+            . '<h1 style="font-size:1.3rem;font-weight:500">Esto es de solo lectura</h1>'
+            . '<p>Estás viendo el panel como otra persona, así que no se puede guardar nada: '
+            . 'lo que quede escrito en la base tiene que haberlo escrito el cliente.</p>'
+            . '<p>Volvé a tu cuenta desde la barra de arriba y hacelo desde el panel del estudio.</p>'
+            . '<p><a href="javascript:history.back()">Volver atrás</a></p></body></html>';
+        exit;
+    }
+
     return $usuario;
 }
 

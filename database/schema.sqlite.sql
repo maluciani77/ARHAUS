@@ -196,3 +196,14 @@ CREATE TABLE IF NOT EXISTS accesos_directos (
   creado_por INTEGER REFERENCES usuarios(id) ON DELETE SET NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Ver como: cada vez que un admin entra al panel de un cliente para ver
+-- lo que ve él. No guarda secretos: es un registro para poder mirar
+-- después quién entró a qué cuenta y cuando.
+CREATE TABLE IF NOT EXISTS suplantaciones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  admin_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  termino TEXT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

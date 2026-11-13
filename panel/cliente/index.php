@@ -484,6 +484,7 @@ $titulo = $obra ? ($seccion === 'inicio' ? $obra['nombre'] : $nombreSeccion . ' 
 <link rel="stylesheet" href="<?= e(recurso($raiz, 'css/cliente.css')) ?>">
 </head>
 <body class="cliente">
+<?php include __DIR__ . '/../_suplantando.php'; ?>
 <?php if ($mostrarBienvenida): ?>
     <div class="cliente-bienvenida<?= $imagenBienvenida ? ' cliente-bienvenida--imagen' : '' ?>" role="status" aria-live="polite" data-bienvenida>
         <?php if ($imagenBienvenida): ?>

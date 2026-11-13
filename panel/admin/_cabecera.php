@@ -15,6 +15,7 @@
  *   $cuentas       [clave de hoja => cuántas cosas hay], para los numeritos
  */
 
+require_once __DIR__ . '/../../lib/csrf.php';
 require_once __DIR__ . '/_menu.php';
 
 $obraActual = $obra ?? null;
@@ -49,6 +50,16 @@ $cuentas = $cuentas ?? [];
                 <p class="adm-obra__nombre"><?= e($obraActual['nombre']) ?></p>
                 <span class="adm-estado"><?= e(nombre_estado($obraActual['estado'])) ?></span>
                 <a class="adm-obra__volver" href="index.php"><?= icono_admin('volver') ?>Todas las obras</a>
+                <?php if (!empty($obraActual['cliente_id'])): ?>
+                    <?php /* Entrar al panel del cliente de esta obra y ver lo
+                             mismo que ve él. Es de solo lectura: ver
+                             lib/suplantar.php. */ ?>
+                    <form method="post" action="<?= e($raiz) ?>panel/suplantar.php">
+                        <?= campo_csrf() ?>
+                        <input type="hidden" name="usuario_id" value="<?= (int)$obraActual['cliente_id'] ?>">
+                        <button type="submit" class="adm-obra__ver-como"><?= icono_admin('ojo') ?>Ver como el cliente</button>
+                    </form>
+                <?php endif; ?>
             </div>
 
             <nav class="adm-nav" aria-label="Secciones de la obra">

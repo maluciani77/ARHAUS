@@ -6,6 +6,7 @@
  * (array de ['href' => ..., 'texto' => ...] específicos del panel).
  */
 ?>
+<?php include __DIR__ . '/_suplantando.php'; ?>
 <header class="panel-topbar">
     <div class="panel-topbar__brand">
         <img src="<?= e($raiz) ?>images/logo.svg" alt="ARHAUS">
