@@ -32,6 +32,8 @@ $introArchivos = [
     // Proyecto > Visuales
     'brochure' => 'El brochure del proyecto, para ver o compartir.',
     'render' => 'Los renders del proyecto: cómo va a quedar la obra terminada.',
+    'presentacion_1' => 'La primera presentación del proyecto: los renders de cómo va a quedar.',
+    'presentacion_2' => 'La segunda presentación, con los cambios que salieron de la primera.',
     'videos' => 'Los videos del proyecto: recorridos y animaciones.',
     // Proyecto > Presupuestos
     'computo' => 'El cómputo de materiales del proyecto, por rubro.',
