@@ -47,3 +47,7 @@
 # Paginas sueltas para comparar maquetas, no van al sitio
 /_maqueta*.html
 /_maquetas.html
+
+# Python
+__pycache__/
+*.pyc
