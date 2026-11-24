@@ -22,7 +22,18 @@ $partesDireccion = array_filter([
     'Argentina',
 ]);
 $hayDireccion = !empty($obraInfo['direccion']) || !empty($obraInfo['localidad']);
-$mapaEmbebido = 'https://maps.google.com/maps?output=embed&z=15&q=' . rawurlencode(implode(', ', $partesDireccion));
+
+// El mapa de abajo necesita un PUNTO, no una direccion. Si el estudio
+// cargo el link de Google Maps, de ahi salen las coordenadas exactas y
+// el pin cae donde tiene que caer. Si no hay link, se cae a la direccion
+// escrita y la ubica Google: ahi el pin puede no aparecer, porque en un
+// barrio cerrado o un lote sin numeracion resuelve una zona y no un
+// punto. Por eso iba sin marcador aunque el boton llevara bien.
+$coordenadas = coordenadas_de_mapa((string)($obraInfo['mapa'] ?? ''));
+$mapaEmbebido = $coordenadas
+    ? 'https://maps.google.com/maps?output=embed&z=17&q=' . rawurlencode($coordenadas)
+    : 'https://maps.google.com/maps?output=embed&q=' . rawurlencode(implode(', ', $partesDireccion));
+
 $enlaceMapa = $obraInfo['mapa'] ?? ('https://www.google.com/maps/search/?api=1&query=' . rawurlencode(implode(', ', $partesDireccion)));
 ?>
 <header class="cliente-cabecera">
