@@ -111,6 +111,40 @@ function obra_info(int $obraId): array
  *
  * Devuelve "lat,lng" o null.
  */
+/**
+ * Abre un link corto de Google Maps para quedarse con el largo, que es
+ * el unico que trae las coordenadas adentro.
+ *
+ * Solo se usa al guardar la ficha, nunca al mostrarla: es una salida a
+ * internet y no puede colgar la pagina del cliente. Si falla, devuelve
+ * null y la ficha se guarda igual.
+ */
+function expandir_link_corto(string $url): ?string
+{
+    if (!preg_match('#^https?://(maps\.app\.goo\.gl|goo\.gl/maps)/#i', $url)) {
+        return null;
+    }
+    if (!function_exists('curl_init')) {
+        return null;
+    }
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_NOBODY => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 6,
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; ARHAUS panel)',
+    ]);
+    curl_exec($ch);
+    $final = (string)curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+    curl_close($ch);
+
+    return ($final !== '' && $final !== $url) ? $final : null;
+}
+
 function coordenadas_de_mapa(string $valor): ?string
 {
     $valor = trim($valor);
@@ -185,8 +219,16 @@ function guardar_obra_info(int $obraId, array $datos): ?string
                 }
                 break;
             case 'url':
+                // El mapa es el unico que ademas de un link acepta un par
+                // de coordenadas pegadas: es lo que se copia del telefono
+                // manteniendo apretado el punto, y es lo mas exacto.
+                if ($clave === 'mapa' && coordenadas_de_mapa($valor) !== null) {
+                    break;
+                }
                 if (!filter_var($valor, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $valor)) {
-                    return $etiqueta . ': tiene que ser un link que empiece con https://';
+                    return $etiqueta . ($clave === 'mapa'
+                        ? ': pega el link de Google Maps o las coordenadas (por ejemplo -40.1354, -71.2512).'
+                        : ': tiene que ser un link que empiece con https://');
                 }
                 break;
             case 'select':
@@ -196,6 +238,22 @@ function guardar_obra_info(int $obraId, array $datos): ?string
                 break;
         }
         $limpios[$clave] = $valor;
+    }
+
+    // Las coordenadas se resuelven UNA VEZ, al guardar, y quedan
+    // guardadas aparte. Asi la pagina del cliente no tiene que salir a
+    // preguntarle nada a Google cada vez que alguien la abre.
+    if (isset($limpios['mapa'])) {
+        $coords = coordenadas_de_mapa($limpios['mapa']);
+        if ($coords === null) {
+            $largo = expandir_link_corto($limpios['mapa']);
+            if ($largo !== null) {
+                $coords = coordenadas_de_mapa($largo);
+            }
+        }
+        if ($coords !== null) {
+            $limpios['mapa_coords'] = $coords;
+        }
     }
 
     asegurar_tabla('obra_info');

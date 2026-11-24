@@ -29,7 +29,12 @@ $hayDireccion = !empty($obraInfo['direccion']) || !empty($obraInfo['localidad'])
 // escrita y la ubica Google: ahi el pin puede no aparecer, porque en un
 // barrio cerrado o un lote sin numeracion resuelve una zona y no un
 // punto. Por eso iba sin marcador aunque el boton llevara bien.
-$coordenadas = coordenadas_de_mapa((string)($obraInfo['mapa'] ?? ''));
+// Primero las coordenadas que quedaron resueltas al guardar la ficha
+// -ahi se expanden los links cortos-; si no hay, se intenta sacarlas del
+// link tal como esta.
+$coordenadas = (string)($obraInfo['mapa_coords'] ?? '') !== ''
+    ? $obraInfo['mapa_coords']
+    : coordenadas_de_mapa((string)($obraInfo['mapa'] ?? ''));
 $mapaEmbebido = $coordenadas
     ? 'https://maps.google.com/maps?output=embed&z=17&q=' . rawurlencode($coordenadas)
     : 'https://maps.google.com/maps?output=embed&q=' . rawurlencode(implode(', ', $partesDireccion));
