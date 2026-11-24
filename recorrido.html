@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Recorrido virtual · ARHAUS Developers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e0e">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+
+<!--
+  RECORRIDO VIRTUAL POR PUNTOS
+
+  model-viewer es un visor que ORBITA: la camara da vueltas alrededor de
+  un punto. Para pararse adentro de una casa hace falta lo contrario, asi
+  que se da vuelta la cuenta.
+
+  La relacion es:  camara = objetivo - radio * u(theta, phi)
+
+  Entonces, para dejar la camara clavada en el punto P donde uno "esta
+  parado", el objetivo se recalcula en cada movimiento:
+
+      objetivo = P + radio * u(theta, phi)
+
+  Asi, cuando el visitante arrastra el dedo, lo que gira es la mirada y
+  no la posicion. El radio queda fijo -min-camera-orbit y max-camera-orbit
+  con el mismo valor- para que el pellizco de zoom no lo rompa; el
+  acercamiento se hace con el campo visual.
+
+  El modelo es huepil-v2.glb y no el 2.glb publicado: el publicado esta
+  pelado, sin una sola textura, porque en el sitio se muestra como maqueta
+  blanca. El v2 tiene las 63 texturas y los muebles.
+-->
+
+<style>
+    :root {
+        --crema: #f5f4f0;
+        --carbon: #333;
+        --borgona: #880723;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    body {
+        background: #0e0e0e;
+        color: var(--crema);
+        font-family: "Work Sans", system-ui, sans-serif;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    model-viewer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: #0e0e0e;
+        --poster-color: #0e0e0e;
+    }
+
+    .encabezado {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: max(14px, env(safe-area-inset-top)) 20px 28px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+        pointer-events: none;
+    }
+    .encabezado img { display: block; height: 24px; opacity: 0.95; }
+    .encabezado a { pointer-events: auto; color: #e6e1d8; font-size: 0.8rem; text-decoration: none; }
+
+    .ambiente {
+        position: absolute;
+        left: 20px;
+        bottom: calc(96px + env(safe-area-inset-bottom));
+        margin: 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 300;
+        font-size: 2rem;
+        line-height: 1;
+        text-shadow: 0 2px 18px rgba(0,0,0,0.8);
+        pointer-events: none;
+    }
+
+    .paradas {
+        position: absolute;
+        left: 0; right: 0;
+        bottom: 0;
+        display: flex;
+        gap: 8px;
+        padding: 14px 20px max(16px, env(safe-area-inset-bottom));
+        overflow-x: auto;
+        background: linear-gradient(to top, rgba(0,0,0,0.78), transparent);
+        scrollbar-width: none;
+    }
+    .paradas::-webkit-scrollbar { display: none; }
+
+    .parada {
+        flex: 0 0 auto;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 1px solid rgba(245,244,240,0.35);
+        border-radius: 999px;
+        background: rgba(14,14,14,0.45);
+        color: #efe9df;
+        font: inherit;
+        font-size: 0.88rem;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    .parada.es-actual {
+        border-color: transparent;
+        background: var(--borgona);
+        color: #fff;
+    }
+
+    .pista {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: rgba(14,14,14,0.6);
+        font-size: 0.86rem;
+        transition: opacity 0.6s;
+        pointer-events: none;
+    }
+    .pista[hidden] { display: none; }
+</style>
+</head>
+<body>
+
+<model-viewer
+    id="visor"
+    src="models/huepil-v2.glb"
+    alt="Recorrido por el interior de Casa Huepil"
+    camera-controls
+    disable-pan
+    disable-tap
+    touch-action="none"
+    interaction-prompt="none"
+    interpolation-decay="120"
+    field-of-view="72deg"
+    min-field-of-view="38deg"
+    max-field-of-view="85deg"
+    exposure="1.05"
+    tone-mapping="aces"
+    shadow-intensity="0"
+    environment-image="models/estudio.hdr"
+    loading="eager"
+    reveal="auto"></model-viewer>
+
+<div class="encabezado">
+    <img src="images/logo.svg" alt="ARHAUS Developers">
+    <a href="ar.html?o=huepil">Verla en el lote &rsaquo;</a>
+</div>
+
+<p class="ambiente" id="ambiente">Casa Huepil</p>
+<p class="pista" id="pista">Arrastrá para mirar alrededor</p>
+
+<div class="paradas" id="paradas"></div>
+
+<script>
+(function () {
+    var visor = document.getElementById('visor');
+    var cajaParadas = document.getElementById('paradas');
+    var rotulo = document.getElementById('ambiente');
+    var pista = document.getElementById('pista');
+
+    // Donde se para el visitante. x/z salen del modelo; la altura es la
+    // de los ojos. "mira" es hacia donde arranca mirando, en grados.
+    //
+    // OJO: estas posiciones las saque midiendo el modelo y mirando cada
+    // una, no de los planos. Si alguna cae mal, se corrige el numero.
+    var ALTURA_OJOS = 1.6;
+    var RADIO = 3;          // distancia al punto que mira. Queda fija.
+    var PARADAS = [
+        { nombre: 'Living',     x: 97.5,   z: -11.0,  mira: 20  },
+        { nombre: 'Cocina',     x: 99.0,   z: -14.0,  mira: 300 },
+        { nombre: 'Estar',      x: 96.5,   z: -16.0,  mira: 135 },
+        { nombre: 'Dormitorio', x: 100.25, z: -16.75, mira: 45  }
+    ];
+
+    var actual = 0;
+    var acomodando = false;
+
+    function direccion(theta, phi) {
+        return {
+            x: Math.sin(phi) * Math.sin(theta),
+            y: Math.cos(phi),
+            z: Math.sin(phi) * Math.cos(theta)
+        };
+    }
+
+    // Deja la camara clavada en la parada y mueve solo el objetivo.
+    function fijar(theta, phi, radio) {
+        var p = PARADAS[actual];
+        var u = direccion(theta, phi);
+        acomodando = true;
+        visor.cameraTarget =
+            (p.x + radio * u.x).toFixed(3) + 'm ' +
+            (ALTURA_OJOS + radio * u.y).toFixed(3) + 'm ' +
+            (p.z + radio * u.z).toFixed(3) + 'm';
+        requestAnimationFrame(function () { acomodando = false; });
+    }
+
+    function ir(i, instantaneo) {
+        actual = i;
+        var p = PARADAS[i];
+        var theta = p.mira * Math.PI / 180;
+        var phi = Math.PI / 2;
+
+        fijar(theta, phi, RADIO);
+        visor.cameraOrbit = p.mira + 'deg 90deg ' + RADIO + 'm';
+        if (instantaneo) { visor.jumpCameraToGoal(); }
+
+        rotulo.textContent = p.nombre;
+        document.querySelectorAll('.parada').forEach(function (b, k) {
+            b.classList.toggle('es-actual', k === i);
+        });
+    }
+
+    PARADAS.forEach(function (p, i) {
+        var b = document.createElement('button');
+        b.className = 'parada';
+        b.type = 'button';
+        b.textContent = p.nombre;
+        b.addEventListener('click', function () { ir(i, false); });
+        cajaParadas.appendChild(b);
+    });
+
+    // Cuando el visitante arrastra, model-viewer mueve la camara en
+    // orbita. Acá se recalcula el objetivo para que la camara vuelva a
+    // quedar donde estaba parada: lo que gira es la mirada.
+    visor.addEventListener('camera-change', function (e) {
+        if (acomodando) { return; }
+        if (e.detail && e.detail.source !== 'user-interaction') { return; }
+        var o = visor.getCameraOrbit();
+        fijar(o.theta, o.phi, RADIO);
+        if (!pista.hidden) { pista.style.opacity = 0; setTimeout(function () { pista.hidden = true; }, 600); }
+    });
+
+    visor.addEventListener('load', function () {
+        // El radio se clava: asi el pellizco no saca la camara del lugar.
+        visor.setAttribute('min-camera-orbit', 'auto 25deg ' + RADIO + 'm');
+        visor.setAttribute('max-camera-orbit', 'auto 150deg ' + RADIO + 'm');
+        ir(0, true);
+        setTimeout(function () {
+            if (!pista.hidden) { pista.style.opacity = 0; setTimeout(function () { pista.hidden = true; }, 600); }
+        }, 5000);
+    });
+})();
+</script>
+
+</body>
+</html>

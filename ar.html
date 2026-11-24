@@ -120,6 +120,23 @@
         color: var(--suave);
     }
     .sin-ar[hidden] { display: none; }
+
+    /* El recorrido por dentro. Va como segunda opcion y no como boton
+       lleno: el principal es ver la casa parada en el lote. */
+    .boton-recorrido {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 50px;
+        margin-top: 10px;
+        border: 1px solid var(--linea);
+        border-radius: 4px;
+        color: var(--carbon);
+        font-size: 0.94rem;
+        text-decoration: none;
+    }
+    .boton-recorrido[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -170,6 +187,7 @@
         Este teléfono no puede mostrar realidad aumentada, pero la maqueta de arriba
         se puede girar con el dedo.
     </p>
+    <a class="boton-recorrido" id="recorrido" href="recorrido.html">Entrar y recorrerla por dentro</a>
 </div>
 
 <script>
@@ -183,6 +201,7 @@
             rotulo: 'San Martín de los Andes · Realidad aumentada',
             modelo: 'models/obras/2.glb',
             escala: 'auto',
+            recorrido: 'recorrido.html',
             ayuda: 'Por ahora esta es la maqueta del terreno completo, con los pinos. ' +
                    'Apuntá a una mesa o al piso y movelo despacio; después podés achicarla con dos dedos.'
         },
@@ -212,6 +231,11 @@
     // tipografia del estudio y con un texto que dice que va a pasar.
     var boton = document.getElementById('boton');
     var sinAr = document.getElementById('sin-ar');
+
+    // El recorrido por dentro existe solo para las obras que tienen
+    // armadas las paradas; en las demas el boton no va.
+    var recorrido = document.getElementById('recorrido');
+    if (obra.recorrido) { recorrido.href = obra.recorrido; } else { recorrido.hidden = true; }
 
     var ayuda = document.getElementById('ayuda');
 
