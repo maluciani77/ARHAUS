@@ -199,11 +199,13 @@
         huepil: {
             nombre: 'Casa Huepil',
             rotulo: 'San Martín de los Andes · Realidad aumentada',
-            modelo: 'models/obras/2.glb',
-            escala: 'auto',
+            modelo: 'models/casa-huepil.glb',
+            escala: 'fixed',
             recorrido: 'recorrido.html',
-            ayuda: 'Por ahora esta es la maqueta del terreno completo, con los pinos. ' +
-                   'Apuntá a una mesa o al piso y movelo despacio; después podés achicarla con dos dedos.'
+            ayuda: 'Pará donde querés que vaya la casa, apuntá el teléfono <strong>al piso</strong> ' +
+                   'y movelo despacio hasta que reconozca el terreno. Después caminá: ' +
+                   'la casa queda plantada y crece a medida que te acercás. Mide 20 por 27 metros, ' +
+                   'así que conviene arrancar desde lejos.'
         },
         barrancas: {
             nombre: 'Barrancas del Lago',
@@ -246,14 +248,22 @@
         ayuda.hidden = !puede;
     }
 
+    boton.addEventListener('click', function () {
+        visor.activateAR();
+    });
+
     // Por dos caminos a proposito: si el modelo ya estaba en cache, el
     // evento "load" puede haber pasado antes de que se enganche el
     // manejador, y la pagina quedaria sin boton y sin aviso.
+    //
+    // OJO con updateComplete: model-viewer se carga como modulo, asi que
+    // cuando corre este script el elemento TODAVIA no es un model-viewer
+    // sino un HTMLElement pelado, y updateComplete no existe. Leerlo
+    // derecho tira una excepcion que corta el resto del script y deja el
+    // boton de realidad aumentada sin su manejador.
     visor.addEventListener('load', revisarAR);
-    visor.updateComplete.then(revisarAR);
-
-    boton.addEventListener('click', function () {
-        visor.activateAR();
+    customElements.whenDefined('model-viewer').then(function () {
+        if (visor.updateComplete) { visor.updateComplete.then(revisarAR); }
     });
 })();
 </script>
