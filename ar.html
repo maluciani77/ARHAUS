@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ver la casa en el lote · ARHAUS Developers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f4f0">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+
+<!--
+  Esta pagina es la que abre el QR que se pone en el lote.
+
+  La realidad aumentada la resuelve model-viewer, que ya usabamos para
+  las maquetas del sitio: no hace falta ninguna app ni ningun servicio de
+  terceros. Segun el telefono entra por uno de tres caminos:
+
+    - Android: Scene Viewer, con el mismo .glb que ya esta publicado.
+    - iPhone: Quick Look. Pide un .usdz, pero model-viewer lo genera solo
+      a partir del .glb, asi que tampoco hay que subir otro archivo.
+    - Navegadores con WebXR: la sesion corre en la propia pagina.
+
+  OJO con la escala. ar-scale="fixed" planta el modelo en su tamano real
+  y no deja agrandarlo ni achicarlo: es lo correcto para pararse en el
+  lote y ver la casa a escala 1:1. Si el modelo que se carga es la
+  maqueta del terreno entero -con base y arboles- conviene "auto", que
+  deja achicarla para verla sobre una mesa.
+-->
+
+<style>
+    :root {
+        --crema: #f5f4f0;
+        --carbon: #333333;
+        --borgona: #880723;
+        --suave: #6f6f6f;
+        --linea: #ddd9d0;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+        display: flex;
+        flex-direction: column;
+        background: var(--crema);
+        color: var(--carbon);
+        font-family: "Work Sans", system-ui, sans-serif;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: max(14px, env(safe-area-inset-top)) 20px 14px;
+        border-bottom: 1px solid var(--linea);
+    }
+    header img { display: block; height: 26px; }
+    header a { color: var(--suave); font-size: 0.82rem; text-decoration: none; }
+
+    .obra { padding: 20px 20px 6px; }
+    .obra__rotulo {
+        margin: 0;
+        font-size: 0.74rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--suave);
+    }
+    .obra__nombre {
+        margin: 6px 0 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 300;
+        font-size: 2rem;
+        line-height: 1.1;
+    }
+
+    model-viewer {
+        flex: 1;
+        min-height: 320px;
+        width: 100%;
+        margin-top: 12px;
+        background: #0e0e0e;
+        --poster-color: #0e0e0e;
+    }
+
+    .pie {
+        padding: 16px 20px max(20px, env(safe-area-inset-bottom));
+        border-top: 1px solid var(--linea);
+    }
+    .ayuda { margin: 0 0 14px; font-size: 0.86rem; line-height: 1.5; color: var(--suave); }
+    .ayuda strong { color: var(--carbon); font-weight: 500; }
+
+    .boton-ar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 54px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 4px;
+        background: var(--borgona);
+        color: #fff;
+        font: inherit;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+    }
+    .boton-ar[hidden] { display: none; }
+    .boton-ar svg { width: 20px; height: 20px; }
+
+    .sin-ar {
+        margin: 0;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        color: var(--suave);
+    }
+    .sin-ar[hidden] { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+    <a href="index.html"><img src="images/logo-dark.svg" alt="ARHAUS Developers"></a>
+    <a href="proyecto.html">Ver todos los proyectos</a>
+</header>
+
+<div class="obra">
+    <p class="obra__rotulo" id="rotulo">Realidad aumentada</p>
+    <h1 class="obra__nombre" id="nombre">Casa Huepil</h1>
+</div>
+
+<model-viewer
+    id="visor"
+    alt=""
+    camera-controls
+    touch-action="pan-y"
+    interaction-prompt="none"
+    auto-rotate
+    rotation-per-second="12deg"
+    auto-rotate-delay="2500"
+    shadow-intensity="1.2"
+    shadow-softness="0.4"
+    exposure="0.95"
+    tone-mapping="aces"
+    environment-image="models/estudio.hdr"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="floor"
+    loading="eager"
+    reveal="auto"></model-viewer>
+
+<div class="pie">
+    <p class="ayuda" id="ayuda">
+        Pará en el lote, apuntá el teléfono <strong>al piso</strong> y movelo despacio
+        hasta que reconozca el terreno. Después caminá alrededor.
+    </p>
+    <button class="boton-ar" id="boton" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3 3 8v8l9 5 9-5V8z"/><path d="m3 8 9 5 9-5M12 13v8"/>
+        </svg>
+        <span id="boton-texto">Verla en el lote</span>
+    </button>
+    <p class="sin-ar" id="sin-ar" hidden>
+        Este teléfono no puede mostrar realidad aumentada, pero la maqueta de arriba
+        se puede girar con el dedo.
+    </p>
+</div>
+
+<script>
+(function () {
+    // Las obras que tienen maqueta publicada. "escala" dice como se
+    // planta en realidad aumentada: "fixed" es tamano real -para pararse
+    // en el lote- y "auto" deja achicarla para verla sobre una mesa.
+    var OBRAS = {
+        huepil: {
+            nombre: 'Casa Huepil',
+            rotulo: 'San Martín de los Andes · Realidad aumentada',
+            modelo: 'models/obras/2.glb',
+            escala: 'auto',
+            ayuda: 'Por ahora esta es la maqueta del terreno completo, con los pinos. ' +
+                   'Apuntá a una mesa o al piso y movelo despacio; después podés achicarla con dos dedos.'
+        },
+        barrancas: {
+            nombre: 'Barrancas del Lago',
+            rotulo: 'Nordelta · Realidad aumentada',
+            modelo: 'models/obras/3.glb',
+            escala: 'fixed',
+            ayuda: 'Apuntá el teléfono al piso y movelo despacio hasta que reconozca el ambiente. ' +
+                   'La cocina aparece en su tamaño real: podés caminar adentro.'
+        }
+    };
+
+    var clave = (new URLSearchParams(location.search).get('o') || 'huepil').toLowerCase();
+    var obra = OBRAS[clave] || OBRAS.huepil;
+
+    var visor = document.getElementById('visor');
+    document.getElementById('nombre').textContent = obra.nombre;
+    document.getElementById('rotulo').textContent = obra.rotulo;
+    document.getElementById('ayuda').innerHTML = obra.ayuda;
+    document.title = obra.nombre + ' en realidad aumentada · ARHAUS';
+    visor.alt = 'Maqueta 3D de ' + obra.nombre;
+    visor.setAttribute('ar-scale', obra.escala);
+    visor.src = obra.modelo;
+
+    // El boton propio en vez del que trae model-viewer: asi queda con la
+    // tipografia del estudio y con un texto que dice que va a pasar.
+    var boton = document.getElementById('boton');
+    var sinAr = document.getElementById('sin-ar');
+
+    var ayuda = document.getElementById('ayuda');
+
+    function revisarAR() {
+        var puede = visor.canActivateAR;
+        boton.hidden = !puede;
+        sinAr.hidden = puede;
+        ayuda.hidden = !puede;
+    }
+
+    // Por dos caminos a proposito: si el modelo ya estaba en cache, el
+    // evento "load" puede haber pasado antes de que se enganche el
+    // manejador, y la pagina quedaria sin boton y sin aviso.
+    visor.addEventListener('load', revisarAR);
+    visor.updateComplete.then(revisarAR);
+
+    boton.addEventListener('click', function () {
+        visor.activateAR();
+    });
+})();
+</script>
+
+</body>
+</html>
