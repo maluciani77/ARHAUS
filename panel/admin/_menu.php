@@ -50,6 +50,7 @@ const ADMIN_MENU_OBRA = [
             ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria',
              'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento',
              'planos_municipales', 'demolicion', 'arq_varios']],
+        'dashboard' => ['Dashboard', ['_documentos'], ['dashboard']],
         'visuales' => ['Visuales', ['_documentos'],
             ['brochure', 'render', 'presentacion_1', 'presentacion_2', 'videos']],
         'presup_proy' => ['Presupuestos', ['_documentos'],

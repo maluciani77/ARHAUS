@@ -29,6 +29,8 @@ $introArchivos = [
     'planos_municipales' => 'Los planos que van a la municipalidad. Cada uno dice si ya está aprobado o si sigue en trámite.',
     'demolicion' => 'Qué se demuele y qué se conserva de lo que había.',
     'arq_varios' => 'Otros archivos del proyecto, incluido el anteproyecto: la primera versión, con la idea general de la casa.',
+    // Proyecto > Dashboard
+    'dashboard' => 'El tablero del proyecto: el estado de cada cosa, de un vistazo.',
     // Proyecto > Visuales
     'brochure' => 'El brochure del proyecto, para ver o compartir.',
     'render' => 'Los renders del proyecto: cómo va a quedar la obra terminada.',

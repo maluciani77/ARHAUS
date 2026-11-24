@@ -32,6 +32,7 @@ const CATEGORIAS_DOCUMENTO = [
     'demolicion' => 'Demolición',
     'arq_varios' => 'Varios',
     // Proyecto > Visuales
+    'dashboard' => 'Dashboard',
     'brochure' => 'Brochure',
     'render' => 'Renders',
     'presentacion_1' => 'Presentación 1',
@@ -54,6 +55,7 @@ const CATEGORIAS_DOCUMENTO = [
 const GRUPOS_DOCUMENTO = [
     'Propietarios' => ['prop_archivos', 'contrato', 'referentes', 'info_varios'],
     'Proyecto · Planos' => ['planos_arq', 'planos_electricos', 'planos_sanitarios', 'planos_carpinteria', 'planos_cielorrasos', 'plano_estructura', 'planos_amoblamiento', 'planos_municipales', 'demolicion', 'arq_varios'],
+    'Proyecto · Dashboard' => ['dashboard'],
     'Proyecto · Visuales' => ['brochure', 'render', 'presentacion_1', 'presentacion_2', 'videos'],
     'Proyecto · Presupuestos' => ['computo', 'presupuesto_proy', 'planificacion_gantt', 'obra_otros'],
     'Ejecución de obra' => ['informes', 'planificacion', 'ejec_archivos', 'relevamiento', 'desmalezamiento'],

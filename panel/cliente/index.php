@@ -50,6 +50,7 @@ const MENU_CLIENTE = [
             'demolicion' => 'Demolición',
             'arq_varios' => 'Varios',
         ]],
+        'dashboard' => ['Dashboard', ['dashboard' => 'Dashboard']],
         'visuales' => ['Visuales', ['brochure' => 'Brochure', 'render' => 'Renders',
             'presentacion_1' => 'Presentación 1', 'presentacion_2' => 'Presentación 2',
             'videos' => 'Videos']],
