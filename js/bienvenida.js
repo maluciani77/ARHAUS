@@ -1,6 +1,6 @@
 // ========================================
 // BIENVENIDA DEL PANEL DEL CLIENTE
-// La animación la hace el CSS (4,5 s en total). Esto solo saca el cartel
+// La animación la hace el CSS (6 s en total). Esto solo saca el cartel
 // cuando termina, para que no quede tapando nada, y deja saltearlo con un
 // clic o una tecla. Sin JavaScript el CSS igual lo deja invisible.
 // ========================================
@@ -11,7 +11,7 @@
 	var cartel = document.querySelector('[data-bienvenida]');
 	if (!cartel) return;
 
-	var DURACION_MS = 4500;
+	var DURACION_MS = 6000;
 
 	function sacar() {
 		if (!cartel.parentNode) return;
