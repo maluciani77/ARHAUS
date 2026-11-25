@@ -1716,7 +1716,7 @@ body.visor-abierto {
   background: var(--bg);
   color: var(--texto);
   cursor: pointer;
-  animation: bienvenida-cortina 6s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  animation: bienvenida-cortina 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
 
 .cliente-bienvenida--imagen {
@@ -1740,7 +1740,7 @@ body.visor-abierto {
   height: 100%;
   object-fit: cover;
   transform: scale(1.22);
-  animation: bienvenida-acercar 6s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+  animation: bienvenida-acercar 5.5s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
 }
 
 /* Oscurece abajo para que el texto se lea sobre cualquier foto */
@@ -1831,13 +1831,13 @@ body.visor-abierto {
   to { transform: translateY(0); }
 }
 
-/* Quieto hasta los 2,9 s; después sube y se va por arriba */
+/* Quieto hasta los 4,9 s; después sube y se va por arriba */
 @keyframes bienvenida-cortina {
-  /* 90,25% de 6 s = 5,4 s quieto y recien ahi sube la cortina. El numero
+  /* 89,36% de 5,5 s = 4,9 s quieto y recien ahi sube la cortina. El numero
      cambio junto con la duracion: lo que se alarga es el rato que el
      cartel se queda, no el movimiento de salida, que sigue durando los
      mismos 0,585 s de antes. */
-  0%, 90.25% { clip-path: inset(0 0 0 0); visibility: visible; }
+  0%, 89.36% { clip-path: inset(0 0 0 0); visibility: visible; }
   100% { clip-path: inset(0 0 100% 0); visibility: hidden; pointer-events: none; }
 }
 
@@ -1848,7 +1848,7 @@ body.visor-abierto {
 @media (prefers-reduced-motion: reduce) {
   .cliente-bienvenida,
   .cliente-bienvenida.is-saliendo {
-    animation: bienvenida-desvanecer 6s linear forwards;
+    animation: bienvenida-desvanecer 5.5s linear forwards;
   }
 
   .cliente-bienvenida__imagen,
@@ -1862,7 +1862,7 @@ body.visor-abierto {
   }
 
   @keyframes bienvenida-desvanecer {
-    0%, 88.75% { opacity: 1; visibility: visible; }
+    0%, 87.73% { opacity: 1; visibility: visible; }
     100% { opacity: 0; visibility: hidden; pointer-events: none; }
   }
 }
