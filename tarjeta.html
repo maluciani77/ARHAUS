@@ -425,11 +425,21 @@ const OBRAS = {
         // ademas trae las dos caras.
         impresion: 'images/tarjetas/huepil-impresa.pdf',
         medida: '88 × 54 mm',
-        modelo: 'models/casa-huepil.glb',
-        // Cuantos anchos de tarjeta ocupa el lado largo de la casa. Con 2
-        // la maqueta mide unos 17 cm sobre una tarjeta de 8,8: se ve
-        // grande sin taparla.
-        anchos: 2,
+        // La maqueta del panel del cliente y no casa-huepil.glb. Esa
+        // otra trae el terreno entero: mide 74.000 de largo por 12.800
+        // de fondo, o sea casi seis a uno, asi que al escalarla para que
+        // entrara en la tarjeta la casa quedaba del tamano de una
+        // moneda y el resto era una plancha de pasto que se desbordaba
+        // de la pantalla. Y una plancha larga es lo peor que se puede
+        // poner sobre un marcador: el error de angulo no se ve en el
+        // centro, se ve en las puntas, y las puntas estaban lejisimos.
+        // Esta mide 2.125 x 712 y es la casa con su lote, nada mas.
+        modelo: 'models/obras/2.glb',
+        // Cuantos anchos de tarjeta ocupa el lado largo de la maqueta.
+        // 1,4 sobre una tarjeta de 8,8 cm son unos 12 cm: sobresale un
+        // poco de la tarjeta y nada mas. Cuanto mas chica, menos se le
+        // nota el temblor del seguimiento.
+        anchos: 1.4,
         giro: 0
     },
     'huepil-render': {
@@ -440,8 +450,8 @@ const OBRAS = {
         tarjeta: 'images/tarjetas/huepil.png',
         impresion: 'images/tarjetas/huepil.pdf',
         medida: '85 × 55 mm',
-        modelo: 'models/casa-huepil.glb',
-        anchos: 2,
+        modelo: 'models/obras/2.glb',
+        anchos: 1.4,
         giro: 0
     }
 };
@@ -607,7 +617,7 @@ async function arrancarDemo() {
     escena.background = new THREE.Color(0x0e0e0e);
     escena.environment = await cargarAmbiente(renderer);
 
-    const modelo = await cargarModelo(obra.anchos);
+    const modelo = await cargarModelo(ajuste('anchos', obra.anchos));
     const maqueta = armarMaqueta(modelo);
     escena.add(maqueta);
 
@@ -702,6 +712,18 @@ function navegadorDeApp() {
     return /Instagram|FBAN|FBAV|FB_IAB|Line\/|Twitter|TikTok/i.test(ua);
 }
 
+/**
+ * Un numero que se puede pisar desde la direccion, para poder probar
+ * valores en el telefono sin volver a subir el archivo:
+ *   tarjeta.html?beta=20&cf=0.0002
+ * Sin parametro devuelve el de siempre.
+ */
+function ajuste(nombre, porDefecto) {
+    const v = new URLSearchParams(location.search).get(nombre);
+    const n = v === null ? NaN : parseFloat(v);
+    return Number.isFinite(n) ? n : porDefecto;
+}
+
 async function arrancarAR(marca, anchos) {
     const { MindARThree } = await import('mindar-image-three');
 
@@ -722,7 +744,33 @@ async function arrancarAR(marca, anchos) {
         missTolerance: 30,
         // Al revés para engancharla: de 5 a 1, asi aparece en cuanto la
         // reconoce y no un sexto de segundo despues.
-        warmupTolerance: 1
+        warmupTolerance: 1,
+
+        // === Lo que hace que la casa se quede quieta ===
+        //
+        // MindAR no entrega la posicion de la tarjeta tal como la
+        // calcula: la pasa por un filtro "one euro", que suaviza mas
+        // cuando el objeto esta quieto y menos cuando se mueve, para no
+        // meter retraso cuando uno mueve el telefono. La cuenta esta en
+        // libs/one-euro-filter.js y es una sola linea:
+        //
+        //     corte = filterMinCF + filterBeta * (velocidad)
+        //
+        // Cuanto mas alto el corte, menos suaviza. MindAR viene con
+        // filterBeta = 1000, que es muchisimo: con el temblor normal de
+        // una mano el corte se va por las nubes y el filtro practicamente
+        // se apaga, asi que cada error de calculo del cuadro -y con una
+        // tarjeta chica, vista en diagonal, hay uno en cada cuadro- llega
+        // entero a la pantalla. Eso es el baile.
+        //
+        // 60 sigue dejando que la casa acompane el movimiento del
+        // telefono, pero le come el temblor. El precio es unas centesimas
+        // de retraso cuando uno gira rapido, que no se notan.
+        filterBeta: ajuste('beta', 60),
+        // Y cuando la tarjeta esta quieta sobre la mesa, el corte baja a
+        // este numero: medio hertz, la mitad que el de MindAR. Ahi el
+        // filtro manda y la casa se planta.
+        filterMinCF: ajuste('cf', 0.0005)
     });
 
     ajustarRenderer(mindar.renderer);
@@ -967,7 +1015,7 @@ if (esDemo) {
         boton.disabled = true;
         $('arrancar-texto').textContent = 'Preparando…';
         try {
-            await arrancarAR(obra.marca, obra.anchos);
+            await arrancarAR(obra.marca, ajuste('anchos', obra.anchos));
         } catch (e) {
             console.error(e);
             boton.disabled = false;
