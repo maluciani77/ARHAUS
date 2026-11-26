@@ -194,6 +194,12 @@ compilar el marcador de ESA misma imagen:
 Si se cambia el render hay que rehacer los dos: un .mind viejo con una
 tarjeta nueva no reconoce nada.
 
+Ojo que hoy `tarjeta.html` NO escanea esa tarjeta generada: escanea la
+tarjeta real que ya tiene el cliente, `images/tarjetas/huepil-impresa.png`
+(el frente, el del dibujo). La generada quedó en `?o=huepil-render`. Si
+se necesita medir cuál de dos artes engancha mejor, el script de abajo
+imprime los puntos de detección y de seguimiento de cada una.
+
 Y el marcador se compila con ESE script, no con el compilador web de
 MindAR: el script le deja al seguimiento el fotograma de 256 px en vez
 del de 128, que son 48 puntos en vez de 26. Es la diferencia entre que

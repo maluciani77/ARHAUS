@@ -355,9 +355,10 @@
     <p class="inicio__rotulo" id="rotulo">Realidad aumentada</p>
     <h1 class="inicio__titulo" id="titulo">Casa Huepil</h1>
     <p class="inicio__texto" id="texto">
-        Poné la tarjeta sobre una mesa, apuntale con la cámara y la casa aparece
-        parada encima. Caminá alrededor: gira con la tarjeta. Si no la tenés
-        impresa, abrila en la pantalla de la compu y apuntale con el teléfono.
+        Poné la tarjeta sobre una mesa <strong>del lado del dibujo</strong>, apuntale
+        con la cámara y la casa aparece parada encima. Caminá alrededor: gira con la
+        tarjeta. Si no la tenés impresa, abrila en la pantalla de la compu y apuntale
+        con el teléfono.
     </p>
     <p class="aviso" id="aviso" hidden></p>
     <button class="boton" id="arrancar">
@@ -402,21 +403,44 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// La que se escanea es la tarjeta DE VERDAD, la que ya tiene el cliente
+// en la mano: el frente, el del dibujo de la casa. Medido contra el
+// dorso antes de elegir -frente 1793 puntos de deteccion y 33 de
+// seguimiento, dorso 1071 y 20-, asi que el logo y el QR enganchan
+// bastante peor que el dibujo, al reves de lo que parecia.
+//
+// Queda tambien la tarjeta que genera tarjeta_ar.py, en ?o=huepil-render:
+// es mejor marca (2712 y 48) y sirve para imprimir una de prueba, pero
+// no es la que anda dando vueltas.
 const OBRAS = {
     huepil: {
         nombre: 'Casa Huepil',
         lugar: 'San Martín de los Andes',
         rotulo: 'Realidad aumentada sobre la tarjeta',
-        marca: 'models/marcas/huepil.mind',
-        tarjeta: 'images/tarjetas/huepil.png',
+        marca: 'models/marcas/huepil-impresa.mind',
+        tarjeta: 'images/tarjetas/huepil-impresa.png',
         // Para imprimir va el PDF y no el PNG: el CDN le saca al PNG el
         // dato de los 300 dpi y queda declarado a 72, asi que sale del
-        // otro lado midiendo 35 cm. El PDF lleva los 85x55 mm adentro.
-        impresion: 'images/tarjetas/huepil.pdf',
+        // otro lado midiendo 35 cm. El PDF lleva la medida adentro, y
+        // ademas trae las dos caras.
+        impresion: 'images/tarjetas/huepil-impresa.pdf',
+        medida: '88 × 54 mm',
         modelo: 'models/casa-huepil.glb',
         // Cuantos anchos de tarjeta ocupa el lado largo de la casa. Con 2
-        // la maqueta mide unos 17 cm sobre una tarjeta de 8,5: se ve
+        // la maqueta mide unos 17 cm sobre una tarjeta de 8,8: se ve
         // grande sin taparla.
+        anchos: 2,
+        giro: 0
+    },
+    'huepil-render': {
+        nombre: 'Casa Huepil',
+        lugar: 'San Martín de los Andes',
+        rotulo: 'Realidad aumentada sobre la tarjeta',
+        marca: 'models/marcas/huepil.mind',
+        tarjeta: 'images/tarjetas/huepil.png',
+        impresion: 'images/tarjetas/huepil.pdf',
+        medida: '85 × 55 mm',
+        modelo: 'models/casa-huepil.glb',
         anchos: 2,
         giro: 0
     }
@@ -434,6 +458,9 @@ $('rotulo').textContent = obra.rotulo;
 $('obra-nombre').textContent = obra.nombre;
 $('obra-lugar').textContent = obra.lugar;
 $('bajar-tarjeta').href = obra.impresion || obra.tarjeta;
+if (obra.medida) {
+    $('bajar-tarjeta').textContent = 'Descargar para imprimir · ' + obra.medida;
+}
 $('muestra').src = obra.tarjeta;
 $('muestra').alt = 'La tarjeta de ' + obra.nombre;
 document.title = obra.nombre + ' sobre la tarjeta · ARHAUS';
