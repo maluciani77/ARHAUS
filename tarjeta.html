@@ -684,7 +684,18 @@ async function arrancarAR(marca, anchos) {
         maxTrack: 1,
         uiLoading: 'no',
         uiScanning: 'no',
-        uiError: 'no'
+        uiError: 'no',
+        // Cuanto aguanta antes de dar la tarjeta por perdida. MindAR
+        // viene con 5 cuadros, que a 30 por segundo son un sexto de
+        // segundo: alcanza un parpadeo, una mano que tapa un borde o un
+        // reflejo para que la casa desaparezca. Con 30 son como un
+        // segundo, y mientras tanto se queda quieta en el ultimo lugar
+        // donde la vio en vez de borrarse. Es lo que hace que no "se
+        // salga" todo el tiempo.
+        missTolerance: 30,
+        // Al revés para engancharla: de 5 a 1, asi aparece en cuanto la
+        // reconoce y no un sexto de segundo despues.
+        warmupTolerance: 1
     });
 
     ajustarRenderer(mindar.renderer);
@@ -703,12 +714,22 @@ async function arrancarAR(marca, anchos) {
     const buscando = $('buscando');
     const rotulo = $('obra');
 
+    // El cartel de "apunta a la tarjeta" no vuelve en el mismo instante
+    // en que se pierde: si volviera, cada vez que la casa se va un
+    // momento la pantalla se llenaria de carteles que entran y salen.
+    // Espera un segundo y medio; si para entonces ya la reconocio otra
+    // vez, el visitante no se enteró de nada.
+    let volverAvisar = null;
     ancla.onTargetFound = () => {
+        clearTimeout(volverAvisar);
         buscando.classList.add('es-ida');
         rotulo.classList.add('es-visible');
     };
     ancla.onTargetLost = () => {
-        buscando.classList.remove('es-ida');
+        clearTimeout(volverAvisar);
+        volverAvisar = setTimeout(() => {
+            buscando.classList.remove('es-ida');
+        }, 1500);
         rotulo.classList.remove('es-visible');
     };
 

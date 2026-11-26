@@ -194,6 +194,12 @@ compilar el marcador de ESA misma imagen:
 Si se cambia el render hay que rehacer los dos: un .mind viejo con una
 tarjeta nueva no reconoce nada.
 
+Y el marcador se compila con ESE script, no con el compilador web de
+MindAR: el script le deja al seguimiento el fotograma de 256 px en vez
+del de 128, que son 48 puntos en vez de 26. Es la diferencia entre que
+la casa aguante mirada de costado y que se caiga sola. Esta explicado
+en el encabezado del script.
+
 `scripts/reel.py` arma los reels, a partir de un guion JSON:
 
     python reel.py guion.json salida.mp4
