@@ -178,6 +178,22 @@ El formato `feed` da 1080×1350, que es el que más ocupa en pantalla. La
 placa `texto` es fondo crema con una sola idea: sirve para abrir un
 carrusel y para que el feed no sea sólo fotos.
 
+`scripts/tarjeta_ar.py` arma la tarjeta que se escanea para ver la casa
+en 3D encima (ver `tarjeta.html`):
+
+    python tarjeta_ar.py <render> "Casa Huepil" "San Martin de los Andes" tarjeta.png
+
+Sale a 85x55 mm, 300 dpi. Ojo: esa tarjeta es ademas la MARCA que
+reconoce el telefono, y el reconocimiento se agarra de los detalles de
+la imagen. Por eso la cara que se escanea lleva el render a sangre: una
+tarjeta crema con el logo y nada mas no engancha nunca. Despues hay que
+compilar el marcador de ESA misma imagen:
+
+    node scripts/compilar_marca.mjs models/marcas/huepil.mind tarjeta.png
+
+Si se cambia el render hay que rehacer los dos: un .mind viejo con una
+tarjeta nueva no reconoce nada.
+
 `scripts/reel.py` arma los reels, a partir de un guion JSON:
 
     python reel.py guion.json salida.mp4

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>La casa sobre la tarjeta · ARHAUS Developers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e0e">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+
+<!--
+  LA CASA PARADA SOBRE LA TARJETA
+
+  Esto NO es lo mismo que ar.html. Alla la casa se planta en el piso a
+  tamano real y el telefono la ancla al terreno. Aca el ancla es una
+  imagen: la tarjeta impresa. El telefono la reconoce, calcula en que
+  angulo la esta mirando y dibuja la maqueta encima; si uno gira
+  alrededor de la tarjeta, la maqueta gira con ella.
+
+  Lo resuelve MindAR, que hace seguimiento de imagen en el navegador.
+  Anda en Safari y en Chrome sin instalar nada, que es la unica forma de
+  que esto sirva para algo: la tarjeta se da en la mano y el que la
+  recibe no se va a bajar una app.
+
+  === La tarjeta es el marcador, y eso manda el diseno ===
+
+  El reconocimiento se agarra de los detalles de la imagen. Una tarjeta
+  crema con el logo centrado -que es lo que pediria el sistema visual
+  del estudio- no tiene de donde agarrarse y no engancha nunca. Por eso
+  la cara que se escanea lleva el render a sangre: el render es lo que
+  le da los puntos. La compilada de Huepil tiene 2.712 puntos de
+  reconocimiento y 48 de seguimiento, que es un marcador sano.
+
+  La tarjeta se arma con scripts/tarjeta_ar.py de la skill
+  contenido-arhaus, y el .mind se compila de ESA misma imagen con
+  scripts/compilar_marca.mjs. Si se cambia el render, hay que rehacer
+  los dos: un .mind viejo con una tarjeta nueva no reconoce nada.
+
+  === El espacio del ancla ===
+
+  MindAR entrega la tarjeta como un plano XY de 1 unidad de ancho, con
+  el centro en el origen y la normal hacia +Z. O sea: "arriba" de la
+  tarjeta es +Z, no +Y. Un modelo que viene con Y hacia arriba queda
+  acostado si se lo mete tal cual, asi que se lo gira 90 grados sobre X.
+
+  Ademas el grupo del ancla tiene matrixAutoUpdate en false -su matriz
+  la escribe el seguimiento en cada cuadro-, asi que nunca se le tocan
+  position, rotation ni scale: todo lo nuestro cuelga de un hijo.
+
+  === ?demo=1 ===
+
+  La misma escena, con la tarjeta dibujada como un plano y sin camara.
+  Sirve para mirar como queda sin tener que imprimir nada, y para poder
+  probar los numeros -la escala, el giro- en la compu.
+-->
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+    "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+  }
+}
+</script>
+
+<style>
+    :root {
+        --crema: #f5f4f0;
+        --carbon: #333;
+        --borgona: #880723;
+        --linea: rgba(245, 244, 240, 0.3);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    body {
+        background: #0e0e0e;
+        color: var(--crema);
+        font-family: "Work Sans", system-ui, sans-serif;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    #escena { position: absolute; inset: 0; overflow: hidden; }
+    #escena canvas, #escena video { display: block; }
+
+    .capa {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+    }
+    .capa > * { pointer-events: auto; }
+
+    .encabezado {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: max(14px, env(safe-area-inset-top)) 20px 26px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent);
+        pointer-events: none;
+    }
+    .encabezado img { display: block; height: 24px; opacity: 0.95; }
+    .encabezado a { pointer-events: auto; color: #e6e1d8; font-size: 0.8rem; text-decoration: none; }
+
+    /* ---- Pantalla de arranque ---- */
+    .inicio {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 24px max(28px, env(safe-area-inset-bottom));
+        background: #0e0e0e;
+    }
+    .inicio[hidden] { display: none; }
+
+    /* La tarjeta de verdad, arriba. Es la mitad de la explicacion: el
+       que llega no sabe que esta buscando hasta que la ve. */
+    .inicio__tarjeta {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+        padding: 56px 0 30px;
+    }
+    .inicio__tarjeta img {
+        width: min(78%, 330px);
+        height: auto;
+        border-radius: 6px;
+        transform: rotate(-4deg);
+        box-shadow: 0 26px 50px rgba(0, 0, 0, 0.75);
+    }
+    @media (max-height: 620px) {
+        .inicio__tarjeta { display: none; }
+    }
+    .inicio__rotulo {
+        margin: 0 0 8px;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #9b968c;
+    }
+    .inicio__titulo {
+        margin: 0 0 14px;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 300;
+        font-size: 2.3rem;
+        line-height: 1.08;
+    }
+    .inicio__texto {
+        margin: 0 0 26px;
+        max-width: 30rem;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: #bdb8ae;
+    }
+
+    .boton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 54px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 4px;
+        background: var(--borgona);
+        color: #fff;
+        font: inherit;
+        font-size: 1rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .boton svg { width: 20px; height: 20px; }
+    .boton--linea {
+        margin-top: 10px;
+        min-height: 48px;
+        border: 1px solid var(--linea);
+        background: transparent;
+        color: #e6e1d8;
+        font-size: 0.92rem;
+    }
+
+    .aviso {
+        margin: 0 0 18px;
+        padding: 12px 14px;
+        border-left: 2px solid var(--borgona);
+        background: rgba(136, 7, 35, 0.12);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #e6e1d8;
+    }
+    .aviso[hidden] { display: none; }
+
+    /* ---- Mientras busca la tarjeta ---- */
+    .buscando {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 0 24px;
+        text-align: center;
+        pointer-events: none;
+        transition: opacity 0.45s;
+    }
+    .buscando[hidden] { display: none; }
+    .buscando.es-ida { opacity: 0; }
+
+    /* El rectangulo con la proporcion de la tarjeta. Decirlo con un
+       dibujo evita la explicacion: se entiende que hay que encuadrarla. */
+    .mira {
+        width: min(74vw, 320px);
+        aspect-ratio: 1004 / 650;
+        border: 1px solid rgba(245, 244, 240, 0.55);
+        border-radius: 6px;
+        animation: respira 2.6s ease-in-out infinite;
+    }
+    @keyframes respira {
+        0%, 100% { opacity: 0.45; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(1.03); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .mira { animation: none; opacity: 0.7; }
+    }
+
+    .buscando p {
+        margin: 0;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: rgba(14, 14, 14, 0.55);
+        font-size: 0.9rem;
+    }
+
+    /* ---- Nombre de la obra, abajo ---- */
+    .obra {
+        position: absolute;
+        left: 20px;
+        bottom: max(22px, env(safe-area-inset-bottom));
+        margin: 0;
+        opacity: 0;
+        transition: opacity 0.6s;
+        pointer-events: none;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85);
+    }
+    .obra.es-visible { opacity: 1; }
+    .obra strong {
+        display: block;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 300;
+        font-size: 1.9rem;
+        line-height: 1;
+    }
+    .obra span { font-size: 0.82rem; color: #ddd7cd; }
+
+    /* ---- Carga ---- */
+    .carga {
+        position: absolute;
+        left: 0; right: 0;
+        bottom: 0;
+        height: 2px;
+        background: rgba(245, 244, 240, 0.15);
+    }
+    .carga[hidden] { display: none; }
+    .carga__barra {
+        height: 100%;
+        width: 0;
+        background: var(--borgona);
+        transition: width 0.3s;
+    }
+</style>
+</head>
+<body>
+
+<div id="escena"></div>
+
+<div class="capa">
+    <div class="encabezado">
+        <img src="images/logo.svg" alt="ARHAUS Developers">
+        <a href="proyecto.html">Ver todos los proyectos</a>
+    </div>
+</div>
+
+<div class="buscando" id="buscando" hidden>
+    <div class="mira"></div>
+    <p>Apuntá a la tarjeta, entera y bien iluminada</p>
+</div>
+
+<p class="obra" id="obra"><strong id="obra-nombre"></strong><span id="obra-lugar"></span></p>
+
+<div class="carga" id="carga" hidden><div class="carga__barra" id="carga-barra"></div></div>
+
+<div class="inicio" id="inicio">
+    <div class="inicio__tarjeta">
+        <img id="muestra" src="images/tarjetas/huepil.png" alt="La tarjeta de Casa Huepil">
+    </div>
+    <p class="inicio__rotulo" id="rotulo">Realidad aumentada</p>
+    <h1 class="inicio__titulo" id="titulo">Casa Huepil</h1>
+    <p class="inicio__texto" id="texto">
+        Poné la tarjeta sobre una mesa, apuntale con la cámara y la casa aparece
+        parada encima. Caminá alrededor: gira con la tarjeta.
+    </p>
+    <p class="aviso" id="aviso" hidden></p>
+    <button class="boton" id="arrancar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <circle cx="12" cy="12.5" r="3.5"/>
+        </svg>
+        <span id="arrancar-texto">Encender la cámara</span>
+    </button>
+    <a class="boton boton--linea" id="ver-demo" href="?demo=1">Ver cómo queda, sin tarjeta</a>
+    <a class="boton boton--linea" id="bajar-tarjeta" href="images/tarjetas/huepil.png" download>Descargar la tarjeta para imprimir</a>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const OBRAS = {
+    huepil: {
+        nombre: 'Casa Huepil',
+        lugar: 'San Martín de los Andes',
+        rotulo: 'Realidad aumentada sobre la tarjeta',
+        marca: 'models/marcas/huepil.mind',
+        tarjeta: 'images/tarjetas/huepil.png',
+        modelo: 'models/casa-huepil.glb',
+        // Cuantos anchos de tarjeta ocupa el lado largo de la casa. Con 2
+        // la maqueta mide unos 17 cm sobre una tarjeta de 8,5: se ve
+        // grande sin taparla.
+        anchos: 2,
+        giro: 0
+    }
+};
+
+const clave = (new URLSearchParams(location.search).get('o') || 'huepil').toLowerCase();
+const obra = OBRAS[clave] || OBRAS.huepil;
+const esDemo = new URLSearchParams(location.search).get('demo') === '1';
+
+const $ = (id) => document.getElementById(id);
+const contenedor = $('escena');
+
+$('titulo').textContent = obra.nombre;
+$('rotulo').textContent = obra.rotulo;
+$('obra-nombre').textContent = obra.nombre;
+$('obra-lugar').textContent = obra.lugar;
+$('bajar-tarjeta').href = obra.tarjeta;
+$('muestra').src = obra.tarjeta;
+$('muestra').alt = 'La tarjeta de ' + obra.nombre;
+document.title = obra.nombre + ' sobre la tarjeta · ARHAUS';
+$('ver-demo').href = '?o=' + clave + '&demo=1';
+
+/* ========================================
+   EL MODELO
+   Se carga una sola vez y se devuelve ya escalado y apoyado: con el
+   lado largo midiendo `anchos` tarjetas, centrado en el origen y con la
+   planta baja en y = 0. Asi el que lo use solo tiene que colgarlo.
+   ======================================== */
+function mostrarCarga(p) {
+    const caja = $('carga');
+    caja.hidden = false;
+    $('carga-barra').style.width = Math.round(p * 100) + '%';
+    if (p >= 1) { setTimeout(() => { caja.hidden = true; }, 400); }
+}
+
+async function cargarModelo() {
+    const draco = new DRACOLoader();
+    draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
+    const loader = new GLTFLoader();
+    loader.setDRACOLoader(draco);
+
+    const gltf = await loader.loadAsync(obra.modelo, (e) => {
+        if (e.total) { mostrarCarga(e.loaded / e.total); }
+    });
+    mostrarCarga(1);
+
+    const casa = gltf.scene;
+    casa.traverse((o) => {
+        if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; }
+    });
+
+    const caja = new THREE.Box3().setFromObject(casa);
+    const medida = caja.getSize(new THREE.Vector3());
+    const centro = caja.getCenter(new THREE.Vector3());
+    const escala = obra.anchos / Math.max(medida.x, medida.z);
+
+    // Primero se corre el modelo para que su centro en planta quede en
+    // el origen y la base en cero; recien despues se escala todo junto.
+    casa.position.set(-centro.x, -caja.min.y, -centro.z);
+    const grupo = new THREE.Group();
+    grupo.add(casa);
+    grupo.scale.setScalar(escala);
+
+    return { grupo, alto: medida.y * escala, lado: Math.max(medida.x, medida.z) * escala };
+}
+
+async function cargarAmbiente(renderer) {
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const hdr = await new RGBELoader().loadAsync('models/estudio.hdr');
+    const env = pmrem.fromEquirectangular(hdr).texture;
+    hdr.dispose();
+    pmrem.dispose();
+    return env;
+}
+
+/**
+ * Arma lo que se apoya sobre la tarjeta: la casa parada, su luz y la
+ * sombra que la planta. Todo cuelga de un solo grupo, que es lo unico
+ * que despues se cuelga del ancla.
+ *
+ * La luz va ADENTRO del grupo a proposito: asi acompana a la tarjeta y
+ * la casa se ve siempre igual, se la mire desde donde se la mire. Si la
+ * luz quedara en la escena, girar alrededor de la tarjeta cambiaria de
+ * que lado le pega el sol.
+ */
+function armarMaqueta(modelo) {
+    const sobreLaTarjeta = new THREE.Group();
+
+    // La tarjeta es el plano XY y su "arriba" es +Z, asi que el modelo,
+    // que viene con Y hacia arriba, se gira 90 grados sobre X.
+    const parado = new THREE.Group();
+    parado.rotation.x = Math.PI / 2;
+    sobreLaTarjeta.add(parado);
+
+    const orientada = new THREE.Group();
+    orientada.rotation.y = obra.giro * Math.PI / 180;
+    parado.add(orientada);
+    orientada.add(modelo.grupo);
+
+    const sol = new THREE.DirectionalLight(0xfff4e6, 2.1);
+    sol.position.set(modelo.lado * 0.9, modelo.alto * 1.8, modelo.lado * 0.7);
+    sol.castShadow = true;
+    sol.shadow.mapSize.set(1024, 1024);
+    const r = modelo.lado * 0.8;
+    Object.assign(sol.shadow.camera, { left: -r, right: r, top: r, bottom: -r, near: 0.01, far: modelo.lado * 5 });
+    sol.shadow.camera.updateProjectionMatrix();
+    sol.shadow.bias = -0.0008;
+    orientada.add(sol);
+    orientada.add(sol.target);
+
+    const relleno = new THREE.DirectionalLight(0xdfe6f0, 0.5);
+    relleno.position.set(-modelo.lado, modelo.alto, -modelo.lado * 0.6);
+    orientada.add(relleno);
+
+    // La sombra es lo que hace que la casa este APOYADA y no flotando.
+    const piso = new THREE.Mesh(
+        new THREE.PlaneGeometry(modelo.lado * 2.4, modelo.lado * 2.4),
+        new THREE.ShadowMaterial({ opacity: 0.34 })
+    );
+    piso.rotation.x = -Math.PI / 2;
+    piso.position.y = 0.001;
+    piso.receiveShadow = true;
+    orientada.add(piso);
+
+    return sobreLaTarjeta;
+}
+
+function ajustarRenderer(renderer) {
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // 1,45 y no 1: la maqueta se ve sobre la imagen de la camara, que
+    // viene clara, y con exposicion 1 quedaba apagada al lado.
+    renderer.toneMappingExposure = 1.45;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+}
+
+function avisar(txt) {
+    const p = $('aviso');
+    p.innerHTML = txt;
+    p.hidden = false;
+}
+
+/* ========================================
+   DEMO: la misma escena, sin camara
+   La tarjeta se dibuja como un plano con la imagen de verdad, en el
+   mismo lugar y con la misma proporcion que le va a tocar en realidad
+   aumentada. O sea: lo que se ve aca es lo que se va a ver sobre la
+   tarjeta impresa.
+   ======================================== */
+async function arrancarDemo() {
+    $('inicio').hidden = true;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    ajustarRenderer(renderer);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(contenedor.clientWidth, contenedor.clientHeight);
+    contenedor.appendChild(renderer.domElement);
+
+    const escena = new THREE.Scene();
+    escena.background = new THREE.Color(0x0e0e0e);
+    escena.environment = await cargarAmbiente(renderer);
+
+    const modelo = await cargarModelo();
+    const maqueta = armarMaqueta(modelo);
+    escena.add(maqueta);
+
+    const textura = await new THREE.TextureLoader().loadAsync(obra.tarjeta);
+    textura.colorSpace = THREE.SRGBColorSpace;
+    const tarjeta = new THREE.Mesh(
+        new THREE.PlaneGeometry(1, textura.image.height / textura.image.width),
+        new THREE.MeshBasicMaterial({ map: textura })
+    );
+    escena.add(tarjeta);
+
+    // La camara se para como el telefono: mirando la tarjeta de frente y
+    // desde arriba, con +Z como vertical.
+    const camara = new THREE.PerspectiveCamera(45, contenedor.clientWidth / contenedor.clientHeight, 0.01, 100);
+    camara.up.set(0, 0, 1);
+
+    const control = new OrbitControls(camara, renderer.domElement);
+    control.target.set(0, 0, modelo.alto * 0.34);
+    control.enableDamping = true;
+    control.maxPolarAngle = Math.PI / 2 - 0.05;
+
+    // La distancia sale de la pantalla y no de un numero fijo: en un
+    // telefono vertical el cuadro es angosto, y con la distancia que
+    // sirve en una compu la maqueta se sale por los costados.
+    //
+    // En vez de despejarlo con una formula -que obliga a suponer que la
+    // maqueta es cuadrada, y las plantas nunca lo son- se prueba: se
+    // proyectan las ocho esquinas de la caja a la pantalla y se busca a
+    // tanteo la distancia donde ocupa el 90% del lado mas comprometido.
+    // La caja se mide sobre la casa sola: la maqueta entera incluye el
+    // plano que recibe la sombra, que es mucho mas grande y dejaria la
+    // camara lejisimos encuadrando pasto invisible.
+    maqueta.updateMatrixWorld(true);
+    const caja = new THREE.Box3().setFromObject(modelo.grupo);
+    const esquinas = [];
+    for (const x of [caja.min.x, caja.max.x]) {
+        for (const y of [caja.min.y, caja.max.y]) {
+            for (const z of [caja.min.z, caja.max.z]) {
+                esquinas.push(new THREE.Vector3(x, y, z));
+            }
+        }
+    }
+
+    function ocupacion(d) {
+        camara.position.set(0, -d * 0.93, d * 0.37 + modelo.alto * 0.3);
+        camara.lookAt(control.target);
+        camara.updateMatrixWorld(true);
+        let m = 0;
+        for (const e of esquinas) {
+            const v = e.clone().project(camara);
+            m = Math.max(m, Math.abs(v.x), Math.abs(v.y));
+        }
+        return m;
+    }
+
+    function encuadrar() {
+        let cerca = 0.3, lejos = 40;
+        for (let i = 0; i < 24; i++) {
+            const medio = (cerca + lejos) / 2;
+            if (ocupacion(medio) > 0.9) { cerca = medio; } else { lejos = medio; }
+        }
+        camara.position.set(0, -lejos * 0.93, lejos * 0.37 + modelo.alto * 0.3);
+        control.update();
+    }
+    encuadrar();
+
+    $('obra').classList.add('es-visible');
+
+    addEventListener('resize', () => {
+        camara.aspect = contenedor.clientWidth / contenedor.clientHeight;
+        camara.updateProjectionMatrix();
+        renderer.setSize(contenedor.clientWidth, contenedor.clientHeight);
+        encuadrar();
+    });
+
+    renderer.setAnimationLoop(() => {
+        control.update();
+        renderer.render(escena, camara);
+    });
+
+    // Solo en ?demo=1: con esto se prueban la exposicion, la escala y el
+    // giro desde la consola, sin tocar el archivo cada vez.
+    window.ar = { renderer, escena, camara, control, tarjeta, modelo };
+    window.listoParaMirar = true;
+}
+
+/* ========================================
+   REALIDAD AUMENTADA
+   ======================================== */
+function navegadorDeApp() {
+    const ua = navigator.userAgent || '';
+    return /Instagram|FBAN|FBAV|FB_IAB|Line\/|Twitter|TikTok/i.test(ua);
+}
+
+async function arrancarAR() {
+    const { MindARThree } = await import('mindar-image-three');
+
+    const mindar = new MindARThree({
+        container: contenedor,
+        imageTargetSrc: obra.marca,
+        maxTrack: 1,
+        uiLoading: 'no',
+        uiScanning: 'no',
+        uiError: 'no'
+    });
+
+    ajustarRenderer(mindar.renderer);
+    // MindAR arranca con el devicePixelRatio entero: en un telefono de 3x
+    // eso es dibujar nueve veces cada pixel mientras ademas corre el
+    // seguimiento. Con 2 no se nota la diferencia y no se traba.
+    mindar.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    mindar.scene.environment = await cargarAmbiente(mindar.renderer);
+
+    const modelo = await cargarModelo();
+    const ancla = mindar.addAnchor(0);
+    // Al grupo del ancla no se le toca la matriz: la escribe el
+    // seguimiento. Lo nuestro va de hijo.
+    ancla.group.add(armarMaqueta(modelo));
+
+    const buscando = $('buscando');
+    const rotulo = $('obra');
+
+    ancla.onTargetFound = () => {
+        buscando.classList.add('es-ida');
+        rotulo.classList.add('es-visible');
+    };
+    ancla.onTargetLost = () => {
+        buscando.classList.remove('es-ida');
+        rotulo.classList.remove('es-visible');
+    };
+
+    await mindar.start();
+    // Recien ahora: si la camara no arranca, el cartel de "apunta a la
+    // tarjeta" no tiene que quedar colgado sobre la pantalla negra.
+    buscando.hidden = false;
+    $('inicio').hidden = true;
+
+    mindar.renderer.setAnimationLoop(() => {
+        mindar.renderer.render(mindar.scene, mindar.camera);
+    });
+}
+
+/* ======================================== */
+
+if (esDemo) {
+    arrancarDemo().catch((e) => {
+        console.error(e);
+        $('inicio').hidden = false;
+        avisar('No pude dibujar la maqueta en este navegador.');
+    });
+} else {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        avisar('Este navegador no deja usar la cámara. Abrilo en Safari o en Chrome.');
+    } else if (navegadorDeApp()) {
+        avisar('Estás dentro del navegador de una app, que no presta la cámara. '
+             + 'Tocá los tres puntitos y elegí <strong>Abrir en el navegador</strong>.');
+    }
+
+    $('arrancar').addEventListener('click', async () => {
+        const boton = $('arrancar');
+        boton.disabled = true;
+        $('arrancar-texto').textContent = 'Preparando…';
+        try {
+            await arrancarAR();
+        } catch (e) {
+            console.error(e);
+            boton.disabled = false;
+            $('arrancar-texto').textContent = 'Probar de nuevo';
+            // MindAR no deja pasar el error de getUserMedia -rechaza con
+            // undefined-, asi que no se puede distinguir "no diste
+            // permiso" de "no hay camara". El texto cubre las dos.
+            avisar('No pude encender la cámara. Fijate que le hayas dado permiso al navegador; '
+                 + 'si no, mirá la maqueta sin tarjeta acá abajo.');
+        }
+    });
+}
+</script>
+
+</body>
+</html>
