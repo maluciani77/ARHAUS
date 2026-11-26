@@ -782,9 +782,87 @@ async function arrancarAR(marca, anchos) {
 
     const modelo = await cargarModelo(anchos);
     const ancla = mindar.addAnchor(0);
-    // Al grupo del ancla no se le toca la matriz: la escribe el
-    // seguimiento. Lo nuestro va de hijo.
-    ancla.group.add(armarMaqueta(modelo));
+
+    /* ========================================
+       QUE SE QUEDE CLAVADA EN LA TARJETA
+
+       Por que baila. MindAR tiene dos modos de sacar la posicion de la
+       tarjeta, y son muy distintos entre si:
+
+         - SEGUIR: parte de donde estaba en el cuadro anterior y la
+           corrige de a poco. Da posiciones parecidas entre si, suaves.
+         - RECONOCER: busca la tarjeta en toda la imagen desde cero. Da
+           una posicion cada vez, independiente de la anterior, y bastante
+           mas ruidosa.
+
+       Mientras uno mueve el telefono, el seguimiento se corta seguido
+       -un reflejo, un dedo, un borde que sale de cuadro- y entonces
+       MindAR vuelve a reconocer. Cada vez que reconoce, la posicion
+       pega un saltito. Y como aguantamos 30 cuadros antes de dar la
+       tarjeta por perdida (missTolerance), la casa no desaparece
+       mientras tanto: se queda en pantalla, saltando de una posicion a
+       la otra. Eso es el baile. No es temblor, son saltos.
+
+       Un filtro de MindAR no lo arregla, porque trabaja sobre la
+       velocidad y un salto de reconocimiento tiene velocidad enorme:
+       justamente le abre la puerta.
+
+       Lo que si lo arregla es no dibujar nunca la posicion que llega,
+       sino una que persigue a esa de a poco. La maqueta cuelga de un
+       grupo propio -no del ancla- y en cada cuadro se le acerca una
+       fraccion. Un salto de reconocimiento deja de ser un salto y pasa
+       a ser un deslizamiento de un cuarto de segundo, que el ojo no
+       lee como error.
+
+       `inercia` son los segundos que tarda en comerse dos tercios de la
+       diferencia. 0,3 es firme y sigue el telefono sin que se note
+       atraso. Con 1 queda practicamente clavada, al precio de que
+       cuando uno mueve el telefono la casa llega despues.
+       ======================================== */
+    const inercia = Math.max(0.01, ajuste('inercia', 0.3));
+
+    const suave = new THREE.Group();
+    suave.matrixAutoUpdate = false;
+    suave.visible = false;
+    mindar.scene.add(suave);
+    suave.add(armarMaqueta(modelo));
+
+    const pDest = new THREE.Vector3(), qDest = new THREE.Quaternion(), eDest = new THREE.Vector3();
+    const pHoy = new THREE.Vector3(), qHoy = new THREE.Quaternion(), eHoy = new THREE.Vector3();
+    let enganchada = false;
+
+    // El ancla sigue existiendo y MindAR le sigue escribiendo la matriz;
+    // lo que no tiene es nada colgado. De ahi leemos a donde ir.
+    ancla.onTargetUpdate = () => {
+        ancla.group.matrix.decompose(pDest, qDest, eDest);
+    };
+
+    let antes = performance.now();
+    function perseguir(ahora) {
+        requestAnimationFrame(perseguir);
+        const dt = Math.min((ahora - antes) / 1000, 0.1);
+        antes = ahora;
+
+        if (!ancla.visible) { return; }
+
+        if (!enganchada) {
+            // La primera vez no se persigue: se aparece ya puesta.
+            pHoy.copy(pDest); qHoy.copy(qDest); eHoy.copy(eDest);
+            enganchada = true;
+        } else {
+            // 1 - e^(-dt/t): la misma fraccion por segundo corra el
+            // telefono a 60 cuadros o a 24. Si se usara un numero fijo
+            // por cuadro, en un telefono lento quedaria lenta.
+            const a = 1 - Math.exp(-dt / inercia);
+            pHoy.lerp(pDest, a);
+            qHoy.slerp(qDest, a);
+            eHoy.lerp(eDest, a);
+        }
+
+        suave.matrix.compose(pHoy, qHoy, eHoy);
+        suave.visible = true;
+    }
+    requestAnimationFrame(perseguir);
 
     const buscando = $('buscando');
     const rotulo = $('obra');
@@ -801,6 +879,11 @@ async function arrancarAR(marca, anchos) {
         rotulo.classList.add('es-visible');
     };
     ancla.onTargetLost = () => {
+        // La maqueta ya no cuelga del ancla, asi que esconderla es cosa
+        // nuestra. Y se desengancha: cuando vuelva tiene que aparecer
+        // donde este la tarjeta, no viajando desde donde estaba antes.
+        suave.visible = false;
+        enganchada = false;
         clearTimeout(volverAvisar);
         volverAvisar = setTimeout(() => {
             buscando.classList.remove('es-ida');
