@@ -13,6 +13,9 @@
 *.mov
 *.avi
 *.pdf
+# Las tarjetas que se escanean si van: son piezas del sitio, no
+# documentos de un cliente.
+!images/tarjetas/*.pdf
 *.heic
 *.HEIC
 *.ai

@@ -308,7 +308,9 @@
     <h1 class="inicio__titulo" id="titulo">Casa Huepil</h1>
     <p class="inicio__texto" id="texto">
         Poné la tarjeta sobre una mesa, apuntale con la cámara y la casa aparece
-        parada encima. Caminá alrededor: gira con la tarjeta.
+        parada encima. Caminá alrededor: gira con la tarjeta. Si todavía no la
+        imprimiste, sirve igual abrirla en la pantalla de la computadora y
+        apuntarle con el teléfono.
     </p>
     <p class="aviso" id="aviso" hidden></p>
     <button class="boton" id="arrancar">
@@ -320,7 +322,7 @@
         <span id="arrancar-texto">Encender la cámara</span>
     </button>
     <a class="boton boton--linea" id="ver-demo" href="?demo=1">Ver cómo queda, sin tarjeta</a>
-    <a class="boton boton--linea" id="bajar-tarjeta" href="images/tarjetas/huepil.png" download>Descargar la tarjeta para imprimir</a>
+    <a class="boton boton--linea" id="bajar-tarjeta" href="images/tarjetas/huepil.pdf" download>Descargar la tarjeta para imprimir · 85 × 55 mm</a>
 </div>
 
 <script type="module">
@@ -337,6 +339,10 @@ const OBRAS = {
         rotulo: 'Realidad aumentada sobre la tarjeta',
         marca: 'models/marcas/huepil.mind',
         tarjeta: 'images/tarjetas/huepil.png',
+        // Para imprimir va el PDF y no el PNG: el CDN le saca al PNG el
+        // dato de los 300 dpi y queda declarado a 72, asi que sale del
+        // otro lado midiendo 35 cm. El PDF lleva los 85x55 mm adentro.
+        impresion: 'images/tarjetas/huepil.pdf',
         modelo: 'models/casa-huepil.glb',
         // Cuantos anchos de tarjeta ocupa el lado largo de la casa. Con 2
         // la maqueta mide unos 17 cm sobre una tarjeta de 8,5: se ve
@@ -357,7 +363,7 @@ $('titulo').textContent = obra.nombre;
 $('rotulo').textContent = obra.rotulo;
 $('obra-nombre').textContent = obra.nombre;
 $('obra-lugar').textContent = obra.lugar;
-$('bajar-tarjeta').href = obra.tarjeta;
+$('bajar-tarjeta').href = obra.impresion || obra.tarjeta;
 $('muestra').src = obra.tarjeta;
 $('muestra').alt = 'La tarjeta de ' + obra.nombre;
 document.title = obra.nombre + ' sobre la tarjeta · ARHAUS';

@@ -80,6 +80,14 @@ def main():
     print("%s  %dx%d px  85x55 mm a 300 dpi  %.2f MB" % (
         salida, im.width, im.height, os.path.getsize(salida) / 1048576))
 
+    # Y el PDF, que es lo que se manda a imprimir. No es un lujo: el CDN
+    # le saca al PNG el dato de los 300 dpi y queda declarado a 72, asi
+    # que impreso sale a 35 cm en vez de a 8,5. El PDF lleva la medida
+    # fisica adentro y nadie se la toca.
+    pdf = os.path.splitext(salida)[0] + ".pdf"
+    im.save(pdf, "PDF", resolution=300.0, quality=95)
+    print("%s  85x55 mm  %.2f MB" % (pdf, os.path.getsize(pdf) / 1048576))
+
 
 if __name__ == "__main__":
     main()
