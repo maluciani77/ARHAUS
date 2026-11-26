@@ -62,7 +62,8 @@
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-    "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+    "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js",
+    "mindar-image": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js"
   }
 }
 </script>
@@ -180,6 +181,9 @@
         cursor: pointer;
     }
     .boton svg { width: 20px; height: 20px; }
+    /* display:flex le gana al hidden del navegador, que es display:none.
+       Sin esto los botones ocultos se ven igual. */
+    .boton[hidden] { display: none; }
     .boton--linea {
         margin-top: 10px;
         min-height: 48px;
@@ -278,6 +282,50 @@
         background: var(--borgona);
         transition: width 0.3s;
     }
+
+    /* ---- Usar una tarjeta cualquiera ---- */
+    .propia {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 24px max(28px, env(safe-area-inset-bottom));
+        background: #0e0e0e;
+        overflow-y: auto;
+    }
+    .propia[hidden] { display: none; }
+    .propia__foto {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+        padding: 56px 0 24px;
+    }
+    .propia__foto img {
+        max-width: 100%;
+        max-height: 46vh;
+        border-radius: 6px;
+        box-shadow: 0 22px 44px rgba(0, 0, 0, 0.7);
+    }
+    .propia__foto img[hidden] { display: none; }
+    .propia__pasos {
+        margin: 0 0 22px;
+        padding: 0 0 0 18px;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: #bdb8ae;
+    }
+    .propia__pasos li { margin-bottom: 6px; }
+    .propia__pasos[hidden] { display: none; }
+    .propia__estado {
+        margin: 0 0 18px;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        color: #bdb8ae;
+    }
+    .propia__estado[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -308,9 +356,8 @@
     <h1 class="inicio__titulo" id="titulo">Casa Huepil</h1>
     <p class="inicio__texto" id="texto">
         Poné la tarjeta sobre una mesa, apuntale con la cámara y la casa aparece
-        parada encima. Caminá alrededor: gira con la tarjeta. Si todavía no la
-        imprimiste, sirve igual abrirla en la pantalla de la computadora y
-        apuntarle con el teléfono.
+        parada encima. Caminá alrededor: gira con la tarjeta. Si no la tenés
+        impresa, abrila en la pantalla de la compu y apuntale con el teléfono.
     </p>
     <p class="aviso" id="aviso" hidden></p>
     <button class="boton" id="arrancar">
@@ -321,8 +368,31 @@
         </svg>
         <span id="arrancar-texto">Encender la cámara</span>
     </button>
+    <button class="boton boton--linea" id="ir-propia">Usar una tarjeta que tenga acá</button>
     <a class="boton boton--linea" id="ver-demo" href="?demo=1">Ver cómo queda, sin tarjeta</a>
-    <a class="boton boton--linea" id="bajar-tarjeta" href="images/tarjetas/huepil.pdf" download>Descargar la tarjeta para imprimir · 85 × 55 mm</a>
+    <a class="boton boton--linea" id="bajar-tarjeta" href="images/tarjetas/huepil.pdf" download>Descargar para imprimir · 85 × 55 mm</a>
+</div>
+
+<div class="propia" id="propia" hidden>
+    <div class="propia__foto">
+        <img id="propia-muestra" alt="La foto de la tarjeta" hidden>
+    </div>
+
+    <ol class="propia__pasos" id="propia-pasos">
+        <li>Apoyá cualquier tarjeta sobre una mesa.</li>
+        <li>Sacale una foto <strong>de frente</strong>, que llene el cuadro.</li>
+        <li>Esperá a que la página la aprenda y apuntale otra vez.</li>
+    </ol>
+
+    <p class="propia__estado" id="propia-estado" hidden></p>
+    <p class="aviso" id="propia-aviso" hidden></p>
+
+    <label class="boton" for="propia-archivo" id="propia-sacar">Sacarle una foto a la tarjeta</label>
+    <input type="file" id="propia-archivo" accept="image/*" capture="environment" hidden>
+
+    <button class="boton boton--linea" id="propia-usar" hidden>Usar esta tarjeta</button>
+    <button class="boton boton--linea" id="propia-guardada" hidden>Seguir con la de la otra vez</button>
+    <button class="boton boton--linea" id="propia-volver">Volver</button>
 </div>
 
 <script type="module">
@@ -382,7 +452,7 @@ function mostrarCarga(p) {
     if (p >= 1) { setTimeout(() => { caja.hidden = true; }, 400); }
 }
 
-async function cargarModelo() {
+async function cargarModelo(anchos) {
     const draco = new DRACOLoader();
     draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
     const loader = new GLTFLoader();
@@ -401,7 +471,7 @@ async function cargarModelo() {
     const caja = new THREE.Box3().setFromObject(casa);
     const medida = caja.getSize(new THREE.Vector3());
     const centro = caja.getCenter(new THREE.Vector3());
-    const escala = obra.anchos / Math.max(medida.x, medida.z);
+    const escala = anchos / Math.max(medida.x, medida.z);
 
     // Primero se corre el modelo para que su centro en planta quede en
     // el origen y la base en cero; recien despues se escala todo junto.
@@ -510,7 +580,7 @@ async function arrancarDemo() {
     escena.background = new THREE.Color(0x0e0e0e);
     escena.environment = await cargarAmbiente(renderer);
 
-    const modelo = await cargarModelo();
+    const modelo = await cargarModelo(obra.anchos);
     const maqueta = armarMaqueta(modelo);
     escena.add(maqueta);
 
@@ -605,12 +675,12 @@ function navegadorDeApp() {
     return /Instagram|FBAN|FBAV|FB_IAB|Line\/|Twitter|TikTok/i.test(ua);
 }
 
-async function arrancarAR() {
+async function arrancarAR(marca, anchos) {
     const { MindARThree } = await import('mindar-image-three');
 
     const mindar = new MindARThree({
         container: contenedor,
-        imageTargetSrc: obra.marca,
+        imageTargetSrc: marca,
         maxTrack: 1,
         uiLoading: 'no',
         uiScanning: 'no',
@@ -624,7 +694,7 @@ async function arrancarAR() {
     mindar.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mindar.scene.environment = await cargarAmbiente(mindar.renderer);
 
-    const modelo = await cargarModelo();
+    const modelo = await cargarModelo(anchos);
     const ancla = mindar.addAnchor(0);
     // Al grupo del ancla no se le toca la matriz: la escribe el
     // seguimiento. Lo nuestro va de hijo.
@@ -647,9 +717,182 @@ async function arrancarAR() {
     // tarjeta" no tiene que quedar colgado sobre la pantalla negra.
     buscando.hidden = false;
     $('inicio').hidden = true;
+    $('propia').hidden = true;
 
     mindar.renderer.setAnimationLoop(() => {
         mindar.renderer.render(mindar.scene, mindar.camera);
+    });
+}
+
+/* ========================================
+   USAR UNA TARJETA CUALQUIERA
+
+   El marcador no tiene por que venir del servidor: MindAR trae un
+   compilador que corre en el navegador, asi que se le puede sacar una
+   foto a cualquier tarjeta y aprenderla ahi mismo. La foto no sale del
+   telefono: se compila y se guarda local.
+
+   Dos cosas que hay que cuidar:
+
+   - El tamano. Una foto de telefono son doce millones de pixeles y
+     compilarla tarda una eternidad. Se baja a 1000 px de lado largo,
+     que es mas o menos lo que mide la tarjeta de Huepil y alcanza de
+     sobra para reconocerla.
+   - La escala de la casa. En el espacio del ancla la imagen mide 1 de
+     ancho, asi que "2 anchos" es 2 veces la FOTO, no 2 veces la
+     tarjeta. Como la foto siempre agarra algo de mesa alrededor, para
+     una tarjeta propia se usa 1,5: queda parecido a la de Huepil.
+   ======================================== */
+const GUARDADA = 'arhaus_tarjeta_propia';
+const LADO_MAX = 1000;
+
+function guardar(buffer) {
+    try {
+        let bin = '';
+        const b = new Uint8Array(buffer);
+        for (let i = 0; i < b.length; i++) { bin += String.fromCharCode(b[i]); }
+        localStorage.setItem(GUARDADA, btoa(bin));
+        return true;
+    } catch (e) {
+        // Puede no haber lugar, o estar en una ventana privada. No es
+        // grave: solo significa volver a sacar la foto la proxima vez.
+        return false;
+    }
+}
+
+function recuperar() {
+    try {
+        const txt = localStorage.getItem(GUARDADA);
+        if (!txt) { return null; }
+        const bin = atob(txt);
+        const b = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) { b[i] = bin.charCodeAt(i); }
+        return b.buffer;
+    } catch (e) {
+        return null;
+    }
+}
+
+function urlDeMarca(buffer) {
+    return URL.createObjectURL(new Blob([buffer], { type: 'application/octet-stream' }));
+}
+
+/** Achica la foto y la devuelve como <img>, ya derecha. */
+async function prepararFoto(archivo) {
+    let fuente;
+    try {
+        // from-image: las fotos de telefono vienen con la rotacion en
+        // los datos EXIF y no en los pixeles.
+        fuente = await createImageBitmap(archivo, { imageOrientation: 'from-image' });
+    } catch (e) {
+        fuente = await new Promise((listo, falla) => {
+            const i = new Image();
+            i.onload = () => listo(i);
+            i.onerror = falla;
+            i.src = URL.createObjectURL(archivo);
+        });
+    }
+
+    const ancho = fuente.width || fuente.naturalWidth;
+    const alto = fuente.height || fuente.naturalHeight;
+    const escala = Math.min(1, LADO_MAX / Math.max(ancho, alto));
+    const lienzo = document.createElement('canvas');
+    lienzo.width = Math.round(ancho * escala);
+    lienzo.height = Math.round(alto * escala);
+    lienzo.getContext('2d').drawImage(fuente, 0, 0, lienzo.width, lienzo.height);
+
+    const img = new Image();
+    img.src = lienzo.toDataURL('image/jpeg', 0.92);
+    await img.decode();
+    return img;
+}
+
+function pantallaPropia() {
+    const pantalla = $('propia');
+    const estado = $('propia-estado');
+    const muestra = $('propia-muestra');
+    const pasos = $('propia-pasos');
+    const avisoP = $('propia-aviso');
+    const botonUsar = $('propia-usar');
+    const botonSacar = $('propia-sacar');
+    const botonGuardada = $('propia-guardada');
+    let foto = null;
+
+    $('ir-propia').addEventListener('click', () => {
+        $('inicio').hidden = true;
+        pantalla.hidden = false;
+        botonGuardada.hidden = !recuperar();
+    });
+
+    $('propia-volver').addEventListener('click', () => {
+        pantalla.hidden = true;
+        $('inicio').hidden = false;
+    });
+
+    $('propia-archivo').addEventListener('change', async (ev) => {
+        const archivo = ev.target.files && ev.target.files[0];
+        if (!archivo) { return; }
+        avisoP.hidden = true;
+        try {
+            foto = await prepararFoto(archivo);
+        } catch (e) {
+            avisoP.textContent = 'No pude leer esa foto. Probá con otra.';
+            avisoP.hidden = false;
+            return;
+        }
+        muestra.src = foto.src;
+        muestra.hidden = false;
+        pasos.hidden = true;
+        botonUsar.hidden = false;
+        botonSacar.textContent = 'Sacar otra';
+        estado.textContent = 'Fijate que la tarjeta se vea de frente y entera.';
+        estado.hidden = false;
+    });
+
+    async function arrancarCon(buffer) {
+        try {
+            await arrancarAR(urlDeMarca(buffer), 1.5);
+        } catch (e) {
+            console.error(e);
+            avisoP.textContent = 'No pude encender la cámara. Fijate que le hayas dado permiso al navegador.';
+            avisoP.hidden = false;
+            botonUsar.disabled = false;
+            botonGuardada.disabled = false;
+        }
+    }
+
+    botonUsar.addEventListener('click', async () => {
+        if (!foto) { return; }
+        botonUsar.disabled = true;
+        botonSacar.hidden = true;
+        estado.textContent = 'Aprendiendo la tarjeta. Tarda entre medio minuto y dos, '
+                           + 'y pasa una sola vez: después queda guardada.';
+        mostrarCarga(0.02);
+
+        try {
+            const { Compiler } = await import('mindar-image');
+            const compilador = new Compiler();
+            await compilador.compileImageTargets([foto], (p) => mostrarCarga(Math.max(0.02, p / 100)));
+            const buffer = compilador.exportData();
+            const quedo = guardar(buffer);
+            botonGuardada.hidden = !quedo;
+            estado.textContent = 'Listo. Apuntale a la tarjeta.';
+            await arrancarCon(buffer);
+        } catch (e) {
+            console.error(e);
+            mostrarCarga(1);
+            avisoP.textContent = 'No pude aprender esa tarjeta. Probá con una foto más de frente y con más luz.';
+            avisoP.hidden = false;
+            botonUsar.disabled = false;
+            botonSacar.hidden = false;
+        }
+    });
+
+    botonGuardada.addEventListener('click', async () => {
+        const buffer = recuperar();
+        if (!buffer) { botonGuardada.hidden = true; return; }
+        botonGuardada.disabled = true;
+        await arrancarCon(buffer);
     });
 }
 
@@ -669,12 +912,14 @@ if (esDemo) {
              + 'Tocá los tres puntitos y elegí <strong>Abrir en el navegador</strong>.');
     }
 
+    pantallaPropia();
+
     $('arrancar').addEventListener('click', async () => {
         const boton = $('arrancar');
         boton.disabled = true;
         $('arrancar-texto').textContent = 'Preparando…';
         try {
-            await arrancarAR();
+            await arrancarAR(obra.marca, obra.anchos);
         } catch (e) {
             console.error(e);
             boton.disabled = false;
