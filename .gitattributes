@@ -1,0 +1,4 @@
+# Los .mind son binarios, pero no tienen la pinta que git usa para
+# darse cuenta: con core.autocrlf=true -que es lo normal en Windows- se
+# arriesga a cambiarles bytes al clonar y el marcador deja de servir.
+*.mind binary
